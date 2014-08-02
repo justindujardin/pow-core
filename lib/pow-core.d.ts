@@ -1,5 +1,4 @@
 /// <reference path="../types/underscore.d.ts" />
-/// <reference path="../types/jquery.d.ts" />
 declare module pow2 {
     function getWorld<T>(name: string): T;
     function registerWorld(name: string, instance: any): any;
@@ -140,14 +139,14 @@ declare module pow2 {
 }
 declare module pow2 {
     class XMLResource extends Resource {
-        public data: JQuery;
+        public data: any;
         public load(): void;
         public prepare(data: any): void;
-        public getElTag(el: JQuery): string;
-        public getRootNode(tag: string): JQuery;
-        public getChildren(el: JQuery, tag: string): JQuery[];
-        public getChild(el: JQuery, tag: string): JQuery;
-        public getElAttribute(el: JQuery, name: string): string;
+        public getElTag(el: any): string;
+        public getRootNode(tag: string): any;
+        public getChildren<T>(el: any, tag: string): T[];
+        public getChild<T>(el: any, tag: string): T;
+        public getElAttribute(el: any, name: string): any;
     }
 }
 declare module pow2 {
@@ -257,7 +256,7 @@ declare module pow2 {
         public loader: ResourceLoader;
         public time: Time;
         public state: IStateMachine;
-        constructor(services: any);
+        constructor(services?: any);
         public setService(name: string, value: IWorldObject): IWorldObject;
         public mark(object: IWorldObject): void;
         public erase(object: IWorldObject): void;
