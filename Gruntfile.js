@@ -81,7 +81,7 @@ module.exports = function(grunt) {
                'lib/pow-core.js',
                'lib/pow-core.js.map',
                'lib/pow-core.min.js',
-               'lib/pow-core.min.js.map'
+               'lib/pow-core.min.map'
             ],
             createTag: true,
             tagName: 'v%VERSION%',
