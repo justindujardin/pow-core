@@ -20,7 +20,8 @@ module.exports = function(grunt) {
                "source/resource.ts",
                "source/events.ts",
                "source/*.ts",
-               "source/resources/*.ts"
+               "source/resources/*.ts",
+               "source/resources/tiled/*.ts"
             ],
             dest: 'lib/<%= pkg.name %>.js'
          },

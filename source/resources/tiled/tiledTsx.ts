@@ -63,7 +63,7 @@ module pow2 {
             this.tiles.push(tile);
          });
 
-         var image = this.getChild(tileSet,'img');
+         var image:any = this.getChild(tileSet,'img');
          if(image && image.length > 0){
             var source = this.getElAttribute(image,'source');
             this.imageWidth = parseInt(this.getElAttribute(image,'width') || "0");

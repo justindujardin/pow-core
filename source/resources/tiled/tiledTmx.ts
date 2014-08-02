@@ -19,6 +19,9 @@
 /// <reference path="./tiledTsx.ts"/>
 
 module pow2 {
+
+   declare var $:any;
+
    /**
     * Use jQuery to load a TMX $map file from a URL.
     */

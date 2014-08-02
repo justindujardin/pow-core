@@ -16,6 +16,7 @@
 
 
 module pow2.tiled {
+   declare var $:any;
 
    export interface ITiledBase {
       name:string;
