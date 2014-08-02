@@ -41,7 +41,7 @@ module pow2 {
       loader:ResourceLoader = null;
       time:Time;
       state: IStateMachine;
-      constructor(services){
+      constructor(services?:any){
          services = _.defaults(services || {},{
             loader: new ResourceLoader,
             time:   new Time({autoStart: true}),
