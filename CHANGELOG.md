@@ -1,3 +1,12 @@
+<a name="0.0.4"></a>
+### 0.0.4 (2014-08-02)
+
+
+#### Features
+
+* **Tiled:** add tiled map format resources to pow-core ([66f988a8](http://github.com/justindujardin/pow-core/commit/66f988a8b80167df20b8d9e7856263ca5f2f52e5))
+
+
 <a name="0.0.3"></a>
 ### 0.0.3 (2014-08-02)
 
