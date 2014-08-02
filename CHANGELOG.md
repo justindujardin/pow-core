@@ -1,3 +1,12 @@
+<a name="0.0.5"></a>
+### 0.0.5 (2014-08-02)
+
+
+#### Bug Fixes
+
+* **Tiled:** actually build in the source files ([500934f2](http://github.com/justindujardin/pow-core/commit/500934f2563bde92e3066e740c456993b471e897))
+
+
 <a name="0.0.4"></a>
 ### 0.0.4 (2014-08-02)
 

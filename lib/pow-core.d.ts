@@ -283,3 +283,81 @@ declare module pow2 {
         public load(source: string, done?: Function): Resource;
     }
 }
+declare module pow2.tiled {
+    interface ITiledBase {
+        name: string;
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+        visible: boolean;
+    }
+    interface ITiledLayerBase extends ITiledBase {
+        opacity: number;
+        properties?: any;
+    }
+    interface ITiledLayer extends ITiledLayerBase {
+        data?: any;
+    }
+    interface ITiledObject extends ITiledBase {
+        properties?: any;
+        rotation?: number;
+        type?: string;
+        gid?: number;
+    }
+    interface ITiledObjectGroup extends ITiledLayerBase {
+        color: string;
+        objects: ITiledObject[];
+    }
+    function readITiledBase(el: any): ITiledBase;
+    function readITiledLayerBase(el: any): ITiledLayerBase;
+    function readTiledProperties(el: any): {};
+    function getChildren(el: any, tag: string): any[];
+    function getChild(el: any, tag: string): any;
+    function getElAttribute(el: any, name: string): any;
+}
+declare module pow2 {
+    interface ITileMeta {
+        image: ImageResource;
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+        data?: any;
+    }
+    class TilesetTile {
+        public id: number;
+        public properties: any;
+        constructor(id: number);
+    }
+    class TiledTSXResource extends XMLResource {
+        public name: string;
+        public tilewidth: number;
+        public tileheight: number;
+        public imageWidth: number;
+        public imageHeight: number;
+        public image: ImageResource;
+        public url: string;
+        public firstgid: number;
+        public tiles: any[];
+        public prepare(data: any): void;
+        public hasGid(gid: number): boolean;
+        public getTileMeta(gidOrIndex: number): ITileMeta;
+    }
+}
+declare module pow2 {
+    class TiledTMXResource extends XMLResource {
+        public $map: any;
+        public width: number;
+        public height: number;
+        public orientation: string;
+        public tileheight: number;
+        public tilewidth: number;
+        public version: number;
+        public properties: any;
+        public tilesets: any;
+        public layers: any[];
+        public objectGroups: any[];
+        public prepare(data: any): void;
+    }
+}
