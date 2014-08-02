@@ -1,6 +1,6 @@
 # pow-core [![Build Status](https://secure.travis-ci.org/justindujardin/pow-core.png)](http://travis-ci.org/justindujardin/pow-core)
 
-Core Typescript classes for use in the various Pow related projects.
+Core Typescript classes for use in the various Pow related projects.  Currently depends on JQuery for resource loading classes, and Underscore.js for general awesome.
 
 ## Getting Started
 
