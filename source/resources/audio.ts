@@ -15,9 +15,11 @@
  */
 
 /// <reference path="../resource.ts"/>
-/// <reference path="../../types/underscore.d.ts"/>
 
 module pow2 {
+
+   declare var _:any;
+
    /**
     * Use jQuery to load an Audio resource.
     */

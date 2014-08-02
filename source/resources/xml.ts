@@ -17,13 +17,15 @@
 /// <reference path="../resource.ts"/>
 
 module pow2 {
+   declare var $:any;
+
    /**
     * Use jQuery to load an XML file from a URL.
     */
    export class XMLResource extends Resource {
-      data:JQuery;
+      data:any; // JQuery object
       load() {
-         var request:JQueryXHR = $.get(this.url);
+         var request:any = $.get(this.url); // JQueryXHR
          request.done((object:XMLDocument) => {
             this.data = $(object);
             this.prepare(this.data);
@@ -39,7 +41,7 @@ module pow2 {
          this.ready();
       }
 
-      getElTag(el:JQuery){
+      getElTag(el:any){
          if(el){
             var name:string = el.prop('tagName');
             if(name){
@@ -58,19 +60,19 @@ module pow2 {
          }));
       }
 
-      getChildren(el:JQuery,tag:string):JQuery[] {
+      getChildren<T>(el:any,tag:string):T[] {
          var list = el.find(tag);
          return _.compact(_.map(list,function(c){
-            var child:JQuery = $(c);
-            return child.parent()[0] !== el[0] ? null : child;
+            var child:any = $(c);
+            return <T>(child.parent()[0] !== el[0] ? null : child);
          }));
       }
 
-      getChild(el:JQuery,tag:string):JQuery {
-         return this.getChildren(el,tag)[0];
+      getChild<T>(el:any,tag:string):T {
+         return <T>this.getChildren(el,tag)[0];
       }
 
-      getElAttribute(el:JQuery, name:string){
+      getElAttribute(el:any, name:string){
          if(el){
             var attr = el.attr(name);
             if(attr){

@@ -17,12 +17,14 @@
 /// <reference path="../resource.ts"/>
 
 module pow2 {
+
+   declare var $:any;
    /**
     * Use jQuery to load a Javascript file from a URL.
     */
    export class ScriptResource extends Resource {
       load() {
-         var request:JQueryXHR = $.getScript(this.url);
+         var request:any = $.getScript(this.url);
          request.done((script:HTMLScriptElement) => {
             this.data = script;
             this.ready();

@@ -17,12 +17,14 @@
 /// <reference path="../resource.ts"/>
 
 module pow2 {
+
+   declare var $:any;
    /**
     * Use jQuery to load a JSON file from a URL.
     */
    export class JSONResource extends Resource {
       load() {
-         var request:JQueryXHR = $.getJSON(this.url);
+         var request:any = $.getJSON(this.url);
          request.done((object:JSON) => {
             this.data = object;
             this.ready();

@@ -14,7 +14,6 @@
  limitations under the License.
  */
 
-/// <reference path="../types/jquery.d.ts"/>
 /// <reference path="./events.ts"/>
 
 module pow2 {
@@ -37,7 +36,7 @@ module pow2 {
     *
     * pow2.Resource objects trigger 'ready' and 'failed' events during their initial loading.
     */
-   export class Resource extends pow2.Events implements IResource{
+   export class Resource extends pow2.Events implements IResource {
       url:string;
       data:any;
       extension:string;
