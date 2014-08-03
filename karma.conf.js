@@ -2,6 +2,8 @@
 module.exports = function(config) {
    "use strict";
 
+   var debug = false;
+
    config.set({
       basePath: '',
       frameworks: ['jasmine'],
@@ -12,7 +14,7 @@ module.exports = function(config) {
          "lib/test/*.js",
          {pattern: 'test/fixtures/*.*', watched: false, included: false, served: true}
       ],
-      reporters: ['dots'],
+      reporters: ['dots','coverage'],
       port: 9876,
       autoWatch: true,
       background:true,
@@ -23,7 +25,16 @@ module.exports = function(config) {
       plugins: [
          'karma-firefox-launcher',
          'karma-chrome-launcher',
-         'karma-jasmine'
-      ]
+         'karma-jasmine',
+         'karma-coverage'
+      ],
+
+      preprocessors: debug ? {} : {
+         "**/lib/*js": "coverage"
+      },
+      coverageReporter: {
+         type: "lcov",
+         dir: ".coverage/"
+      }
    });
 };

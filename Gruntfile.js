@@ -98,6 +98,19 @@ module.exports = function(grunt) {
          options: {
             commitMessage: 'chore(attribution): update contributors'
          }
+      },
+
+      /**
+       * Code Coverage
+       */
+      coveralls: {
+         options: {
+            coverage_dir: '.coverage/',
+            debug: process.env.TRAVIS ? false : true,
+            dryRun: process.env.TRAVIS ? false : true,
+            force: true,
+            recursive: true
+         }
       }
 
    });
@@ -107,6 +120,10 @@ module.exports = function(grunt) {
    grunt.loadNpmTasks('grunt-contrib-watch');
    grunt.registerTask('default', ['typescript']);
    grunt.registerTask('develop', ['default', 'watch']);
+
+   // Test Coverage
+   grunt.loadNpmTasks('grunt-karma-coveralls');
+
 
 
    // Release a version
