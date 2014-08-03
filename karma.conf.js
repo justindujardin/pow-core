@@ -2,8 +2,6 @@
 module.exports = function(config) {
    "use strict";
 
-   var debug = false;
-
    config.set({
       basePath: '',
       frameworks: ['jasmine'],
@@ -29,9 +27,7 @@ module.exports = function(config) {
          'karma-coverage'
       ],
 
-      preprocessors: debug ? {} : {
-         "**/lib/*js": "coverage"
-      },
+      preprocessors: process.env.TRAVIS ? { "**/lib/*js": "coverage" } : {},
       coverageReporter: {
          type: "lcov",
          dir: ".coverage/"
