@@ -46,6 +46,7 @@ module pow2 {
          // Try all supported types, and accept the first valid one.
          _.each(<any>AudioResource.types,(mime:string,extension:string) => {
             if(!reference.canPlayType(mime + ";")){
+               sources--;
                return;
             }
             var source:HTMLSourceElement = document.createElement('source');
