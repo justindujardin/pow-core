@@ -35,15 +35,9 @@ Install the npm dependencies:
 
 ## Developing
 
-Once you've installed the project, start up the developer workflow using grunt:
-
 > grunt develop
 
-This command start a long-running process that will build the game files, and host a web server at (http://localhost:5215/).
-If a file (Sprites, Maps, Code) changes while this task is running, it will automatically build new outputs.  This means you
-can edit your files and refresh your webpage a few moments later when the new build is done.  No muss, no fuss, just game stuff.
+### Contributing
 
-### Committing
-
-Commit messages should [follow conventions](https://github.com/justindujardin/pow-core/blob/master/CONVENTIONS.md)
+Commit messages should [follow conventions](https://github.com/justindujardin/pow-core/blob/master/CONVENTIONS.md), and pull requests must *not* include checked in versions of the files in `lib/`.  The lib directory checkins happen automatically during tag releases.
 
