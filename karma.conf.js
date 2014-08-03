@@ -27,7 +27,7 @@ module.exports = function(config) {
          'karma-coverage'
       ],
 
-      preprocessors: process.env.TRAVIS ? { "**/lib/*js": "coverage" } : {},
+      preprocessors: process.env.TRAVIS ? { "lib/*.js": "coverage" } : {},
       coverageReporter: {
          type: "lcov",
          dir: ".coverage/"
