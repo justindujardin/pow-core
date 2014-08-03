@@ -36,6 +36,8 @@ module pow2 {
          'js':ScriptResource,
          'json':JSONResource,
          'xml':XMLResource,
+         'tmx':TiledTMXResource,
+         'tsx':TiledTSXResource,
          '':AudioResource
       };
       private _doneQueue = [];

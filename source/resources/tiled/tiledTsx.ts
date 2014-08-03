@@ -69,7 +69,7 @@ module pow2 {
             this.imageWidth = parseInt(this.getElAttribute(image,'width') || "0");
             this.imageHeight = parseInt(this.getElAttribute(image,'height') || "0");
             console.log("Tileset source: " + source);
-            this.url = '/maps/' + source;
+            this.url = this.url.substr(0,this.url.lastIndexOf('/') + 1) + source;
             this.loader.load(this.url,(res:ImageResource) => {
                this.image = res;
                if(!res.isReady()){
