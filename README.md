@@ -1,4 +1,4 @@
-# pow-core [![Build Status](https://secure.travis-ci.org/justindujardin/pow-core.png)](http://travis-ci.org/justindujardin/pow-core) [![Coverage Status](https://coveralls.io/repos/justindujardin/pow-core/badge.png)](https://coveralls.io/r/justindujardin/pow-core)
+# pow-core [![Build Status](https://secure.travis-ci.org/justindujardin/pow-core.png)](http://travis-ci.org/justindujardin/pow-core) [![Coverage Status](https://img.shields.io/coveralls/justindujardin/pow-core.svg)](https://coveralls.io/r/justindujardin/pow-core?branch=master)
 
 Core Typescript classes for use in the various Pow related projects.  Currently depends on JQuery for resource loading classes, and Underscore.js for general awesome.
 
