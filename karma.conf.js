@@ -6,10 +6,11 @@ module.exports = function(config) {
       basePath: '',
       frameworks: ['jasmine'],
       files: [
-         "test/vendor/jquery/jquery.min.js",
+         "test/vendor/jquery/dist/jquery.min.js",
          "test/vendor/underscore/underscore-min.js",
          "lib/pow-core.js",
-         "lib/test/*.js"
+         "lib/test/*.js",
+         {pattern: 'test/fixtures/*.*', watched: false, included: false, served: true}
       ],
       reporters: ['dots'],
       port: 9876,

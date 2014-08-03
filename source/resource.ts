@@ -37,6 +37,10 @@ module pow2 {
     * pow2.Resource objects trigger 'ready' and 'failed' events during their initial loading.
     */
    export class Resource extends pow2.Events implements IResource {
+
+      static READY:string = 'ready';
+      static FAILED:string = 'failed';
+
       url:string;
       data:any;
       extension:string;
@@ -62,12 +66,12 @@ module pow2 {
 
       ready() {
          this._ready = true;
-         this.trigger('ready',this);
+         this.trigger(Resource.READY,this);
       }
       failed(error:any){
          this._ready = false;
          console.log("ERROR loading resource: " + this.url + "\n   -> " + error);
-         this.trigger('failed',this);
+         this.trigger(Resource.FAILED,this);
       }
    }
 }

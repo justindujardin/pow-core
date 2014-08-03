@@ -21,6 +21,7 @@ module pow2 {
     * Use html image element to load an image resource.
     */
    export class ImageResource extends Resource {
+      data:HTMLImageElement;
       load() {
          var reference:HTMLImageElement = document.createElement('img');
          reference.onload = () => {
