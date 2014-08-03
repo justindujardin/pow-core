@@ -86,10 +86,10 @@ module pow2 {
          return url.substr(index+1);
       }
 
-      create(typeConstructor:any,data:any):IResource {
+      create<T extends IResource>(typeConstructor:any,data:any):T {
          var type:Resource = <Resource>new typeConstructor(null,data);
          type.setLoader(this);
-         return type;
+         return <T><any>type;
       }
 
       loadAsType(source:string,resourceType:any,done?:any):IResource{
