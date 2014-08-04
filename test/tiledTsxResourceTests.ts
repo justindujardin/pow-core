@@ -19,4 +19,9 @@ describe("pow2.TiledTSXResource",()=>{
       var resource:pow2.TiledTSXResource = <any>loader.load('bad/does/not/exist.tsx');
       resource.on(pow2.Resource.FAILED,()=>{ done(); });
    });
+   it("should fail with missing image source",(done)=>{
+      var loader:pow2.ResourceLoader = new pow2.ResourceLoader();
+      var resource:pow2.TiledTSXResource = <any>loader.load('base/test/fixtures/badImage.tsx');
+      resource.on(pow2.Resource.FAILED,()=>{ done(); });
+   });
 });

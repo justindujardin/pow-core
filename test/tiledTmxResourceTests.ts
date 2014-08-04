@@ -25,4 +25,12 @@ describe("pow2.TiledTMXResource",()=>{
       var resource:pow2.TiledTMXResource = <any>loader.load('bad/does/not/exist.tmx');
       resource.on(pow2.Resource.FAILED,()=>{ done(); });
    });
+
+   it("should fail with missing image source",(done)=>{
+      var loader:pow2.ResourceLoader = new pow2.ResourceLoader();
+      var resource:pow2.TiledTMXResource = <any>loader.load('base/test/fixtures/badImage.tmx');
+      resource.on(pow2.Resource.FAILED,()=>{ done(); });
+   });
+
+
 });

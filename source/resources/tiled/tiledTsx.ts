@@ -73,7 +73,8 @@ module pow2 {
             this.loader.load(this.url,(res:ImageResource) => {
                this.image = res;
                if(!res.isReady()){
-                  throw new Error("Failed to load required TileMap image: " + source)
+                  this.failed("Failed to load required TileMap image: " + source);
+                  return;
                }
 
                this.imageWidth = this.image.data.width;
@@ -91,11 +92,9 @@ module pow2 {
                _.each(this.tiles,(tile) => {
                   tileLookup[tile.id] = tile.properties;
                });
-               // TODO: uh-oh overwriting tiles...?
                this.tiles = tileLookup;
 
                this.ready();
-               //console.log(this);
             });
          }
          else {
