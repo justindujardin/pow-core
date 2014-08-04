@@ -1,3 +1,18 @@
+<a name="0.0.6"></a>
+### 0.0.6 (2014-08-03)
+
+
+#### Bug Fixes
+
+* **AudioResource:** fewer expected failures if browser lacks type support ([43d94043](http://github.com/justindujardin/pow-core/commit/43d940434720891a76666e4c41527aa72def767d))
+* **build:** tell travis to use a recent version of FireFox ([9969cab8](http://github.com/justindujardin/pow-core/commit/9969cab85c80e72c046945e2bd4c537f53882571))
+
+
+#### Features
+
+* add support for coveralls code coverage reporting ([26a25fd2](http://github.com/justindujardin/pow-core/commit/26a25fd21484d40b9d0152b6d7a827475fdde649))
+
+
 <a name="0.0.5"></a>
 ### 0.0.5 (2014-08-02)
 

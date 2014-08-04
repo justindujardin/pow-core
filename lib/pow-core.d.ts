@@ -30,6 +30,8 @@ declare module pow2 {
         failed(error: any): any;
     }
     class Resource extends Events implements IResource {
+        static READY: string;
+        static FAILED: string;
         public url: string;
         public data: any;
         public extension: string;
@@ -124,6 +126,7 @@ declare module pow2 {
 }
 declare module pow2 {
     class ImageResource extends Resource {
+        public data: HTMLImageElement;
         public load(): void;
     }
 }
@@ -277,7 +280,7 @@ declare module pow2 {
         public processFrame(elapsed: number): void;
         public ensureType(extension: string, type: Function): void;
         public getResourceExtension(url: string): string;
-        public create(typeConstructor: any, data: any): IResource;
+        public create<T extends IResource>(typeConstructor: any, data: any): T;
         public loadAsType(source: string, resourceType: any, done?: any): IResource;
         public load(sources: string[], done?: Function): Resource[];
         public load(source: string, done?: Function): Resource;
