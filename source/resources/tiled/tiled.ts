@@ -25,6 +25,7 @@ module pow2.tiled {
       width:number;
       height:number;
       visible:boolean;
+      _xml:any;
    }
 
    // <layer>, <objectgroup>
@@ -58,11 +59,12 @@ module pow2.tiled {
          y:parseInt(getElAttribute(el,'y') || "0"),
          width:parseInt(getElAttribute(el,'width') || "0"),
          height:parseInt(getElAttribute(el,'height') || "0"),
-         visible:parseInt(getElAttribute(el, 'visible') || "1") === 1 // 0 or 1
+         visible:parseInt(getElAttribute(el, 'visible') || "1") === 1, // 0 or 1,
+         _xml:el
       };
    }
 
-   export function readITiledLayerBase(el:any) {
+   export function readITiledLayerBase(el:any):ITiledLayerBase {
       // Base layer properties
       var result:ITiledLayerBase = <ITiledLayerBase>readITiledBase(el);
       // Layer opacity is 0-1
@@ -72,6 +74,7 @@ module pow2.tiled {
       if(props){
          result.properties = props;
       }
+      result._xml = el;
       return result;
    }
 
