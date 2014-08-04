@@ -51,10 +51,11 @@ module pow2 {
          var tileSets = this.getChildren(this.$map,'tileset');
          _.each(tileSets,(ts) => {
             var source:string = this.getElAttribute(ts,'source');
+            var firstGid:number = parseInt(this.getElAttribute(ts,'firstgid') || "-1");
             if(source){
                tileSetDeps.push({
-                  source:'/maps/' + source,
-                  firstgid:parseInt(this.getElAttribute(ts,'firstgid') || "-1")
+                  source:source,
+                  firstgid:firstGid
                });
             }
             // Tileset element is inline, load from the existing XML and
@@ -64,7 +65,7 @@ module pow2 {
                tileSetDeps.push({
                   data:ts,
                   source:this.url,
-                  firstgid:parseInt(this.getElAttribute(ts,'firstgid') || "-1")
+                  firstgid:firstGid
                })
             }
             // TODO: IF no source then create a resource with the given data.
@@ -81,7 +82,7 @@ module pow2 {
             if(data){
                var encoding:string = this.getElAttribute(data,'encoding');
                if(!encoding || encoding.toLowerCase() !== 'csv'){
-                  throw new Error("Pow2 only supports CSV maps.  Edit the Map Properties (for:" + this.url +  ") in Tiled to use the CSV option when saving.");
+                  this.failed("Pow2 only supports CSV maps.  Edit the Map Properties (for:" + this.url +  ") in Tiled to use the CSV option when saving.");
                }
                tileLayer.data = JSON.parse('[' + $.trim(data.text()) + ']');
             }
@@ -117,10 +118,13 @@ module pow2 {
 
                var tsr = <TiledTSXResource>this.loader.create(TiledTSXResource,dep.data);
                tsr.url = dep.source;
-               tsr.once('ready',()=>{
+               tsr.once(Resource.READY,()=>{
                   this.tilesets[tsr.name] = tsr;
                   tsr.firstgid = dep.firstgid;
                   _next();
+               });
+               tsr.once(Resource.FAILED,(error)=>{
+                  this.failed(error);
                });
                tsr.prepare(data);
             }

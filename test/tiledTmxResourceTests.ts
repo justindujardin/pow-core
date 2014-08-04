@@ -52,6 +52,7 @@ describe("pow2.TiledTMXResource",()=>{
          expect(resource.objectGroups.length).toBe(1);
          var group:pow2.tiled.ITiledObjectGroup = resource.objectGroups[0];
          expect(group._xml).toBeDefined();
+         expect(group.color).toBe('#000000');
 
          expect(group.objects.length).toBe(1);
          var object = group.objects[0];
@@ -72,6 +73,12 @@ describe("pow2.TiledTMXResource",()=>{
    it("should fail with missing image source",(done)=>{
       var loader:pow2.ResourceLoader = new pow2.ResourceLoader();
       var resource:pow2.TiledTMXResource = <any>loader.load('base/test/fixtures/badImage.tmx');
+      resource.on(pow2.Resource.FAILED,()=>{ done(); });
+   });
+
+   it("should fail with non-csv encoded layer data",(done)=>{
+      var loader:pow2.ResourceLoader = new pow2.ResourceLoader();
+      var resource:pow2.TiledTMXResource = <any>loader.load('base/test/fixtures/badEncoding.tmx');
       resource.on(pow2.Resource.FAILED,()=>{ done(); });
    });
 
