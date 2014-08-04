@@ -2,42 +2,33 @@
 
 Core Typescript classes for use in the various Pow related projects.  Currently depends on JQuery for resource loading classes, and Underscore.js for general awesome.
 
-## Getting Started
+## Using
 
-You should really only need Node.JS and Grunt.  Let's do it:
+`bower install --save pow-core`
 
-### Node.JS
+## Building
 
-[Download](http://nodejs.org/) and install it.
+[Download](http://nodejs.org/) and install Node.JS if you don't have it:
 
 > node --version
 >
 > npm --version
 
-If those commands both return a value, and no error message, you're ready to go.
-
-### Grunt
-
-Install the `grunt` utility.
+Install the `grunt` utility:
 
 > npm install -g grunt-cli
 >
 > grunt --version
 
-If you receive errors, you may need to run this command as an administrator on your OS.  For more detailed information, see
-the grunt [Getting Started Guide](http://gruntjs.com/getting-started#installing-the-cli).
-
-## Installing
-
 Install the npm dependencies:
 
 > npm install
 
-## Developing
+Run the developer workflow:
 
 > grunt develop
 
-### Contributing
+## Contributing
 
 Commit messages should [follow conventions](https://github.com/justindujardin/pow-core/blob/master/CONVENTIONS.md), and pull requests must *not* include checked in versions of the files in `lib/`.  The lib directory checkins happen automatically during tag releases.
 
