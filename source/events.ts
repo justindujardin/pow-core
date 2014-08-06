@@ -77,7 +77,7 @@ module pow2 {
       // callbacks with that function. If `callback` is null, removes all
       // callbacks for the event. If `name` is null, removes all bound
       // callbacks for all events.
-      off(name:any, callback?:Function, context?:any):IEvents {
+      off(name?:any, callback?:Function, context?:any):IEvents {
          var retain, ev, events, names, i, l, j, k;
          if (!this._events || !eventsApi(this, 'off', name, [callback, context])) return this;
          if (!name && !callback && !context) {
