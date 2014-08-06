@@ -15,6 +15,10 @@
  */
 module pow2{
    export class Point {
+
+      static DIVIDE_ZERO:string = 'divide by zero operation';
+      static INVALID_ARGUMENTS:string = 'invalid arguments';
+
       x:number;
       y:number;
       constructor();
@@ -47,9 +51,12 @@ module pow2{
             this.x = pointOrX.x;
             this.y = pointOrX.y;
          }
+         else if(typeof pointOrX === 'number' && typeof y === 'number'){
+            this.x = pointOrX;
+            this.y = y;
+         }
          else {
-            this.x = typeof pointOrX !== 'undefined' ? pointOrX : 0;
-            this.y = typeof y !== 'undefined' ? y : 0;
+            throw new Error(Point.INVALID_ARGUMENTS);
          }
          return this;
       }
@@ -58,19 +65,12 @@ module pow2{
          return new Point(this.x,this.y);
       }
 
-      copy(from:Point):Point{
-         this.x = from.x;
-         this.y = from.y;
-         return this;
-      }
-
-      truncate():Point {
+      floor():Point {
          this.x = Math.floor(this.x);
          this.y = Math.floor(this.y);
          return this;
       }
 
-      // TODO: Remove this or truncate.
       round():Point {
          this.x = Math.round(this.x);
          this.y = Math.round(this.y);
@@ -109,7 +109,7 @@ module pow2{
             this.x *= pointOrXOrValue.x;
             this.y *= pointOrXOrValue.y;
          }
-         else if(pointOrXOrValue && typeof y === 'undefined'){
+         else if(typeof pointOrXOrValue === 'number' && typeof y === 'undefined'){
             this.x *= pointOrXOrValue;
             this.y *= pointOrXOrValue;
          }
@@ -126,21 +126,21 @@ module pow2{
       divide(pointOrXOrValue:any,y?:number):Point{
          if(pointOrXOrValue instanceof Point){
             if(pointOrXOrValue.x === 0 || pointOrXOrValue.y === 0){
-               throw new Error("Divide by zero");
+               throw new Error(Point.DIVIDE_ZERO);
             }
             this.x /= pointOrXOrValue.x;
             this.y /= pointOrXOrValue.y;
          }
-         else if(pointOrXOrValue && typeof y === 'undefined'){
+         else if(typeof pointOrXOrValue === 'number' && typeof y === 'undefined'){
             if(pointOrXOrValue === 0){
-               throw new Error("Divide by zero");
+               throw new Error(Point.DIVIDE_ZERO);
             }
             this.x /= pointOrXOrValue;
             this.y /= pointOrXOrValue;
          }
          else {
             if(pointOrXOrValue === 0 || y === 0){
-               throw new Error("Divide by zero");
+               throw new Error(Point.DIVIDE_ZERO);
             }
             this.x /= pointOrXOrValue;
             this.y /= y;
