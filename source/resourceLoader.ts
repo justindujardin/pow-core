@@ -76,7 +76,7 @@ module pow2 {
          });
       }
 
-      ensureType(extension:string,type:Function){
+      registerType(extension:string,type:Function){
          this._types[extension] = type;
       }
 
@@ -94,7 +94,7 @@ module pow2 {
          return <T><any>type;
       }
 
-      loadAsType(source:string,resourceType:any,done?:any):IResource{
+      loadAsType(source:string,resourceType:any,done?:(res?:IResource)=>any):IResource{
          var completeCb:any = (obj:any) => {
             if(this.world && done){
                this._doneQueue.push({cb:done,result:obj});
@@ -123,15 +123,14 @@ module pow2 {
             completeCb(resource);
          });
          resource.once('failed',(resource:IResource) => {
-            console.log("Failed to load asset: " + resource.url);
-            completeCb(null);
+            completeCb(resource);
          });
          resource.load();
          return resource;
       }
 
-      load(sources:Array<string>,done?:Function):Array<Resource>;
-      load(source:string,done?:Function):Resource;
+      load(sources:Array<string>,done?:(res?:IResource)=>any):Array<Resource>;
+      load(source:string,done?:(res?:IResource)=>any):Resource;
       load(sources:any,done?:any):any{
          var results:Array<Resource> = [];
          var loadQueue:number = 0;
