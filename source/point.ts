@@ -85,7 +85,7 @@ module pow2{
             this.x += pointOrXOrValue.x;
             this.y += pointOrXOrValue.y;
          }
-         else if(pointOrXOrValue && typeof y === 'undefined'){
+         else if(typeof pointOrXOrValue === 'number' && typeof y === 'undefined'){
             this.x += pointOrXOrValue;
             this.y += pointOrXOrValue;
          }
@@ -95,9 +95,23 @@ module pow2{
          }
          return this;
       }
-      subtract(point:Point):Point{
-         this.x -= point.x;
-         this.y -= point.y;
+
+      subtract(x:number,y:number):Point;
+      subtract(value:number):Point;
+      subtract(point:Point):Point;
+      subtract(pointOrXOrValue:any,y?:number){
+         if(pointOrXOrValue instanceof Point){
+            this.x -= pointOrXOrValue.x;
+            this.y -= pointOrXOrValue.y;
+         }
+         else if(typeof pointOrXOrValue === 'number' && typeof y === 'undefined'){
+            this.x -= pointOrXOrValue;
+            this.y -= pointOrXOrValue;
+         }
+         else {
+            this.x -= pointOrXOrValue;
+            this.y -= y;
+         }
          return this;
       }
 
@@ -170,23 +184,6 @@ module pow2{
          factor = Math.min(Math.max(factor,0),1);
          this.x = (from.x * (1.0 - factor)) + (to.x * factor);
          this.y = (from.y * (1.0 - factor)) + (to.y * factor);
-         return this;
-      }
-
-      magnitude():number {
-         return Math.sqrt(this.x * this.x + this.y * this.y);
-      }
-
-      magnitudeSquared():number {
-         return this.x * this.x + this.y * this.y;
-      }
-
-      normalize():Point {
-         var m:number = this.magnitude();
-         if(m > 0){
-            this.x /= m;
-            this.y /= m;
-         }
          return this;
       }
    }

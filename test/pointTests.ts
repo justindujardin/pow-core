@@ -54,7 +54,7 @@ describe("pow2.Point",()=>{
       });
       it('should throw error with invalid arguments',()=>{
          var p:pow2.Point = new pow2.Point(0,0);
-         expect(() => { p.set('four',10); }).toThrow(new Error(pow2.Point.INVALID_ARGUMENTS));
+         expect(() => { p.set(<any>'four',<any>10); }).toThrow(new Error(pow2.Point.INVALID_ARGUMENTS));
       });
    });
 
@@ -109,6 +109,29 @@ describe("pow2.Point",()=>{
       });
    });
 
+   describe('subtract',()=>{
+      it('should accept another point instance as argument',()=>{
+         var p:pow2.Point = new pow2.Point(10,10);
+         var p2:pow2.Point = new pow2.Point(5,5);
+         // Point instance
+         p.subtract(p2);
+         expect(p).toEqual(p2);
+      });
+      it('should accept x and y as number arguments',()=>{
+         var p:pow2.Point = new pow2.Point(0,0);
+         // X,Y
+         p.subtract(-25,-25);
+         expect(p).toEqual(new pow2.Point(25,25));
+      });
+      it('should accept a single number to use for x and y',()=>{
+         var p:pow2.Point = new pow2.Point(0,0);
+         var p2:pow2.Point = new pow2.Point(-10,-10);
+         // scalar value
+         p.subtract(10);
+         expect(p).toEqual(p2);
+      });
+   });
+
    describe('multiply',()=>{
       it('should accept another point instance as argument',()=>{
          var p:pow2.Point = new pow2.Point(1,1);
@@ -155,11 +178,57 @@ describe("pow2.Point",()=>{
 
       it('should throw error for divide by zero values',()=>{
          var p:pow2.Point = new pow2.Point(10,10);
-         expect(() => { p.divide(0,0); }).toThrow(new Error(pow2.Point.DIVIDE_ZERO));
-         expect(() => { p.divide(new pow2.Point(0,0)); }).toThrow(new Error(pow2.Point.DIVIDE_ZERO));
-         expect(() => { p.divide(0); }).toThrow(new Error(pow2.Point.DIVIDE_ZERO));
+         var err:Error = new Error(pow2.Point.DIVIDE_ZERO);
+         expect(() => { p.divide(0,0); }).toThrow(err);
+         expect(() => { p.divide(new pow2.Point(0,0)); }).toThrow(err);
+         expect(() => { p.divide(0); }).toThrow(err);
       });
    });
 
+   describe('inverse',()=>{
+      it('should flip the sign on x and y',()=>{
+         expect(new pow2.Point(10,10).inverse()).toEqual(new pow2.Point(-10,-10));
+         expect(new pow2.Point(-5,5).inverse()).toEqual(new pow2.Point(5,-5));
+         expect(new pow2.Point(-4.35,5.21).inverse()).toEqual(new pow2.Point(4.35,-5.21));
+         expect(new pow2.Point(0,0).inverse().equal(new pow2.Point())).toBeTruthy();
+      });
+   });
+
+   describe('equal',()=>{
+      it('should return a boolean indicating whether the two points are equal',()=>{
+         expect(new pow2.Point(0,0).equal(new pow2.Point(0,0))).toBeTruthy();
+         expect(new pow2.Point(0,0).equal(new pow2.Point(-5,-5))).toBeFalsy();
+      });
+   });
+   describe('equal',()=>{
+      it('should return a boolean indicating whether the two points are equal',()=>{
+         expect(new pow2.Point(0,0).equal(new pow2.Point(0,0))).toBeTruthy();
+      });
+   });
+
+   describe('isZero',()=>{
+      it('should return a boolean indicating whether x and y are zero',()=>{
+         expect(new pow2.Point(0,0).isZero()).toBeTruthy();
+         expect(new pow2.Point(-5,0).isZero()).toBeFalsy();
+         expect(new pow2.Point(0.01,0.05).isZero()).toBeFalsy();
+      });
+   });
+
+   describe('zero',()=>{
+      it('should set x and y to zero',()=>{
+         expect(new pow2.Point(5,5).zero().equal(new pow2.Point())).toBeTruthy();
+      });
+   });
+
+   describe('interpolate',()=>{
+      it('should interpolate between two points',()=>{
+         var from:pow2.Point = new pow2.Point(0,0);
+         var to:pow2.Point = new pow2.Point(10,10);
+         var current:pow2.Point = from.clone();
+         expect(current.interpolate(from,to,0.5).equal(new pow2.Point(5,5))).toBeTruthy();
+         expect(current.interpolate(from,to,1).equal(to)).toBeTruthy();
+         expect(current.interpolate(from,to,0).equal(from)).toBeTruthy();
+      });
+   });
 
 });
