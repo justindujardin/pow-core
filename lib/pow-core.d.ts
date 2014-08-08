@@ -15,7 +15,7 @@ declare module pow2 {
         private _events;
         public on(name: any, callback?: Function, context?: any): IEvents;
         public once(name: any, callback?: Function, context?: any): IEvents;
-        public off(name: any, callback?: Function, context?: any): IEvents;
+        public off(name?: any, callback?: Function, context?: any): IEvents;
         public trigger(name: string, ...args: any[]): IEvents;
     }
 }
@@ -47,6 +47,8 @@ declare module pow2 {
 }
 declare module pow2 {
     class Point {
+        static DIVIDE_ZERO: string;
+        static INVALID_ARGUMENTS: string;
         public x: number;
         public y: number;
         constructor();
@@ -57,12 +59,13 @@ declare module pow2 {
         public set(point: Point): Point;
         public set(x: number, y: number): Point;
         public clone(): Point;
-        public copy(from: Point): Point;
-        public truncate(): Point;
+        public floor(): Point;
         public round(): Point;
         public add(x: number, y: number): Point;
         public add(value: number): Point;
         public add(point: Point): Point;
+        public subtract(x: number, y: number): Point;
+        public subtract(value: number): Point;
         public subtract(point: Point): Point;
         public multiply(x: number, y: number): Point;
         public multiply(value: number): Point;
@@ -75,9 +78,6 @@ declare module pow2 {
         public isZero(): boolean;
         public zero(): Point;
         public interpolate(from: Point, to: Point, factor: number): Point;
-        public magnitude(): number;
-        public magnitudeSquared(): number;
-        public normalize(): Point;
     }
 }
 declare module pow2 {
@@ -278,12 +278,12 @@ declare module pow2 {
         public onRemoveFromWorld(world: any): void;
         public tick(elapsed: number): void;
         public processFrame(elapsed: number): void;
-        public ensureType(extension: string, type: Function): void;
+        public registerType(extension: string, type: Function): void;
         public getResourceExtension(url: string): string;
         public create<T extends IResource>(typeConstructor: any, data: any): T;
-        public loadAsType(source: string, resourceType: any, done?: any): IResource;
-        public load(sources: string[], done?: Function): Resource[];
-        public load(source: string, done?: Function): Resource;
+        public loadAsType(source: string, resourceType: any, done?: (res?: IResource) => any): IResource;
+        public load(sources: string[], done?: (res?: IResource) => any): Resource[];
+        public load(source: string, done?: (res?: IResource) => any): Resource;
     }
 }
 declare module pow2.tiled {
@@ -294,6 +294,7 @@ declare module pow2.tiled {
         width: number;
         height: number;
         visible: boolean;
+        _xml: any;
     }
     interface ITiledLayerBase extends ITiledBase {
         opacity: number;
