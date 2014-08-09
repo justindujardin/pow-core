@@ -34,7 +34,7 @@ module pow2{
             this.point = new Point(rectOrPointOrX.point);
             this.extent = new Point(rectOrPointOrX.extent);
          }
-         else if(width && height){
+         else if(typeof width === 'number' && typeof height === 'number'){
             this.point = new Point(rectOrPointOrX,extentOrY);
             this.extent = new Point(width,height);
          }
@@ -50,7 +50,7 @@ module pow2{
       }
 
       toString():string {
-         return "p(" + this.point.toString() + ") extent(" + this.extent.toString() + ")";
+         return this.point.toString() + "," + this.extent.toString();
       }
 
       set(rect:IRect):Rect;
@@ -61,7 +61,7 @@ module pow2{
             this.point.set(rectOrPointOrX.point);
             this.extent.set(rectOrPointOrX.extent);
          }
-         else if(width && height){
+         else if(typeof width === 'number' && typeof height === 'number'){
             this.point.set(rectOrPointOrX,extentOrY);
             this.extent.set(width,height);
          }
@@ -70,7 +70,7 @@ module pow2{
             this.extent.set(extentOrY);
          }
          else {
-            throw new Error("Unsupported arguments to Rect.set");
+            throw new Error(pow2.errors.INVALID_ARGUMENTS);
          }
          return this;
       }
@@ -79,36 +79,19 @@ module pow2{
          return new Rect(this.point.clone(),this.extent.clone());
       }
 
-      clamp(rect:IRect):Rect {
-         if(this.point.x < rect.point.x){
-            this.point.x += rect.point.x - this.point.x;
-         }
-         if(this.point.y < rect.point.y){
-            this.point.y += rect.point.y - this.point.y;
-         }
-         if(this.point.x + this.extent.x > rect.point.x + rect.extent.x){
-            this.point.x -= ((this.point.x + this.extent.x) - (rect.point.x + rect.extent.x));
-         }
-         if(this.point.y + this.extent.y > rect.point.y + rect.extent.y){
-            this.point.y -= ((this.point.y + this.extent.y) - (rect.point.y + rect.extent.y));
-         }
-
-         return this;
-      }
-
-
       clip(clipRect:IRect):Rect{
          var right:number = this.point.x + this.extent.x;
          var bottom:number = this.point.y + this.extent.y;
          this.point.x = Math.max(clipRect.point.x, this.point.x);
          this.extent.x = Math.min(clipRect.point.x + clipRect.extent.x,right) - this.point.x;
          this.point.y = Math.max(clipRect.point.y, this.point.y);
-         this.extent.x = Math.min(clipRect.point.y + clipRect.extent.y,bottom) - this.point.y;
+         this.extent.y = Math.min(clipRect.point.y + clipRect.extent.y,bottom) - this.point.y;
          return this;
       }
       isValid():boolean {
          return this.extent.x > 0 && this.extent.y > 0;
       }
+
       intersect(clipRect:IRect):boolean {
          return !(clipRect.point.x > this.point.x + this.extent.x ||
             clipRect.point.x + clipRect.extent.x < this.point.x ||
@@ -124,8 +107,11 @@ module pow2{
             x = pointOrX.x;
             y = pointOrX.y;
          }
-         else {
+         else if(typeof pointOrX === 'number' && typeof y === 'number'){
             x = pointOrX;
+         }
+         else {
+            throw new Error(pow2.errors.INVALID_ARGUMENTS);
          }
          if(x >= this.point.x + this.extent.x || y >= this.point.y + this.extent.y){
             return false;
@@ -152,18 +138,6 @@ module pow2{
          }
          this.point.x = parseFloat((x - this.extent.x * 0.5).toFixed(2));
          this.point.y = parseFloat((y - this.extent.y * 0.5).toFixed(2));
-         return this;
-      }
-
-      scale(value:number):Rect {
-         this.point.multiply(value);
-         this.extent.multiply(value);
-         return this;
-      }
-
-      round():Rect {
-         this.point.round();
-         this.extent.set(Math.ceil(this.extent.x),Math.ceil(this.extent.y));
          return this;
       }
 

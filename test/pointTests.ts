@@ -54,7 +54,7 @@ describe("pow2.Point",()=>{
       });
       it('should throw error with invalid arguments',()=>{
          var p:pow2.Point = new pow2.Point(0,0);
-         expect(() => { p.set(<any>'four',<any>10); }).toThrow(new Error(pow2.Point.INVALID_ARGUMENTS));
+         expect(() => { p.set(<any>'four',<any>10); }).toThrow(new Error(pow2.errors.INVALID_ARGUMENTS));
       });
    });
 
@@ -178,7 +178,7 @@ describe("pow2.Point",()=>{
 
       it('should throw error for divide by zero values',()=>{
          var p:pow2.Point = new pow2.Point(10,10);
-         var err:Error = new Error(pow2.Point.DIVIDE_ZERO);
+         var err:Error = new Error(pow2.errors.DIVIDE_ZERO);
          expect(() => { p.divide(0,0); }).toThrow(err);
          expect(() => { p.divide(new pow2.Point(0,0)); }).toThrow(err);
          expect(() => { p.divide(0); }).toThrow(err);

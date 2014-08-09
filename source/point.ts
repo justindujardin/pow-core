@@ -13,12 +13,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
+///<reference path="./errors.ts"/>
+
 module pow2{
    export class Point {
-
-      static DIVIDE_ZERO:string = 'divide by zero operation';
-      static INVALID_ARGUMENTS:string = 'invalid arguments';
-
       x:number;
       y:number;
       constructor();
@@ -56,7 +54,7 @@ module pow2{
             this.y = y;
          }
          else {
-            throw new Error(Point.INVALID_ARGUMENTS);
+            throw new Error(pow2.errors.INVALID_ARGUMENTS);
          }
          return this;
       }
@@ -140,21 +138,21 @@ module pow2{
       divide(pointOrXOrValue:any,y?:number):Point{
          if(pointOrXOrValue instanceof Point){
             if(pointOrXOrValue.x === 0 || pointOrXOrValue.y === 0){
-               throw new Error(Point.DIVIDE_ZERO);
+               throw new Error(pow2.errors.DIVIDE_ZERO);
             }
             this.x /= pointOrXOrValue.x;
             this.y /= pointOrXOrValue.y;
          }
          else if(typeof pointOrXOrValue === 'number' && typeof y === 'undefined'){
             if(pointOrXOrValue === 0){
-               throw new Error(Point.DIVIDE_ZERO);
+               throw new Error(pow2.errors.DIVIDE_ZERO);
             }
             this.x /= pointOrXOrValue;
             this.y /= pointOrXOrValue;
          }
          else {
             if(pointOrXOrValue === 0 || y === 0){
-               throw new Error(Point.DIVIDE_ZERO);
+               throw new Error(pow2.errors.DIVIDE_ZERO);
             }
             this.x /= pointOrXOrValue;
             this.y /= y;
