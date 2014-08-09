@@ -192,7 +192,7 @@ module.exports = function(grunt) {
                      grunt.fatal('Can not push to ' + opts.pushTo + ':\n  ' + stderr);
                   }
                   grunt.log.ok('Pushed to ' + opts.pushTo);
-                  next();
+                  done();
                });
             });
          });
