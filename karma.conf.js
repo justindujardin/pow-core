@@ -2,6 +2,8 @@
 module.exports = function(config) {
    "use strict";
 
+   var coverageDebug = false;
+
    config.set({
       basePath: '',
       frameworks: ['jasmine'],
@@ -10,7 +12,7 @@ module.exports = function(config) {
          "test/vendor/underscore/underscore-min.js",
          "lib/pow-core.js",
          "lib/test/*.js",
-         {pattern: 'test/fixtures/*.*', watched: false, included: false, served: true}
+         {pattern: 'test/fixtures/*.*', watched: true, included: false, served: true}
       ],
       reporters: ['dots','coverage'],
       port: 9876,
@@ -27,7 +29,7 @@ module.exports = function(config) {
          'karma-coverage'
       ],
 
-      preprocessors: process.env.TRAVIS ? { "lib/*.js": "coverage" } : {},
+      preprocessors: (process.env.TRAVIS || coverageDebug) ? { "lib/*.js": "coverage" } : {},
       coverageReporter: {
          type: "lcov",
          dir: ".coverage/"
