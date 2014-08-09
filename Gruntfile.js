@@ -155,13 +155,14 @@ module.exports = function(grunt) {
    grunt.registerTask('artifacts', 'temporarily version output libs for release tags', function(type) {
       var opts = this.options({
          files: [],
+         pushTo: 'origin',
          commitAdd:"chore: add artifacts for release",
          commitRemove:"chore: remove release artifacts"
       });
       var done = this.async();
       console.log(opts.files);
       if(type === 'add') {
-         exec('git add ' + opts.files.join(' '), function (err, stdout, stderr) {
+         exec('git add -f ' + opts.files.join(' '), function (err, stdout, stderr) {
             if (err) {
                grunt.fatal('Cannot add the release artifacts:\n  ' + stderr);
             }
@@ -186,7 +187,13 @@ module.exports = function(grunt) {
                   grunt.fatal('Cannot create the commit:\n  ' + stderr);
                }
                grunt.log.ok('Committed as "' + commitMessage + '"');
-               done();
+               exec('git push ' + opts.pushTo, function(err, stdout, stderr) {
+                  if (err) {
+                     grunt.fatal('Can not push to ' + opts.pushTo + ':\n  ' + stderr);
+                  }
+                  grunt.log.ok('Pushed to ' + opts.pushTo);
+                  next();
+               });
             });
          });
       }
