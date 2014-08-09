@@ -1,3 +1,18 @@
+<a name="0.0.7"></a>
+### 0.0.7 (2014-08-09)
+
+
+#### Bug Fixes
+
+* **TiledTSXResource:** trigger a failure when image source is invalid ([2e954848](http://github.com/justindujardin/pow-core/commit/2e9548482fc925dab127959eb82a6ab25476f6bb))
+
+
+#### Features
+
+* **Tiled:** attach reference to original xml dom for each tiledbase ([4bcb2548](http://github.com/justindujardin/pow-core/commit/4bcb2548a0465eb6d494bb0da3a742877e10eeb8))
+* **grunt:** add artifacts task for generating tag release outputs ([7a9e772c](http://github.com/justindujardin/pow-core/commit/7a9e772c12611f63c510b95729f232fe9801938f))
+
+
 <a name="0.0.6"></a>
 ### 0.0.6 (2014-08-03)
 
