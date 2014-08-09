@@ -1,3 +1,12 @@
+<a name="0.0.8"></a>
+### 0.0.8 (2014-08-09)
+
+
+#### Features
+
+* **release:** push removed artifacts to origin when done ([886a568f](http://github.com/justindujardin/pow-core/commit/886a568fd0a96c31dfe303a7e75983cab912a34f))
+
+
 <a name="0.0.7"></a>
 ### 0.0.7 (2014-08-09)
 
