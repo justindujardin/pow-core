@@ -53,7 +53,7 @@ module pow2 {
       }
 
       load() {
-         console.log("Loading: " + this.url);
+         throw new Error(pow2.errors.CLASS_NOT_IMPLEMENTED);
       }
 
       setLoader(loader:ResourceLoader) {
@@ -70,7 +70,7 @@ module pow2 {
       }
       failed(error:any){
          this._ready = false;
-         console.log("ERROR loading resource: " + this.url + "\n   -> " + error);
+         //console.log("ERROR loading resource: " + this.url + "\n   -> " + error);
          this.trigger(Resource.FAILED,this);
       }
    }

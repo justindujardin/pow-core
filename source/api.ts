@@ -14,6 +14,8 @@
  limitations under the License.
  */
 
+/// <reference path="./errors.ts"/>
+
 module pow2 {
 
    var _worldLookup:{ [name:string]:any } = {};
@@ -28,10 +30,10 @@ module pow2 {
     */
    export function registerWorld(name:string,instance:any) {
       if(!name){
-         throw new Error("Cannot register world with null name");
+         throw new Error(pow2.errors.REQUIRED_ARGUMENT);
       }
       if(_worldLookup.hasOwnProperty(name)){
-         throw new Error("Cannot register world multiple times with the same name");
+         throw new Error(pow2.errors.ALREADY_EXISTS);
       }
       _worldLookup[name] = instance;
       return _worldLookup[name];
@@ -41,10 +43,10 @@ module pow2 {
     */
    export function unregisterWorld(name:string) {
       if(!name){
-         throw new Error("Cannot unregister a world with null name");
+         throw new Error(pow2.errors.REQUIRED_ARGUMENT);
       }
       if(!_worldLookup.hasOwnProperty(name)){
-         throw new Error("Cannot unregister non existent world");
+         throw new Error(pow2.errors.INVALID_ARGUMENTS);
       }
       var instance:any = _worldLookup[name];
       delete _worldLookup[name];

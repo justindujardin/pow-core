@@ -1,5 +1,5 @@
-///<reference path="../types/jasmine.d.ts"/>
-///<reference path="../lib/pow-core.d.ts"/>
+///<reference path="../../types/jasmine.d.ts"/>
+///<reference path="../../lib/pow-core.d.ts"/>
 
 describe("pow2.ScriptResource",()=>{
    it("should be defined",()=>{

@@ -1,5 +1,5 @@
 /**
- Copyright (C) 2013 by Justin DuJardin
+ Copyright (C) 2014 by Justin DuJardin
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -30,4 +30,12 @@ module pow2.errors {
     */
    export var DIVIDE_ZERO:string = 'divide by zero operation';
 
+   /**
+    * Something called on a base class that doesn't implement the desired functionality
+    */
+   export var CLASS_NOT_IMPLEMENTED:string = 'must be implemented in a subclass';
+
+   export var REQUIRED_ARGUMENT:string = 'argument must be valid';
+
+   export var ALREADY_EXISTS:string = 'already exists and would overwrite existing value';
 }

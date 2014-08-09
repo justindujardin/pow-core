@@ -34,6 +34,9 @@ describe("pow2.Events",()=>{
       obj.off(ev,cb);
       obj.trigger(ev);
       expect(count).toBe(1);
+      obj.off(null,cb);
+      obj.off(null,null,this);
+      obj.off(ev,null,null);
    });
 
    it("should add one time observers with once",()=>{
