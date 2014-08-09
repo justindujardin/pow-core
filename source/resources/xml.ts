@@ -41,16 +41,6 @@ module pow2 {
          this.ready();
       }
 
-      getElTag(el:any){
-         if(el){
-            var name:string = el.prop('tagName');
-            if(name){
-               return name.toLowerCase();
-            }
-         }
-         return null;
-      }
-
       getRootNode(tag:string){
          if(!this.data){
             return null;

@@ -70,7 +70,7 @@ module pow2 {
             this.imageHeight = parseInt(this.getElAttribute(image,'height') || "0");
             console.log("Tileset source: " + source);
             this.url = this.url.substr(0,this.url.lastIndexOf('/') + 1) + source;
-            this.loader.load(this.url,(res:ImageResource) => {
+            this.loader.load(this.url,(res?:ImageResource) => {
                this.image = res;
                if(!res.isReady()){
                   this.failed("Failed to load required TileMap image: " + source);

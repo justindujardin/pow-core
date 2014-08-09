@@ -17,15 +17,12 @@
 ///<reference path="../types/underscore.d.ts"/>
 ///<reference path="./resourceLoader.ts"/>
 ///<reference path="./time.ts"/>
-///<reference path="./stateMachine.ts"/>
-
 
 module pow2 {
 
    export interface IWorld {
       loader:ResourceLoader;
       time:Time;
-      state:IStateMachine;
       mark(object:IWorldObject);
       erase(object:IWorldObject);
       setService(name:string,value:IWorldObject):IWorldObject;
@@ -40,12 +37,10 @@ module pow2 {
    export class World implements IWorld {
       loader:ResourceLoader = null;
       time:Time;
-      state: IStateMachine;
       constructor(services?:any){
          services = _.defaults(services || {},{
-            loader: new ResourceLoader,
-            time:   new Time({autoStart: true}),
-            state:  null
+            loader: new ResourceLoader(),
+            time:   new Time()
          });
          _.extend(this,services);
          _.each(services,(s:IWorldObject,k) => {
