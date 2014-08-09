@@ -25,7 +25,6 @@ module pow2 {
 
    var _shared:pow2.Time = null;
    export class Time {
-      autoStart:boolean = false;
       tickRateMS:number = 32;
       mspf:number = 0;
       world:any = null;
@@ -33,17 +32,13 @@ module pow2 {
       time:number = 0;
       running:boolean = false;
       objects:Array<IProcessObject> = [];
-      constructor(options:Object){
-         _.extend(this,options || {});
+      constructor(){
          this.polyFillAnimationFrames();
-         if(this.autoStart){
-            this.start();
-         }
       }
 
       static get():pow2.Time {
          if(!_shared){
-            _shared = new pow2.Time({ autoStart:true });
+            _shared = new pow2.Time();
          }
          return _shared;
       }
