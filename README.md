@@ -20,9 +20,13 @@ Install the `grunt` utility:
 >
 > grunt --version
 
-Install the npm dependencies:
+Install the `bower` utility that's used for installing javascript libraries:
 
-> npm install
+> npm install -g bower
+
+Install the npm and bower dependencies:
+
+> npm install && bower install
 
 Run the developer workflow:
 
@@ -30,5 +34,5 @@ Run the developer workflow:
 
 ## Contributing
 
-Commit messages should [follow conventions](https://github.com/justindujardin/pow-core/blob/master/CONVENTIONS.md), and pull requests must *not* include checked in versions of the files in `lib/`.  The lib directory checkins happen automatically during tag releases.
+Commit messages should [follow conventions](https://github.com/justindujardin/pow-core/blob/master/CONVENTIONS.md).
 
