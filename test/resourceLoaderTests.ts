@@ -22,6 +22,13 @@ describe("pow2.ResourceLoader",()=>{
       expect(pow2.ResourceLoader.get()).toBeDefined();
    });
 
+   it("should throw error if create is called with invalid args",()=>{
+      var loader:pow2.ResourceLoader = new pow2.ResourceLoader();
+      expect(()=>{
+         loader.create(<any>"this isn't a constructor",null);
+      }).toThrow(new Error(pow2.errors.INVALID_ARGUMENTS));
+   });
+
    it("should trigger Resource.READY event when resource loads properly",(done)=>{
       var loader:pow2.ResourceLoader = new pow2.ResourceLoader();
       var resource:MockResource = loader.create<MockResource>(MockResource,true);
