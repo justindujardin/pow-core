@@ -89,6 +89,9 @@ module pow2 {
       }
 
       create<T extends IResource>(typeConstructor:any,data:any):T {
+         if(typeof typeConstructor !== 'function'){
+            throw new Error(pow2.errors.INVALID_ARGUMENTS);
+         }
          var type:Resource = <Resource>new typeConstructor(null,data);
          type.setLoader(this);
          return <T><any>type;
