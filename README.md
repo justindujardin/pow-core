@@ -2,7 +2,16 @@
 
 Core Typescript classes for use in the various Pow related projects.  Currently depends on JQuery for resource loading classes, and Underscore.js for general awesome.
 
-## Using
+## Features
+ 
+- Resource Manager for loading Audio, Image, JSON, Javascript, XML, Tiled TMX, and Tiled TSX files.
+- Events class based on Backbone.Events.
+- Point and Rect classes for representing spatial objects.
+- Time manager that can efficiently notify many objects of time and frame updates.
+- World class for grouing app specific data so that there may be many distinct apps on a given page.
+
+
+## Installation
 
 `bower install --save pow-core`
 
