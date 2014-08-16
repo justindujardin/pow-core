@@ -47,7 +47,7 @@ module pow2 {
          this.tileheight = parseInt(this.getElAttribute(this.$map,'tileheight'));
          this.tilewidth = parseInt(this.getElAttribute(this.$map,'tilewidth'));
          this.properties = tiled.readTiledProperties(this.$map);
-         var tileSetDeps = [];
+         var tileSetDeps:pow2.tiled.ITileSetDependency[] = [];
          var tileSets = this.getChildren(this.$map,'tileset');
          _.each(tileSets,(ts) => {
             var source:string = this.getElAttribute(ts,'source');
@@ -68,7 +68,6 @@ module pow2 {
                   firstgid:firstGid
                })
             }
-            // TODO: IF no source then create a resource with the given data.
          });
 
          // Extract tile <layer>s
@@ -129,7 +128,7 @@ module pow2 {
                tsr.prepare(data);
             }
             else if(dep.source){
-               this.loader.load(dep.source,(tsr:TiledTSXResource) => {
+               this.loader.load(dep.source,(tsr?:TiledTSXResource) => {
                   this.tilesets[tsr.name] = tsr;
                   tsr.firstgid = dep.firstgid;
                   _next();

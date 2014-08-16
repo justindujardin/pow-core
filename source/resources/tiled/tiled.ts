@@ -18,6 +18,11 @@
 module pow2.tiled {
    declare var $:any;
 
+
+   // -------------------------------------------------------------------------
+   // Implement a subset of the Tiled editor format:
+   //
+   // https://github.com/bjorn/tiled/wiki/TMX-Map-Format
    export interface ITiledBase {
       name:string;
       x:number;
@@ -35,6 +40,8 @@ module pow2.tiled {
    }
    export interface ITiledLayer extends ITiledLayerBase {
       data?:any;
+      color?:string;
+      objects?:ITiledObject[];
    }
 
    // <object>
@@ -45,11 +52,12 @@ module pow2.tiled {
       gid?:number;
    }
 
-   // <objectgroup>
-   export interface ITiledObjectGroup extends ITiledLayerBase {
-      color:string;
-      objects:ITiledObject[];
+   export interface ITileSetDependency {
+      source?:string; // Path to URL source from which to load data.
+      data?:any; // Data instead of source.
+      firstgid:number; // First global id.
    }
+
 
    // Tiled object XML reading utilities.
    export function readITiledBase(el:any):ITiledBase{
