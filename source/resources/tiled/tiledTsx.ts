@@ -19,15 +19,6 @@
 module pow2 {
 
 
-   export interface ITileMeta {
-      image:ImageResource;
-      x:number;
-      y:number;
-      width:number;
-      height:number;
-      data?:any;
-   }
-
    export class TilesetTile {
       id:number;
       properties:any = {};
@@ -108,7 +99,7 @@ module pow2 {
             && gid < this.firstgid + this.tiles.length;
       }
 
-      getTileMeta(gidOrIndex:number):ITileMeta {
+      getTileMeta(gidOrIndex:number):pow2.tiled.ITileInstanceMeta {
          var index:number = this.firstgid !== -1 ? (gidOrIndex - (this.firstgid)): gidOrIndex;
          var tilesX = this.imageWidth / this.tilewidth;
          var x = index % tilesX;

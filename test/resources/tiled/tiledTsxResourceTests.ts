@@ -24,4 +24,17 @@ describe("pow2.TiledTSXResource",()=>{
       var resource:pow2.TiledTSXResource = <any>loader.load('base/test/fixtures/badImage.tsx');
       resource.on(pow2.Resource.FAILED,()=>{ done(); });
    });
+
+   describe('getTileMeta',()=>{
+      it("should return metadata about a tile by global id",(done)=>{
+         var loader:pow2.ResourceLoader = new pow2.ResourceLoader();
+         var resource:pow2.TiledTSXResource = <any>loader.load('base/test/fixtures/example.tsx');
+         resource.on(pow2.Resource.READY,()=>{
+            var meta:pow2.tiled.ITileInstanceMeta = resource.getTileMeta(1);
+            expect(meta).not.toBeNull();
+            expect(meta.url).toContain('vezu.png');
+            done();
+         });
+      });
+   });
 });
