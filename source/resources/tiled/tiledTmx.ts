@@ -35,8 +35,7 @@ module pow2 {
       version:number = 1;
       properties:any = {};
       tilesets:any = {};
-      layers:any[] = [];
-      objectGroups:any[] = [];
+      layers:pow2.tiled.ITiledLayer[] = [];
 
       prepare(data) {
          this.$map = this.getRootNode('map');
@@ -70,8 +69,8 @@ module pow2 {
             }
          });
 
-         // Extract tile <layer>s
-         var layers = this.getChildren(this.$map,'layer');
+         // Extract tile <layer>s and <objectgroup>s
+         var layers = this.getChildren(this.$map,'layer,objectgroup');
          _.each(layers,(layer) => {
             var tileLayer = <tiled.ITiledLayer>tiled.readITiledLayerBase(layer);
             this.layers.push(tileLayer);
@@ -85,27 +84,22 @@ module pow2 {
                }
                tileLayer.data = JSON.parse('[' + $.trim(data.text()) + ']');
             }
-         });
 
-         // Extract tile <objectgroup>s
-         var objectGroups = this.getChildren(this.$map,'objectgroup');
-         _.each(objectGroups,($group) => {
-
-            // Base layer properties.
-            var objectGroup = <tiled.ITiledObjectGroup>tiled.readITiledLayerBase($group);
-            objectGroup.objects = [];
-            var color:string = this.getElAttribute($group,'color');
+            // Any custom color for this layer?
+            var color:string = this.getElAttribute(layer,'color');
             if(color){
-               objectGroup.color = color;
+               tileLayer.color = color;
             }
-            // Read any objects
-            var objects = this.getChildren($group,'object');
-            _.each(objects,(object) => {
-               objectGroup.objects.push(<tiled.ITiledObject>tiled.readITiledLayerBase(object));
-            });
-            this.objectGroups.push(objectGroup);
-         });
 
+            // Read any child objects
+            var objects = this.getChildren(layer,'object');
+            if(objects){
+               tileLayer.objects = [];
+               _.each(objects,(object) => {
+                  tileLayer.objects.push(<tiled.ITiledObject>tiled.readITiledLayerBase(object));
+               });
+            }
+         });
 
          // Load any source references.
          var _next = ():any => {

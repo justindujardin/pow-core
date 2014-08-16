@@ -23,6 +23,17 @@ module pow2.tiled {
    // Implement a subset of the Tiled editor format:
    //
    // https://github.com/bjorn/tiled/wiki/TMX-Map-Format
+
+   export interface ITileInstanceMeta {
+      image: HTMLImageElement;
+      url: string;
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+      data?: any;
+   }
+
    export interface ITiledBase {
       name:string;
       x:number;
@@ -50,6 +61,7 @@ module pow2.tiled {
       rotation?:number;
       type?:string;
       gid?:number;
+      color?:string;
    }
 
    export interface ITileSetDependency {

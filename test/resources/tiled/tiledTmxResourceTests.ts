@@ -15,8 +15,7 @@ describe("pow2.TiledTMXResource",()=>{
          expect(resource.width).toBe(4);
          expect(resource.tilewidth).toBe(tileSize);
          expect(resource.tileheight).toBe(tileSize);
-         expect(resource.objectGroups.length).toBe(1);
-         expect(resource.layers.length).toBe(1);
+         expect(resource.layers.length).toBe(2);
          done();
       });
    });
@@ -25,10 +24,9 @@ describe("pow2.TiledTMXResource",()=>{
       var loader:pow2.ResourceLoader = new pow2.ResourceLoader();
       var resource:pow2.TiledTMXResource = <any>loader.load('base/test/fixtures/example.tmx');
       resource.on(pow2.Resource.READY,()=>{
-         expect(resource.objectGroups.length).toBe(1);
-         expect(resource.objectGroups[0]._xml).toBeDefined();
-         expect(resource.layers.length).toBe(1);
+         expect(resource.layers.length).toBe(2);
          expect(resource.layers[0]._xml).toBeDefined();
+         expect(resource.layers[1]._xml).toBeDefined();
          done();
       });
    });
@@ -37,7 +35,6 @@ describe("pow2.TiledTMXResource",()=>{
       var loader:pow2.ResourceLoader = new pow2.ResourceLoader();
       var resource:pow2.TiledTMXResource = <any>loader.load('base/test/fixtures/example.tmx');
       resource.on(pow2.Resource.READY,()=>{
-         expect(resource.layers.length).toBe(1);
          var layer:pow2.tiled.ITiledLayer = resource.layers[0];
          expect(layer._xml).toBeDefined();
          expect(layer.name).toBe("TestLayer");
@@ -49,13 +46,15 @@ describe("pow2.TiledTMXResource",()=>{
       var loader:pow2.ResourceLoader = new pow2.ResourceLoader();
       var resource:pow2.TiledTMXResource = <any>loader.load('base/test/fixtures/example.tmx');
       resource.on(pow2.Resource.READY,()=>{
-         expect(resource.objectGroups.length).toBe(1);
-         var group:pow2.tiled.ITiledObjectGroup = resource.objectGroups[0];
-         expect(group._xml).toBeDefined();
-         expect(group.color).toBe('#000000');
+         var objectLayer:pow2.tiled.ITiledLayer = resource.layers[1];
+         expect(objectLayer.objects.length).toBe(1);
 
-         expect(group.objects.length).toBe(1);
-         var object = group.objects[0];
+
+
+         expect(objectLayer._xml).toBeDefined();
+         expect(objectLayer.color).toBe('#000000');
+
+         var object:pow2.tiled.ITiledObject = objectLayer.objects[0];
          expect(object.properties).toBeDefined();
          expect(object.properties.result).toBe("OK");
          expect(object.name).toBe("example");
