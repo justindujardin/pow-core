@@ -39,11 +39,14 @@ module pow2 {
       url:string;
       firstgid:number = -1;
       tiles:any[] = [];
+      relativeTo:string = null;
+      imageUrl:string = null;
       prepare(data) {
          var tileSet = this.getRootNode('tileset');
          this.name = this.getElAttribute(tileSet,'name');
          this.tilewidth = parseInt(this.getElAttribute(tileSet,'tilewidth'));
          this.tileheight = parseInt(this.getElAttribute(tileSet,'tileheight'));
+         var relativePath:string = this.url ? this.url.substr(0,this.url.lastIndexOf('/') + 1) : "";
 
          // Load tiles and custom properties.
          var tiles = this.getChildren(tileSet,'tile');
@@ -59,9 +62,9 @@ module pow2 {
             var source = this.getElAttribute(image,'source');
             this.imageWidth = parseInt(this.getElAttribute(image,'width') || "0");
             this.imageHeight = parseInt(this.getElAttribute(image,'height') || "0");
-            console.log("Tileset source: " + source);
-            this.url = this.url.substr(0,this.url.lastIndexOf('/') + 1) + source;
-            this.loader.load(this.url,(res?:ImageResource) => {
+            this.imageUrl = (this.relativeTo ? this.relativeTo : relativePath) + source;
+            console.log("Tileset source: " + this.imageUrl);
+            this.loader.load(this.imageUrl,(res?:ImageResource) => {
                this.image = res;
                if(!res.isReady()){
                   this.failed("Failed to load required TileMap image: " + source);
@@ -106,7 +109,7 @@ module pow2 {
          var y = Math.floor((index - x) / tilesX);
          return _.extend(this.tiles[index] || {},{
             image: this.image,
-            url:this.url,
+            url:this.imageUrl,
             x:x * this.tilewidth,
             y:y * this.tileheight,
             width:this.tilewidth,

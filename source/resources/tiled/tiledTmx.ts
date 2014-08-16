@@ -48,12 +48,13 @@ module pow2 {
          this.properties = tiled.readTiledProperties(this.$map);
          var tileSetDeps:pow2.tiled.ITileSetDependency[] = [];
          var tileSets = this.getChildren(this.$map,'tileset');
+         var relativePath:string = this.url.substr(0,this.url.lastIndexOf('/') + 1);
          _.each(tileSets,(ts) => {
             var source:string = this.getElAttribute(ts,'source');
             var firstGid:number = parseInt(this.getElAttribute(ts,'firstgid') || "-1");
             if(source){
                tileSetDeps.push({
-                  source:source,
+                  source:relativePath + source,
                   firstgid:firstGid
                });
             }
@@ -63,7 +64,7 @@ module pow2 {
             else {
                tileSetDeps.push({
                   data:ts,
-                  source:this.url,
+                  source:relativePath,
                   firstgid:firstGid
                })
             }
@@ -110,7 +111,7 @@ module pow2 {
             if(dep.data) {
 
                var tsr = <TiledTSXResource>this.loader.create(TiledTSXResource,dep.data);
-               tsr.url = dep.source;
+               tsr.relativeTo = relativePath;
                tsr.once(Resource.READY,()=>{
                   this.tilesets[tsr.name] = tsr;
                   tsr.firstgid = dep.firstgid;
@@ -119,7 +120,7 @@ module pow2 {
                tsr.once(Resource.FAILED,(error)=>{
                   this.failed(error);
                });
-               tsr.prepare(data);
+               tsr.prepare(dep.data);
             }
             else if(dep.source){
                this.loader.load(dep.source,(tsr?:TiledTSXResource) => {
