@@ -1,3 +1,19 @@
+<a name="0.1.1"></a>
+### 0.1.1 (2014-08-16)
+
+
+#### Bug Fixes
+
+* **ResourceLoader:** throw a sane error if create is given a bad constructor ([da3600e8](http://github.com/justindujardin/pow-core/commit/da3600e82cbba1e52a82c9e904241824b08aa47d))
+
+
+#### Features
+
+* **Tiled:**
+  * updates to tiled implementation from pow-edit ([283de09c](http://github.com/justindujardin/pow-core/commit/283de09cf63083e9c6e8a91c431b2d9621e6dad5))
+  * updates to tiled implementation from pow-edit ([9babe959](http://github.com/justindujardin/pow-core/commit/9babe959ebf710cf3cd5c51d46636167b0ebace0))
+
+
 <a name="0.1.0"></a>
 ## 0.1.0 (2014-08-09)
 
