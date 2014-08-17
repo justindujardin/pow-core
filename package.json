@@ -1,6 +1,6 @@
 {
   "name": "pow-core",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Pow Core - TypeScript classes for pow projects.",
   "main": "lib/pow-core.js",
   "repository": {

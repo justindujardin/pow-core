@@ -1,3 +1,12 @@
+<a name="0.1.3"></a>
+### 0.1.3 (2014-08-16)
+
+
+#### Bug Fixes
+
+* **TiledTMX:** support more proper inherited paths in TMX ([239a3859](http://github.com/justindujardin/pow-core/commit/239a3859a544e565b6a7abe1b564833326e095d1))
+
+
 <a name="0.1.2"></a>
 ### 0.1.2 (2014-08-16)
 
