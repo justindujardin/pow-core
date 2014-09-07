@@ -1,3 +1,12 @@
+<a name="0.1.4"></a>
+### 0.1.4 (2014-09-07)
+
+
+#### Bug Fixes
+
+* **Time:** issue #1 generate unique id to reduce boilerplate ([880ffbd5](http://github.com/justindujardin/pow-core/commit/880ffbd5634e3a19ea719ea7710bb6fc7763f9ad))
+
+
 <a name="0.1.3"></a>
 ### 0.1.3 (2014-08-16)
 
