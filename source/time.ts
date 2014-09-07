@@ -18,7 +18,7 @@
 
 module pow2 {
    export interface IProcessObject {
-      _uid:string;
+      _uid?:string;
       tick?(elapsed:number);
       processFrame?(elapsed:number);
    }
