@@ -76,7 +76,7 @@ module pow2 {
 
       addObject(object:IProcessObject){
          if(!object._uid){
-            throw new Error("Invalid object contains no _uid ->" + object);
+            object._uid = _.uniqueId("u");
          }
          if(_.where(this.objects,{_uid:object._uid}).length > 0){
             return;

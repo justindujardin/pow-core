@@ -18,6 +18,16 @@ describe("pow2.Time",()=>{
       expect(t.polyFillAnimationFrames).toBeDefined();
    });
 
+   describe('addObject',()=>{
+      it('should generate unique id if _uid is not an object property',()=>{
+         var obj:any = {};
+         var t:pow2.Time = pow2.Time.get();
+         t.addObject(obj);
+         expect(obj._uid).toBeDefined();
+         expect(typeof obj._uid).toBe('string');
+      });
+   });
+
    it("should poly-fill requestAnimationFrame in legacy browsers",(done)=>{
       var olds:{
          [key:string]:any
