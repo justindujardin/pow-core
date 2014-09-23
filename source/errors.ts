@@ -38,4 +38,15 @@ module pow2.errors {
    export var REQUIRED_ARGUMENT:string = 'argument must be valid';
 
    export var ALREADY_EXISTS:string = 'already exists and would overwrite existing value';
+
+   /**
+    * A specified index is out of the valid range for an array it applies to.
+    */
+   export var INDEX_OUT_OF_RANGE:string = 'index out of range';
+
+   /**
+    * An item is not of the expected type or value.
+    */
+   export var INVALID_ITEM:string = 'invalid item type or value';
+
 }
