@@ -10,10 +10,13 @@
 </data>
  </layer>
  <objectgroup color="#000000" draworder="topdown" name="TestObject" width="4" height="4">
-  <object name="example" x="0" y="0" width="64" height="64">
+  <object name="example" x="5" y="5" width="64" height="64" type="box" visible="false">
    <properties>
     <property name="result" value="OK"/>
+    <property name="number" value="10"/>
+    <property name="boolean" value="false"/>
    </properties>
   </object>
+  <object name="example2" x="0" y="0" width="64" height="64"/>
  </objectgroup>
 </map>

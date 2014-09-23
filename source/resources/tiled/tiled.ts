@@ -41,7 +41,6 @@ module pow2.tiled {
       width:number;
       height:number;
       visible:boolean;
-      _xml:any;
    }
 
    // <layer>, <objectgroup>
@@ -68,6 +67,7 @@ module pow2.tiled {
       source?:string; // Path to URL source from which to load data.
       data?:any; // Data instead of source.
       firstgid:number; // First global id.
+      literal?:string; // The literal string representing the source as originally specified in xml
    }
 
 
@@ -83,6 +83,39 @@ module pow2.tiled {
          _xml:el
       };
    }
+   export function writeITiledBase(el:any,data:ITiledObject){
+      setElAttribute(el,'name',data.name);
+      if(data.type){
+         setElAttribute(el,'type',data.type);
+      }
+      if(data.x !== 0){
+         setElAttribute(el,'x',data.x);
+      }
+      if(data.y !== 0){
+         setElAttribute(el,'y',data.y);
+      }
+      setElAttribute(el,'width',data.width);
+      setElAttribute(el,'height',data.height);
+      if(data.visible === false){
+         setElAttribute(el,'visible',data.visible);
+      }
+      if(typeof data.color !== 'undefined'){
+         setElAttribute(el,'color',data.color);
+      }
+   }
+   export function writeITiledObjectBase(el:any,data:ITiledObject){
+      writeITiledBase(el,data);
+   }
+
+   export function readITiledObject(el:any):ITiledObject {
+      // Base layer properties
+      var result:ITiledObject = <ITiledObject>readITiledLayerBase(el);
+      var type:string = getElAttribute(el,'type');
+      if(type){
+         result.type = type;
+      }
+      return result;
+   }
 
    export function readITiledLayerBase(el:any):ITiledLayerBase {
       // Base layer properties
@@ -94,8 +127,49 @@ module pow2.tiled {
       if(props){
          result.properties = props;
       }
-      result._xml = el;
       return result;
+   }
+
+   // StackOverflow: http://stackoverflow.com/questions/14780350/convert-relative-path-to-absolute-using-javascript
+   export function compactUrl(base:string, relative:string) {
+      var stack = base.split("/");
+      var parts = relative.split("/");
+      stack.pop(); // remove current file name (or empty string)
+      // (omit if "base" is the current folder without trailing slash)
+      for (var i=0; i<parts.length; i++) {
+         if (parts[i] == ".")
+            continue;
+         if (parts[i] == "..")
+            stack.pop();
+         else
+            stack.push(parts[i]);
+      }
+      return stack.join("/");
+   }
+
+   export function xml2Str(xmlNode) {
+
+         try {
+            // Gecko- and Webkit-based browsers (Firefox, Chrome), Opera.
+            return (new XMLSerializer()).serializeToString(xmlNode);
+         }
+         catch (e) {
+            try {
+               // Internet Explorer.
+               return xmlNode.xml;
+            }
+            catch (e) {
+               //Other browsers without XML Serializer
+               throw new Error('Xmlserializer not supported');
+            }
+         }
+      }
+
+
+   export function writeITiledLayerBase(el:any,data:ITiledLayerBase) {
+      writeITiledBase(el,data);
+      setElAttribute(el,'opacity',data.opacity);
+      writeTiledProperties(el,data.properties);
    }
 
    export function readTiledProperties(el:any){
@@ -124,6 +198,18 @@ module pow2.tiled {
       return null;
    }
 
+   export function writeTiledProperties(el:any,data:any){
+      var result:any = $('<properties/>');
+      _.each(data,(value:any,key:string)=>{
+         var prop:any = $('<property/>');
+         setElAttribute(prop,'name',key);
+         setElAttribute(prop,'value',value);
+         result.append(prop);
+      });
+      if(result.children().length > 0){
+         el.append(result);
+      }
+   }
    // XML Utilities
 
    export function getChildren(el:any,tag:string):any[] {
@@ -137,15 +223,11 @@ module pow2.tiled {
    export function getChild(el:any,tag:string):any {
       return getChildren(el,tag)[0];
    }
-
-   export function getElAttribute(el:any, name:string){
-      if(el){
-         var attr = el.attr(name);
-         if(attr){
-            return attr;
-         }
-      }
-      return null;
+   export function setElAttribute(el:any, name:string,value:any){
+      el.attr(name,value);
+   }
+   export function getElAttribute(el:any, name:string):string{
+      return el.attr(name) || null;
    }
 
 }

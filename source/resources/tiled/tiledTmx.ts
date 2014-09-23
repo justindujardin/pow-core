@@ -36,6 +36,65 @@ module pow2 {
       properties:any = {};
       tilesets:any = {};
       layers:pow2.tiled.ITiledLayer[] = [];
+      xmlHeader:string = '<?xml version="1.0" encoding="UTF-8"?>';
+
+      write():any{
+         var root:any = $('<map/>');
+         tiled.setElAttribute(root,'version',this.version);
+         tiled.setElAttribute(root,'orientation',this.orientation);
+         tiled.setElAttribute(root,'width',this.width);
+         tiled.setElAttribute(root,'height',this.height);
+         tiled.setElAttribute(root,'tilewidth',this.tilewidth);
+         tiled.setElAttribute(root,'tileheight',this.tileheight);
+         tiled.writeTiledProperties(root,this.properties);
+
+         _.each(this.tilesets,(tileSet:any)=>{
+            if(!tileSet.literal){
+               throw new Error("Add support for inline TSX writing");
+            }
+            if(!tileSet.firstgid){
+               throw new Error(pow2.errors.INVALID_ITEM);
+            }
+            var tilesetElement:any = $('<tileset/>');
+            tilesetElement.attr('firstgid',tileSet.firstgid);
+            tilesetElement.attr('source',tileSet.literal);
+            root.append(tilesetElement);
+         });
+
+         _.each(this.layers,(layer:pow2.tiled.ITiledLayer)=>{
+            var layerElement:any = null;
+            if(typeof layer.data !== 'undefined') {
+               layerElement = $('<layer/>');
+               tiled.writeITiledObjectBase(layerElement,layer);
+               var dataElement:any = $('<data/>');
+
+               // Validate data length
+               var expectLength:number = this.width * this.height;
+               if(layer.data.length != expectLength){
+                  throw new Error(pow2.errors.INVALID_ITEM);
+               }
+
+               // Only supports CSV. Add GZIP support some day.
+               dataElement.attr('encoding','csv');
+               dataElement.text(layer.data.join(','));
+               layerElement.append(dataElement);
+            } else if (typeof layer.objects !== 'undefined'){
+               layerElement = $('<objectgroup/>');
+               _.each(layer.objects,(obj:tiled.ITiledObject)=>{
+                  var objectElement = $('<object/>');
+                  tiled.writeITiledObjectBase(objectElement,obj);
+                  tiled.writeTiledProperties(objectElement,obj.properties);
+                  layerElement.append(objectElement);
+               });
+            }
+            else {
+               throw new Error(pow2.errors.INVALID_ITEM);
+            }
+            tiled.writeITiledLayerBase(layerElement,layer);
+            root.append(layerElement);
+         });
+         return this.xmlHeader + tiled.xml2Str(root[0]);
+      }
 
       prepare(data) {
          this.$map = this.getRootNode('map');
@@ -54,7 +113,8 @@ module pow2 {
             var firstGid:number = parseInt(this.getElAttribute(ts,'firstgid') || "-1");
             if(source){
                tileSetDeps.push({
-                  source:relativePath + source,
+                  source:tiled.compactUrl(relativePath, source),
+                  literal:source,
                   firstgid:firstGid
                });
             }
@@ -97,7 +157,7 @@ module pow2 {
             if(objects){
                tileLayer.objects = [];
                _.each(objects,(object) => {
-                  tileLayer.objects.push(<tiled.ITiledObject>tiled.readITiledLayerBase(object));
+                  tileLayer.objects.push(<tiled.ITiledObject>tiled.readITiledObject(object));
                });
             }
          });
@@ -126,6 +186,7 @@ module pow2 {
                this.loader.load(dep.source,(tsr?:TiledTSXResource) => {
                   this.tilesets[tsr.name] = tsr;
                   tsr.firstgid = dep.firstgid;
+                  tsr.literal = dep.literal;
                   _next();
                });
             }

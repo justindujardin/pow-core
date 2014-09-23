@@ -41,6 +41,7 @@ module pow2 {
       tiles:any[] = [];
       relativeTo:string = null;
       imageUrl:string = null;
+      literal:string = null; // The literal source path specified in xml
       prepare(data) {
          var tileSet = this.getRootNode('tileset');
          this.name = this.getElAttribute(tileSet,'name');
@@ -62,7 +63,7 @@ module pow2 {
             var source = this.getElAttribute(image,'source');
             this.imageWidth = parseInt(this.getElAttribute(image,'width') || "0");
             this.imageHeight = parseInt(this.getElAttribute(image,'height') || "0");
-            this.imageUrl = (this.relativeTo ? this.relativeTo : relativePath) + source;
+            this.imageUrl = tiled.compactUrl(this.relativeTo ? this.relativeTo : relativePath, source);
             console.log("Tileset source: " + this.imageUrl);
             this.loader.load(this.imageUrl,(res?:ImageResource) => {
                this.image = res;
