@@ -1,3 +1,12 @@
+<a name="0.1.5"></a>
+### 0.1.5 (2014-09-23)
+
+
+#### Features
+
+* **TiledTMX:** support serialization of tiled map file ([49a4a312](http://github.com/justindujardin/pow-core/commit/49a4a3125918f5486537b609b53f4e271142d9d0))
+
+
 <a name="0.1.4"></a>
 ### 0.1.4 (2014-09-07)
 
