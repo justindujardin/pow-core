@@ -39,8 +39,8 @@ module pow2 {
       time:Time;
       constructor(services?:any){
          services = _.defaults(services || {},{
-            loader: new ResourceLoader(),
-            time:   new Time()
+            loader: pow2.ResourceLoader.get(),
+            time:   pow2.Time.get()
          });
          _.extend(this,services);
          _.each(services,(s:IWorldObject,k) => {
