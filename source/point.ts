@@ -16,6 +16,12 @@
 ///<reference path="./errors.ts"/>
 
 module pow2{
+
+   export interface IPoint {
+      x:number;
+      y:number;
+   }
+
    export class Point {
       x:number;
       y:number;
