@@ -42,6 +42,10 @@ module pow2 {
          };
 
          var reference:HTMLAudioElement = document.createElement('audio');
+         reference.addEventListener('canplaythrough',() => {
+            this.data = reference;
+            this.ready();
+         });
 
          // Try all supported types, and accept the first valid one.
          _.each(<any>AudioResource.types,(mime:string,extension:string) => {
@@ -60,10 +64,7 @@ module pow2 {
             });
             reference.appendChild(source);
          });
-         reference.addEventListener('canplaythrough',() => {
-            this.data = reference;
-            this.ready();
-         });
+
          reference.load();
       }
    }
