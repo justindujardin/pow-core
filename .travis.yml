@@ -3,14 +3,14 @@ node_js:
  - "0.10"
 
 before_script:
- - export DISPLAY=:99.0
- - sh -e /etc/init.d/xvfb start
  - npm install
  - ./node_modules/.bin/bower install
  - ./node_modules/.bin/grunt typescript
 
+before_install:
+  - export CHROME_BIN=chromium-browser
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+
 after_script:
  - ./node_modules/.bin/grunt coveralls
-
-addons:
-  firefox: "27.0"

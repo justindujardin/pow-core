@@ -19,7 +19,7 @@ module.exports = function(config) {
       autoWatch: true,
       background:true,
       // - Chrome, ChromeCanary, Firefox, Opera, Safari (only Mac), PhantomJS, IE (only Windows)
-      browsers: process.env.TRAVIS ? ['Firefox'] : ['Chrome'],
+      browsers: process.env.TRAVIS ? ['TravisChrome'] : ['Chrome'],
       singleRun: false,
       reportSlowerThan: 500,
       plugins: [
@@ -28,6 +28,12 @@ module.exports = function(config) {
          'karma-jasmine',
          'karma-coverage'
       ],
+      customLaunchers: {
+         TravisChrome: {
+            base: 'Chrome',
+            flags: ['--no-sandbox']
+         }
+      },
 
       preprocessors: (process.env.TRAVIS || coverageDebug) ? { "lib/*.js": "coverage" } : {},
       coverageReporter: {
