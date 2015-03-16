@@ -53,7 +53,7 @@ module pow2 {
                sources--;
                return;
             }
-            var source:HTMLSourceElement = document.createElement('source');
+            var source = <HTMLSourceElement>document.createElement('source');
             source.type = mime;
             source.src = this.url + '.' + extension;
             source.addEventListener('error',function(e:Event){
