@@ -1,3 +1,12 @@
+<a name="0.1.9"></a>
+### 0.1.9 (2015-04-18)
+
+
+#### Bug Fixes
+
+* **time:** actually stop the raf when time.stop is called ([9b12b0fc](http://github.com/justindujardin/pow-core/commit/9b12b0fc513f55d682678fa21c7f2ef88c36d264))
+
+
 <a name="0.1.8"></a>
 ### 0.1.8 (2015-01-04)
 
