@@ -51,6 +51,9 @@ module pow2 {
          }
          this.running = true;
          var _frameCallback:FrameRequestCallback = (time:number) => {
+            if(!this.running){
+               return;
+            }
             this.time = Math.floor(time);
             var now:number = new Date().getMilliseconds();
             var elapsed:number = Math.floor(time - this.lastTime);
