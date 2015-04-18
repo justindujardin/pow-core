@@ -83,7 +83,7 @@ module pow2 {
 
       getResourceExtension(url:string):string {
          var index:number = url.lastIndexOf('.');
-         if(index === -1){
+         if(index === -1 || index <= url.lastIndexOf('/')){
             return '';
          }
          return url.substr(index+1);
