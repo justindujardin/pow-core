@@ -1,0 +1,45 @@
+[
+  {
+    "name": "EntityWithComponents",
+    "type": "pow2.Entity",
+    "components": [
+      {
+        "name": "one",
+        "type": "pow2.Component"
+      },
+      {
+        "name": "two",
+        "type": "pow2.Component"
+      }
+    ]
+  },
+  {
+    "name": "EntityWithParams",
+    "type": "pow2.tests.BooleanConstructObject",
+    "params": ["arg"],
+    "inputs": {
+      "arg": "boolean"
+    }
+  },
+  {
+    "name": "EntityWithComponentInput",
+    "type": "pow2.Entity",
+    "inputs": {
+      "component": "pow2.Component"
+    }
+  },
+  {
+    "name": "ComponentWithParams",
+    "type": "pow2.Entity",
+    "inputs": {
+      "arg": "boolean"
+    },
+    "components": [
+      {
+        "name": "test",
+        "type": "pow2.tests.BooleanConstructComponent",
+        "params": ["arg"]
+      }
+    ]
+  }
+]
