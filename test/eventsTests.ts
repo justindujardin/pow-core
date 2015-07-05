@@ -87,10 +87,10 @@ describe("pow2.Events",()=>{
       it("should support any number of arguments",()=>{
          var ev:string = 'event';
          var expectArgs:number = -1;
-         var cb:any = () => {
+         function cb() {
             expect(expectArgs).toBeGreaterThan(-1);
             expect(arguments.length).toBe(expectArgs);
-         };
+         }
          obj.on(ev,cb);
          var i:number = 0;
          for(; i < 10; i++){
