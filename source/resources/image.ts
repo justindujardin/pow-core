@@ -12,27 +12,28 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
-*/
+ */
 
 
 /// <reference path="../resource.ts"/>
 
 module pow2 {
-   /**
-    * Use html image element to load an image resource.
-    */
-   export class ImageResource extends Resource {
-      data:HTMLImageElement;
-      load() {
-         var reference:HTMLImageElement = document.createElement('img');
-         reference.onload = () => {
-            this.data = reference;
-            this.ready();
-         };
-         reference.onerror = (err:any) => {
-            this.failed(err);
-         };
-         reference.src = this.url;
-      }
-   }
+  /**
+   * Use html image element to load an image resource.
+   */
+  export class ImageResource extends Resource {
+    data:HTMLImageElement;
+
+    load() {
+      var reference:HTMLImageElement = document.createElement('img');
+      reference.onload = () => {
+        this.data = reference;
+        this.ready();
+      };
+      reference.onerror = (err:any) => {
+        this.failed(err);
+      };
+      reference.src = this.url;
+    }
+  }
 }

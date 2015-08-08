@@ -12,27 +12,27 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
-*/
+ */
 
 
 /// <reference path="../resource.ts"/>
 
 module pow2 {
 
-   declare var $:any;
-   /**
-    * Use jQuery to load a Javascript file from a URL.
-    */
-   export class ScriptResource extends Resource {
-      load() {
-         var request:any = $.getScript(this.url);
-         request.done((script:HTMLScriptElement) => {
-            this.data = script;
-            this.ready();
-         });
-         request.fail((jqxhr,settings,exception) => {
-            this.failed(exception);
-         });
-      }
-   }
+  declare var $:any;
+  /**
+   * Use jQuery to load a Javascript file from a URL.
+   */
+  export class ScriptResource extends Resource {
+    load() {
+      var request:any = $.getScript(this.url);
+      request.done((script:HTMLScriptElement) => {
+        this.data = script;
+        this.ready();
+      });
+      request.fail((jqxhr, settings, exception) => {
+        this.failed(exception);
+      });
+    }
+  }
 }

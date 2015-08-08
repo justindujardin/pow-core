@@ -12,7 +12,7 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
-*/
+ */
 
 /**
  * Constant strings for use in throwing Error with messages.  Used to
@@ -20,33 +20,33 @@
  */
 module pow2.errors {
 
-   /**
-    * An invalid combination of arguments was given to a function
-    */
-   export var INVALID_ARGUMENTS:string = 'invalid arguments';
+  /**
+   * An invalid combination of arguments was given to a function
+   */
+  export var INVALID_ARGUMENTS:string = 'invalid arguments';
 
-   /**
-    * A division by zero would have occurred
-    */
-   export var DIVIDE_ZERO:string = 'divide by zero operation';
+  /**
+   * A division by zero would have occurred
+   */
+  export var DIVIDE_ZERO:string = 'divide by zero operation';
 
-   /**
-    * Something called on a base class that doesn't implement the desired functionality
-    */
-   export var CLASS_NOT_IMPLEMENTED:string = 'must be implemented in a subclass';
+  /**
+   * Something called on a base class that doesn't implement the desired functionality
+   */
+  export var CLASS_NOT_IMPLEMENTED:string = 'must be implemented in a subclass';
 
-   export var REQUIRED_ARGUMENT:string = 'argument must be valid';
+  export var REQUIRED_ARGUMENT:string = 'argument must be valid';
 
-   export var ALREADY_EXISTS:string = 'already exists and would overwrite existing value';
+  export var ALREADY_EXISTS:string = 'already exists and would overwrite existing value';
 
-   /**
-    * A specified index is out of the valid range for an array it applies to.
-    */
-   export var INDEX_OUT_OF_RANGE:string = 'index out of range';
+  /**
+   * A specified index is out of the valid range for an array it applies to.
+   */
+  export var INDEX_OUT_OF_RANGE:string = 'index out of range';
 
-   /**
-    * An item is not of the expected type or value.
-    */
-   export var INVALID_ITEM:string = 'invalid item type or value';
+  /**
+   * An item is not of the expected type or value.
+   */
+  export var INVALID_ITEM:string = 'invalid item type or value';
 
 }

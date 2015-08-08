@@ -12,172 +12,186 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
-*/
+ */
 
 
 ///<reference path='./point.ts' />
 
-module pow2{
-   export interface IRect {
-      point: Point;
-      extent: Point;
-   }
+module pow2 {
+  export interface IRect {
+    point: Point;
+    extent: Point;
+  }
 
-   export class Rect implements IRect{
-      point: Point;
-      extent: Point;
-      constructor();
-      constructor(rect:IRect);
-      constructor(point:Point,extent:Point);
-      constructor(x:number,y:number,width:number,height:number);
-      constructor(rectOrPointOrX?:any,extentOrY?:any,width?:number,height?:number) {
-         if(rectOrPointOrX instanceof Rect){
-            this.point = new Point(rectOrPointOrX.point);
-            this.extent = new Point(rectOrPointOrX.extent);
-         }
-         else if(typeof width === 'number' && typeof height === 'number'){
-            this.point = new Point(rectOrPointOrX,extentOrY);
-            this.extent = new Point(width,height);
-         }
-         else if(rectOrPointOrX instanceof Point && extentOrY instanceof Point){
-            this.point = new Point(rectOrPointOrX);
-            this.extent = new Point(extentOrY);
-         }
-         else {
-            this.point = new Point(0,0);
-            this.extent = new Point(1,1);
-         }
-         return this;
-      }
+  export class Rect implements IRect {
+    point:Point;
+    extent:Point;
 
-      toString():string {
-         return this.point.toString() + "," + this.extent.toString();
+    constructor();
+    constructor(rect:IRect);
+    constructor(point:Point, extent:Point);
+    constructor(x:number, y:number, width:number, height:number);
+    constructor(rectOrPointOrX?:any, extentOrY?:any, width?:number, height?:number) {
+      if (rectOrPointOrX instanceof Rect) {
+        this.point = new Point(rectOrPointOrX.point);
+        this.extent = new Point(rectOrPointOrX.extent);
       }
+      else if (typeof width === 'number' && typeof height === 'number') {
+        this.point = new Point(rectOrPointOrX, extentOrY);
+        this.extent = new Point(width, height);
+      }
+      else if (rectOrPointOrX instanceof Point && extentOrY instanceof Point) {
+        this.point = new Point(rectOrPointOrX);
+        this.extent = new Point(extentOrY);
+      }
+      else {
+        this.point = new Point(0, 0);
+        this.extent = new Point(1, 1);
+      }
+      return this;
+    }
 
-      set(rect:IRect):Rect;
-      set(point:Point,extent:Point):Rect;
-      set(x:number,y:number,width:number,height:number);
-      set(rectOrPointOrX:any,extentOrY?:any,width?:number,height?:number):Rect {
-         if(rectOrPointOrX instanceof Rect){
-            this.point.set(rectOrPointOrX.point);
-            this.extent.set(rectOrPointOrX.extent);
-         }
-         else if(typeof width === 'number' && typeof height === 'number'){
-            this.point.set(rectOrPointOrX,extentOrY);
-            this.extent.set(width,height);
-         }
-         else if(rectOrPointOrX instanceof Point && extentOrY instanceof Point){
-            this.point.set(rectOrPointOrX);
-            this.extent.set(extentOrY);
-         }
-         else {
-            throw new Error(pow2.errors.INVALID_ARGUMENTS);
-         }
-         return this;
-      }
+    toString():string {
+      return this.point.toString() + "," + this.extent.toString();
+    }
 
-      clone():Rect {
-         return new Rect(this.point.clone(),this.extent.clone());
+    set(rect:IRect):Rect;
+    set(point:Point, extent:Point):Rect;
+    set(x:number, y:number, width:number, height:number);
+    set(rectOrPointOrX:any, extentOrY?:any, width?:number, height?:number):Rect {
+      if (rectOrPointOrX instanceof Rect) {
+        this.point.set(rectOrPointOrX.point);
+        this.extent.set(rectOrPointOrX.extent);
       }
+      else if (typeof width === 'number' && typeof height === 'number') {
+        this.point.set(rectOrPointOrX, extentOrY);
+        this.extent.set(width, height);
+      }
+      else if (rectOrPointOrX instanceof Point && extentOrY instanceof Point) {
+        this.point.set(rectOrPointOrX);
+        this.extent.set(extentOrY);
+      }
+      else {
+        throw new Error(pow2.errors.INVALID_ARGUMENTS);
+      }
+      return this;
+    }
 
-      clip(clipRect:IRect):Rect{
-         var right:number = this.point.x + this.extent.x;
-         var bottom:number = this.point.y + this.extent.y;
-         this.point.x = Math.max(clipRect.point.x, this.point.x);
-         this.extent.x = Math.min(clipRect.point.x + clipRect.extent.x,right) - this.point.x;
-         this.point.y = Math.max(clipRect.point.y, this.point.y);
-         this.extent.y = Math.min(clipRect.point.y + clipRect.extent.y,bottom) - this.point.y;
-         return this;
-      }
-      isValid():boolean {
-         return this.extent.x > 0 && this.extent.y > 0;
-      }
+    clone():Rect {
+      return new Rect(this.point.clone(), this.extent.clone());
+    }
 
-      intersect(clipRect:IRect):boolean {
-         return !(clipRect.point.x > this.point.x + this.extent.x ||
-            clipRect.point.x + clipRect.extent.x < this.point.x ||
-            clipRect.point.y > this.point.y + this.extent.y ||
-            clipRect.point.y + clipRect.extent.y < this.point.y);
-      }
+    clip(clipRect:IRect):Rect {
+      var right:number = this.point.x + this.extent.x;
+      var bottom:number = this.point.y + this.extent.y;
+      this.point.x = Math.max(clipRect.point.x, this.point.x);
+      this.extent.x = Math.min(clipRect.point.x + clipRect.extent.x, right) - this.point.x;
+      this.point.y = Math.max(clipRect.point.y, this.point.y);
+      this.extent.y = Math.min(clipRect.point.y + clipRect.extent.y, bottom) - this.point.y;
+      return this;
+    }
 
-      pointInRect(point:Point):boolean;
-      pointInRect(x:number,y:number):boolean;
-      pointInRect(pointOrX:any,y?:number){
-         var x:number = 0;
-         if(pointOrX instanceof Point){
-            x = pointOrX.x;
-            y = pointOrX.y;
-         }
-         else if(typeof pointOrX === 'number' && typeof y === 'number'){
-            x = pointOrX;
-         }
-         else {
-            throw new Error(pow2.errors.INVALID_ARGUMENTS);
-         }
-         if(x >= this.point.x + this.extent.x || y >= this.point.y + this.extent.y){
-            return false;
-         }
-         return !(x < this.point.x || y < this.point.y);
-      }
+    isValid():boolean {
+      return this.extent.x > 0 && this.extent.y > 0;
+    }
 
-      getCenter():Point {
-         var x = parseFloat((this.point.x + this.extent.x * 0.5).toFixed(2));
-         var y = parseFloat((this.point.y + this.extent.y * 0.5).toFixed(2));
-         return new Point(x,y);
-      }
+    intersect(clipRect:IRect):boolean {
+      return !(clipRect.point.x > this.point.x + this.extent.x ||
+      clipRect.point.x + clipRect.extent.x < this.point.x ||
+      clipRect.point.y > this.point.y + this.extent.y ||
+      clipRect.point.y + clipRect.extent.y < this.point.y);
+    }
 
-      setCenter(point:Point):Rect;
-      setCenter(x:number,y:number):Rect;
-      setCenter(pointOrX:any,y?:number):Rect {
-         var x:number;
-         if(pointOrX instanceof Point){
-            x = pointOrX.x;
-            y = pointOrX.y;
-         }
-         else {
-            x = pointOrX;
-         }
-         this.point.x = parseFloat((x - this.extent.x * 0.5).toFixed(2));
-         this.point.y = parseFloat((y - this.extent.y * 0.5).toFixed(2));
-         return this;
+    pointInRect(point:Point):boolean;
+    pointInRect(x:number, y:number):boolean;
+    pointInRect(pointOrX:any, y?:number) {
+      var x:number = 0;
+      if (pointOrX instanceof Point) {
+        x = pointOrX.x;
+        y = pointOrX.y;
       }
+      else if (typeof pointOrX === 'number' && typeof y === 'number') {
+        x = pointOrX;
+      }
+      else {
+        throw new Error(pow2.errors.INVALID_ARGUMENTS);
+      }
+      if (x >= this.point.x + this.extent.x || y >= this.point.y + this.extent.y) {
+        return false;
+      }
+      return !(x < this.point.x || y < this.point.y);
+    }
 
-      getLeft():number { return this.point.x; }
-      getTop():number { return this.point.y; }
-      getRight():number { return this.point.x + this.extent.x; }
-      getBottom():number { return this.point.y + this.extent.y; }
-      getHalfSize():Point {
-         return new Point(this.extent.x / 2, this.extent.y / 2);
-      }
+    getCenter():Point {
+      var x = parseFloat((this.point.x + this.extent.x * 0.5).toFixed(2));
+      var y = parseFloat((this.point.y + this.extent.y * 0.5).toFixed(2));
+      return new Point(x, y);
+    }
 
-      /**
-       * Add a point to the rect.  This will ensure that the rect
-       * contains the given point.
-       * @param {pow2.Point} value The point to add.
-       */
-      addPoint(value:Point) {
-         if(value.x < this.point.x){
-            this.extent.x = this.extent.x - (value.x - this.point.x);
-            this.point.x = value.x;
-         }
-         if(value.y < this.point.y){
-            this.extent.y = this.extent.y - (value.x - this.point.y);
-            this.point.y = value.y;
-         }
-         if(value.x > this.point.x + this.extent.x){
-            this.extent.x = value.x - this.point.x;
-         }
-         if(value.y > this.point.y + this.extent.y){
-            this.extent.y = value.y - this.point.y;
-         }
+    setCenter(point:Point):Rect;
+    setCenter(x:number, y:number):Rect;
+    setCenter(pointOrX:any, y?:number):Rect {
+      var x:number;
+      if (pointOrX instanceof Point) {
+        x = pointOrX.x;
+        y = pointOrX.y;
       }
+      else {
+        x = pointOrX;
+      }
+      this.point.x = parseFloat((x - this.extent.x * 0.5).toFixed(2));
+      this.point.y = parseFloat((y - this.extent.y * 0.5).toFixed(2));
+      return this;
+    }
 
-      inflate(x:number=1,y:number=1):Rect {
-         this.point.x -= x;
-         this.extent.x += 2 * x;
-         this.point.y -= y;
-         this.extent.y += 2 * y;
-         return this;
+    getLeft():number {
+      return this.point.x;
+    }
+
+    getTop():number {
+      return this.point.y;
+    }
+
+    getRight():number {
+      return this.point.x + this.extent.x;
+    }
+
+    getBottom():number {
+      return this.point.y + this.extent.y;
+    }
+
+    getHalfSize():Point {
+      return new Point(this.extent.x / 2, this.extent.y / 2);
+    }
+
+    /**
+     * Add a point to the rect.  This will ensure that the rect
+     * contains the given point.
+     * @param {pow2.Point} value The point to add.
+     */
+    addPoint(value:Point) {
+      if (value.x < this.point.x) {
+        this.extent.x = this.extent.x - (value.x - this.point.x);
+        this.point.x = value.x;
       }
-   }
+      if (value.y < this.point.y) {
+        this.extent.y = this.extent.y - (value.x - this.point.y);
+        this.point.y = value.y;
+      }
+      if (value.x > this.point.x + this.extent.x) {
+        this.extent.x = value.x - this.point.x;
+      }
+      if (value.y > this.point.y + this.extent.y) {
+        this.extent.y = value.y - this.point.y;
+      }
+    }
+
+    inflate(x:number = 1, y:number = 1):Rect {
+      this.point.x -= x;
+      this.extent.x += 2 * x;
+      this.point.y -= y;
+      this.extent.y += 2 * y;
+      return this;
+    }
+  }
 }

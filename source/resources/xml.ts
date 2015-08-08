@@ -12,64 +12,65 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
-*/
+ */
 
 /// <reference path="../resource.ts"/>
 
 module pow2 {
-   declare var $:any;
+  declare var $:any;
 
-   /**
-    * Use jQuery to load an XML file from a URL.
-    */
-   export class XMLResource extends Resource {
-      data:any; // JQuery object
-      load() {
-         var request:any = $.get(this.url); // JQueryXHR
-         request.done((object:XMLDocument) => {
-            this.data = $(object);
-            this.prepare(this.data);
-         });
-         request.fail((jqxhr,settings,exception) => {
-            this.failed(exception);
-         });
-      }
-      /*
-         Do any data modification here, or just fall-through to ready.
-       */
-      prepare(data){
-         this.ready();
-      }
+  /**
+   * Use jQuery to load an XML file from a URL.
+   */
+  export class XMLResource extends Resource {
+    data:any; // JQuery object
+    load() {
+      var request:any = $.get(this.url); // JQueryXHR
+      request.done((object:XMLDocument) => {
+        this.data = $(object);
+        this.prepare(this.data);
+      });
+      request.fail((jqxhr, settings, exception) => {
+        this.failed(exception);
+      });
+    }
 
-      getRootNode(tag:string){
-         if(!this.data){
-            return null;
-         }
-         return $(_.find(this.data,function(d:any){
-            return d.tagName && d.tagName.toLowerCase() === tag;
-         }));
-      }
+    /*
+     Do any data modification here, or just fall-through to ready.
+     */
+    prepare(data) {
+      this.ready();
+    }
 
-      getChildren<T>(el:any,tag:string):T[] {
-         var list = el.find(tag);
-         return _.compact(_.map(list,function(c){
-            var child:any = $(c);
-            return <T>(child.parent()[0] !== el[0] ? null : child);
-         }));
+    getRootNode(tag:string) {
+      if (!this.data) {
+        return null;
       }
+      return $(_.find(this.data, function (d:any) {
+        return d.tagName && d.tagName.toLowerCase() === tag;
+      }));
+    }
 
-      getChild<T>(el:any,tag:string):T {
-         return <T>this.getChildren(el,tag)[0];
-      }
+    getChildren<T>(el:any, tag:string):T[] {
+      var list = el.find(tag);
+      return _.compact(_.map(list, function (c) {
+        var child:any = $(c);
+        return <T>(child.parent()[0] !== el[0] ? null : child);
+      }));
+    }
 
-      getElAttribute(el:any, name:string){
-         if(el){
-            var attr = el.attr(name);
-            if(attr){
-               return attr;
-            }
-         }
-         return null;
+    getChild<T>(el:any, tag:string):T {
+      return <T>this.getChildren(el, tag)[0];
+    }
+
+    getElAttribute(el:any, name:string) {
+      if (el) {
+        var attr = el.attr(name);
+        if (attr) {
+          return attr;
+        }
       }
-   }
+      return null;
+    }
+  }
 }

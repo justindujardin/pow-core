@@ -16,7 +16,9 @@
   {
     "name": "EntityWithParams",
     "type": "pow2.tests.BooleanConstructObject",
-    "params": ["arg"],
+    "params": [
+      "arg"
+    ],
     "inputs": {
       "arg": "boolean"
     }
@@ -38,7 +40,9 @@
       {
         "name": "test",
         "type": "pow2.tests.BooleanConstructComponent",
-        "params": ["arg"]
+        "params": [
+          "arg"
+        ]
       }
     ]
   }

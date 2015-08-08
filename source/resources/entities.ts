@@ -18,14 +18,14 @@
 
 module pow2 {
   export enum EntityError {
-    NONE = 0,
-    ENTITY_TYPE = 1,
-    COMPONENT_TYPE = 2,
+    NONE                     = 0,
+    ENTITY_TYPE              = 1,
+    COMPONENT_TYPE           = 2,
     COMPONENT_NAME_DUPLICATE = 4,
-    COMPONENT_REGISTER = 8,
-    COMPONENT_INPUT = 16,
-    INPUT_NAME = 32,
-    INPUT_TYPE = 64
+    COMPONENT_REGISTER       = 8,
+    COMPONENT_INPUT          = 16,
+    INPUT_NAME               = 32,
+    INPUT_TYPE               = 64
   }
 
   /**
@@ -48,7 +48,7 @@ module pow2 {
     /**
      * The object type to use for the entity.  Assumed to be an [[ISceneObjectComponentHost]] type.
      */
-        type:string;
+      type:string;
     /**
      * An array of inputs for the constructor call to the output object of `type`.
      */

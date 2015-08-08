@@ -12,44 +12,47 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
-*/
+ */
 
 /// <reference path="./errors.ts"/>
 
 module pow2 {
 
-   var _worldLookup:{ [name:string]:any } = {};
-   /**
-    * Module level world accessor.
-    */
-   export function getWorld<T>(name:string):T{
-      return <T>_worldLookup[name];
-   }
-   /**
-    * Module level world setter.
-    */
-   export function registerWorld(name:string,instance:any) {
-      if(!name){
-         throw new Error(pow2.errors.REQUIRED_ARGUMENT);
-      }
-      if(_worldLookup.hasOwnProperty(name)){
-         throw new Error(pow2.errors.ALREADY_EXISTS);
-      }
-      _worldLookup[name] = instance;
-      return _worldLookup[name];
-   }
-   /**
-    * Module level world remover.
-    */
-   export function unregisterWorld(name:string) {
-      if(!name){
-         throw new Error(pow2.errors.REQUIRED_ARGUMENT);
-      }
-      if(!_worldLookup.hasOwnProperty(name)){
-         throw new Error(pow2.errors.INVALID_ARGUMENTS);
-      }
-      var instance:any = _worldLookup[name];
-      delete _worldLookup[name];
-      return instance;
-   }
+  var _worldLookup:{ [name:string]:any } = {};
+
+  /**
+   * Module level world accessor.
+   */
+  export function getWorld<T>(name:string):T {
+    return <T>_worldLookup[name];
+  }
+
+  /**
+   * Module level world setter.
+   */
+  export function registerWorld(name:string, instance:any) {
+    if (!name) {
+      throw new Error(pow2.errors.REQUIRED_ARGUMENT);
+    }
+    if (_worldLookup.hasOwnProperty(name)) {
+      throw new Error(pow2.errors.ALREADY_EXISTS);
+    }
+    _worldLookup[name] = instance;
+    return _worldLookup[name];
+  }
+
+  /**
+   * Module level world remover.
+   */
+  export function unregisterWorld(name:string) {
+    if (!name) {
+      throw new Error(pow2.errors.REQUIRED_ARGUMENT);
+    }
+    if (!_worldLookup.hasOwnProperty(name)) {
+      throw new Error(pow2.errors.INVALID_ARGUMENTS);
+    }
+    var instance:any = _worldLookup[name];
+    delete _worldLookup[name];
+    return instance;
+  }
 }
