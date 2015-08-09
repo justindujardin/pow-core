@@ -24,8 +24,8 @@ module pow2 {
   export interface IWorld {
     loader:ResourceLoader;
     time:Time;
-    mark(object:IWorldObject);
-    erase(object:IWorldObject);
+    mark(object?:IWorldObject);
+    erase(object?:IWorldObject);
     setService(name:string, value:IWorldObject):IWorldObject;
   }
   export interface IWorldObject {
@@ -45,9 +45,7 @@ module pow2 {
         time: pow2.Time.get()
       });
       _.extend(this, services);
-      _.each(services, (s:IWorldObject, k) => {
-        this.mark(s);
-      });
+      _.each(services, (s:IWorldObject) => this.mark(s));
     }
 
     setService(name:string, value:IWorldObject):IWorldObject {
@@ -56,7 +54,7 @@ module pow2 {
       return value;
     }
 
-    mark(object:IWorldObject) {
+    mark(object?:IWorldObject) {
       if (object) {
         object.world = this;
         if (object.onAddToWorld) {
@@ -65,7 +63,7 @@ module pow2 {
       }
     }
 
-    erase(object:IWorldObject) {
+    erase(object?:IWorldObject) {
       if (object) {
         if (object.onRemoveFromWorld) {
           object.onRemoveFromWorld(this);
