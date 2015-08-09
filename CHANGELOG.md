@@ -1,3 +1,12 @@
+<a name="0.2.1"></a>
+### 0.2.1 (2015-08-08)
+
+
+#### Features
+
+* **entity:** extend events class ([d767e32b](http://github.com/justindujardin/pow-core/commit/d767e32b013e661a097c7e99c9a460c89b90efef))
+
+
 <a name="0.2.0"></a>
 ## 0.2.0 (2015-08-08)
 
