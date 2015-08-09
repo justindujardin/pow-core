@@ -24,7 +24,7 @@ module pow2 {
    * addition and removal of component objects.  Components may be looked up by type, and
    * may depend on siblings components for parts of their own behavior.
    */
-  export class Entity implements IComponentHost {
+  export class Entity extends Events implements IComponentHost {
     id:string;
     name:string;
 
