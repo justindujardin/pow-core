@@ -81,32 +81,65 @@ describe("pow2.Time", ()=> {
     });
   });
 
-  it("should poly-fill requestAnimationFrame in legacy browsers", (done)=> {
-    var olds:{
-      [key:string]:any
-    } = {
-      'requestAnimationFrame': window.requestAnimationFrame
-    };
-    var vendors = ['ms', 'moz', 'webkit', 'o'];
-    for (var i = 0; i < vendors.length; i++) {
-      olds = window[vendors[i] + 'RequestAnimationFrame'];
-      window[vendors[i] + 'RequestAnimationFrame'] = null;
-    }
-    window.requestAnimationFrame = null;
+  describe('polyFillAnimationFrames', () => {
+    it('should trigger time updates with polyfill and setInterval', function (done) {
+      var olds:any = {
+        requestAnimationFrame: window.requestAnimationFrame
+      };
+      var vendors = ['ms', 'moz', 'webkit', 'o'];
+      for (var i = 0; i < vendors.length; i++) {
+        olds = window[vendors[i] + 'RequestAnimationFrame'];
+        window[vendors[i] + 'RequestAnimationFrame'] = null;
+      }
+      window.requestAnimationFrame = null;
 
-    var t:pow2.Time = new pow2.Time();
-    var m:MockTimeObject = new MockTimeObject();
-    t.addObject(m);
-    m.once('tick', ()=> {
-      t.stop();
-      t.removeObject(m);
-      expect(window.requestAnimationFrame).toBeDefined();
-      _.each(olds, (value, key)=> {
-        window[key] = value;
+      var t:pow2.Time = new pow2.Time();
+      var m:MockTimeObject = new MockTimeObject();
+      t.addObject(m);
+      m.once('tick', ()=> {
+        t.stop();
+        t.removeObject(m);
+        expect(window.requestAnimationFrame).toBeDefined();
+        _.each(olds, (value, key:any) => {
+          window[key] = value;
+        });
+        done();
       });
-      done();
+      t.start();
     });
-    t.start();
+
   });
 
+  var functions = [
+    'webkitRequestAnimationFrame',
+    'mozRequestAnimationFrame'
+  ];
+  functions.forEach(function (fnName) {
+    var w:any = window;
+    if (!w[fnName]) {
+      return;
+    }
+    it('should apply polyfill if not present on window', function () {
+      var oldRaf:any = w.requestAnimationFrame;
+      var oldVendorRaf:any = w[fnName];
+
+      w.requestAnimationFrame = null;
+      w[fnName] = null;
+
+      new pow2.Time();
+      expect(window.requestAnimationFrame).toBeDefined();
+
+      w.requestAnimationFrame = oldRaf;
+      w[fnName] = oldVendorRaf;
+    });
+    it('should be patched as requestAnimationFrame if present on window', function () {
+      if (window.hasOwnProperty(fnName)) {
+        var oldRaf:any = w.requestAnimationFrame;
+        w.requestAnimationFrame = null;
+        new pow2.Time();
+        expect(window.requestAnimationFrame).toBeDefined();
+        w.requestAnimationFrame = oldRaf;
+      }
+    });
+  });
 });
