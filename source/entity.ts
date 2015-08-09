@@ -85,12 +85,11 @@ module pow2 {
 
     addComponent(component:pow2.IComponent, silent?:boolean):boolean {
       if (_.where(this._components, {id: component.id}).length > 0) {
-        throw new Error("Component added twice");
+        throw new Error(pow2.errors.ALREADY_EXISTS);
       }
       component.host = this;
       if (component.connectComponent() === false) {
         delete component.host;
-        console.log("Component " + component.name + " failed to register.");
         return false;
       }
       this._components.push(component);
@@ -105,7 +104,7 @@ module pow2 {
       if (!component) {
         return false;
       }
-      return this.removeComponent(component);
+      return this.removeComponent(component, silent);
     }
 
     removeComponent(component:IComponent, silent:boolean = false):boolean {
@@ -120,13 +119,12 @@ module pow2 {
         }
         return true;
       });
-      var change:boolean = this._components.length === previousCount;
+      var change:boolean = this._components.length !== previousCount;
       if (change && silent !== true) {
         this.syncComponents();
       }
       return change;
     }
-
-
+¬
   }
 }
