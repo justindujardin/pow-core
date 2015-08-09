@@ -125,6 +125,6 @@ module pow2 {
       }
       return change;
     }
-¬
+
   }
 }
