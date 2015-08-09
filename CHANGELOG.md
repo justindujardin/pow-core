@@ -1,3 +1,18 @@
+<a name="0.2.0"></a>
+## 0.2.0 (2015-08-08)
+
+
+#### Bug Fixes
+
+* events test typescript compile error ([f76e091b](http://github.com/justindujardin/pow-core/commit/f76e091bd787678d8ddcbc6dd7267bdb6629bbaf))
+
+
+#### Features
+
+* add editorconfig file for file indentation and formatting ([d4f5c0b7](http://github.com/justindujardin/pow-core/commit/d4f5c0b76f0931d1eb628b5311a77b948a1df88e))
+* **build:** use Travis container based infratstructure ([ae194278](http://github.com/justindujardin/pow-core/commit/ae1942785f16aca42bf06f87d1e6a1fcc27059db))
+
+
 <a name="0.1.9"></a>
 ### 0.1.9 (2015-04-18)
 
