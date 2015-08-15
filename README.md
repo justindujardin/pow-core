@@ -4,6 +4,7 @@ Core Typescript classes for use in the various Pow related projects.  Currently 
 
 ## Features
  
+- Serialized Entity composition with hot-swappable Component objects.
 - Resource Manager for loading Audio, Image, JSON, Javascript, XML, Tiled TMX, and Tiled TSX files.
 - Events class based on Backbone.Events.
 - Point and Rect classes for representing spatial objects.
