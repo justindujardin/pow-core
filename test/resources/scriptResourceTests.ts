@@ -8,7 +8,7 @@ describe("pow2.ScriptResource", ()=> {
 
   it("should succeed with good url", (done)=> {
     var loader:pow2.ResourceLoader = new pow2.ResourceLoader();
-    var resource:pow2.ScriptResource = loader.load('base/test/fixtures/example.js');
+    var resource = loader.load<pow2.ScriptResource>('base/test/fixtures/example.js');
     resource.on(pow2.Resource.READY, ()=> {
       var w:any = window;
       expect(w.POW_CORE_TEST.result).toBe('OK');
@@ -18,7 +18,7 @@ describe("pow2.ScriptResource", ()=> {
   });
   it("should fail with bad url", (done)=> {
     var loader:pow2.ResourceLoader = new pow2.ResourceLoader();
-    var resource:pow2.ImageResource = loader.load('bad/does/not/exist.js');
+    var resource = loader.load<pow2.ScriptResource>('bad/does/not/exist.js');
     resource.on(pow2.Resource.FAILED, ()=> {
       var w:any = window;
       expect(w.POW_CORE_TEST).toBeUndefined();

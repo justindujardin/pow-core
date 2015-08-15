@@ -18,7 +18,7 @@ module pow2.tests {
     var loader:pow2.ResourceLoader = new pow2.ResourceLoader();
     var factory:pow2.EntityContainerResource = null;
     beforeEach((done)=> {
-      loader.loadAsType('base/test/fixtures/basic.powEntities', pow2.EntityContainerResource, (resource:pow2.EntityContainerResource) => {
+      loader.load('base/test/fixtures/basic.entities', (resource:pow2.EntityContainerResource) => {
         factory = resource;
         done();
       });

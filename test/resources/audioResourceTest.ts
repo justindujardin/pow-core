@@ -8,7 +8,7 @@ describe("pow2.AudioResource", ()=> {
 
   it("should succeed with good url", (done)=> {
     var loader:pow2.ResourceLoader = new pow2.ResourceLoader();
-    var resource:pow2.AudioResource = loader.load('base/test/fixtures/tele');
+    var resource = loader.load<pow2.AudioResource>('base/test/fixtures/tele');
     resource.on(pow2.Resource.READY, ()=> {
       expect(resource.data.currentTime).toBe(0);
       expect(resource.data.ended).toBe(false);
@@ -18,7 +18,7 @@ describe("pow2.AudioResource", ()=> {
   });
   it("should fail with bad url", (done)=> {
     var loader:pow2.ResourceLoader = new pow2.ResourceLoader();
-    var resource:pow2.AudioResource = loader.load('bad/does/not/exist');
+    var resource = loader.load<pow2.AudioResource>('bad/does/not/exist');
     resource.on(pow2.Resource.FAILED, ()=> {
       done();
     });

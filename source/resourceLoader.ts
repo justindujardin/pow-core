@@ -18,6 +18,7 @@
 /// <reference path="./resources/image.ts"/>
 /// <reference path="./resources/json.ts"/>
 /// <reference path="./resources/script.ts"/>
+/// <reference path="./resources/entities.ts"/>
 /// <reference path="./resources/xml.ts"/>
 /// <reference path="./world.ts"/>
 /// <reference path="./time.ts"/>
@@ -37,6 +38,7 @@ module pow2 {
       'js': ScriptResource,
       'json': JSONResource,
       'xml': XMLResource,
+      'entities': EntityContainerResource,
       'tmx': TiledTMXResource,
       'tsx': TiledTSXResource,
       '': AudioResource
@@ -101,7 +103,7 @@ module pow2 {
       return <T><any>type;
     }
 
-    loadAsType(source:string, resourceType:any, done?:(res?:IResource)=>any):IResource {
+    loadAsType<T extends IResource>(source:string, resourceType:any, done?:(res?:IResource)=>any):T {
       var completeCb:any = (obj:any) => {
         if (this.world && done) {
           this._doneQueue.push({cb: done, result: obj});
@@ -118,13 +120,14 @@ module pow2 {
         return;
       }
 
-      var resource:Resource = this._cache[source];
+      var resource:any = this._cache[source];
       if (!resource) {
         resource = this._cache[source] = new resourceType(source, this);
         resource.setLoader(this);
       }
       else if (resource.isReady()) {
-        return completeCb(resource);
+        completeCb(resource);
+        return resource;
       }
 
       resource.once('ready', (resource:IResource) => {
@@ -138,10 +141,11 @@ module pow2 {
       return resource;
     }
 
-    load(sources:Array<string>, done?:(res?:IResource)=>any):Array<Resource>;
-    load(source:string, done?:(res?:IResource)=>any):Resource;
-    load(sources:any, done?:any):any {
-      var results:Array<Resource> = [];
+    load<T extends IResource|IResource[]>(sources:Array<string>, done?:(res?:IResource)=>any):T[];
+    load<T extends IResource|IResource[]>(sources:Array<string>, done?:(res?:IResource)=>any):T[];
+    load<T extends IResource|IResource[]>(source:string, done?:(res?:IResource)=>any):T;
+    load<T extends IResource|IResource[]>(sources:any, done?:any):T|T[] {
+      var results:Array<T> = [];
       var loadQueue:number = 0;
       if (!_.isArray(sources)) {
         sources = [sources];
@@ -156,49 +160,20 @@ module pow2 {
       for (var i:number = 0; i < sources.length; i++) {
         var src:string = sources[i];
         var extension:string = this.getResourceExtension(src);
-        var resourceType = this._types[extension];
-        if (!resourceType) {
-          console.error("Unknown resource type: " + src);
-          return;
-        }
-        var resource:Resource = this._cache[src];
-        if (!resource) {
-          resource = this._cache[src] = new resourceType(src, this);
-          resource.setLoader(this);
-        }
-        else if (resource.isReady()) {
+        var resource = this.loadAsType<any>(src, this._types[extension], () => {
+          loadQueue--;
+          _checkDone();
+        });
+        if (resource) {
+          resource.extension = extension;
+          loadQueue++;
           results.push(resource);
-          continue;
         }
-        resource.extension = extension;
-        loadQueue++;
-
-        resource.once('ready', (resource:IResource) => {
-          console.log("Loaded asset: " + resource.url);
-          loadQueue--;
-          _checkDone();
-        });
-        resource.once('failed', (resource:IResource) => {
-          console.log("Failed to load asset: " + resource.url);
-          loadQueue--;
-          _checkDone();
-        });
-        resource.load();
-        results.push(resource);
-
-      }
-      var obj:any = results.length > 1 ? results : results[0];
-      if (loadQueue === 0) {
-        if (this.world && done) {
-          this._doneQueue.push({cb: done, result: obj});
-        }
-        else if (done) {
-          _.defer(function () {
-            done(obj);
-          });
+        else {
+          results.push(null);
         }
       }
-      return obj;
+      return <any>results.length > 1 ? results : results[0];
     }
   }
 }
