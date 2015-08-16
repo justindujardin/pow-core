@@ -1,4 +1,4 @@
-# pow-core [![Build Status](https://travis-ci.org/justindujardin/pow-core.svg?branch=master)](https://travis-ci.org/justindujardin/pow-core) [![Coverage Status](https://img.shields.io/coveralls/justindujardin/pow-core.svg)](https://coveralls.io/r/justindujardin/pow-core?branch=master)
+# pow-core [![Build Status](https://travis-ci.org/justindujardin/pow-core.svg?branch=master)](https://travis-ci.org/justindujardin/pow-core) [![Coverage Status](https://img.shields.io/coveralls/justindujardin/pow-core.svg)](https://coveralls.io/r/justindujardin/pow-core?branch=master) [![Join the chat at https://gitter.im/justindujardin/pow-core](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/justindujardin/pow-core?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Core Typescript classes for use in the various Pow related projects.  Uses JQuery for resource loading, and Underscore.js for general awesome.
 
