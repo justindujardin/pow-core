@@ -45,9 +45,10 @@ module pow2 {
     data:HTMLAudioElement;
     private static FORMATS:Object = {
       'mp3': 'audio/mpeg;',
-      'wav': 'audio/wav; codecs="1"',
+      'aac': 'audio/mp4; codecs="mp4a.40.2"',
+      'm4a': 'audio/mp4; codecs="mp4a.40.2"',
       'ogg': 'audio/ogg; codecs="vorbis"',
-      'aac': 'audio/mp4; codecs="mp4a.40.2"'
+      'wav': 'audio/wav; codecs="1"',
     };
 
     /**
