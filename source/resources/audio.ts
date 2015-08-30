@@ -62,6 +62,16 @@ module pow2 {
         if (!document.createElement('audio').canPlayType) {
           return;
         }
+        // Server editions of Windows will throw "Not Implemented" if they
+        // have no access to media extension packs.  Catch this error and
+        // leave the detected types at 0 length.
+        try {
+          a.canPlayType('audio/mpeg;');
+        }
+        catch(e){
+          return;
+        }
+
         _.each(this.FORMATS, (type:string, extension:string) => {
           if (!!a.canPlayType(type).replace(/no/, '')) {
             this._types.push({
