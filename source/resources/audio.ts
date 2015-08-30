@@ -22,18 +22,63 @@ module pow2 {
   declare var _:any;
 
   /**
+   * A supported audio format description that maps extensions to resource types.
+   */
+  export interface IAudioFormat {
+
+    /**
+     * The file extension that corresponds to this format.
+     */
+    extension:string;
+
+    /**
+     * The media resource type to check against an audio element.
+     */
+      type:string;
+
+  }
+
+  /**
    * Use jQuery to load an Audio resource.
    */
   export class AudioResource extends Resource {
     data:HTMLAudioElement;
-    static types:Object = {
-      'mp3': 'audio/mpeg',
-      'ogg': 'audio/ogg',
-      'wav': 'audio/wav'
+    private static FORMATS:Object = {
+      'mp3': 'audio/mpeg;',
+      'ogg': 'audio/ogg; codecs="vorbis"',
+      'wav': 'audio/wav; codecs="1"',
+      'aac': 'audio/mp4; codecs="mp4a.40.2"'
     };
 
+    /**
+     * Detect support for audio files of varying types.
+     *
+     * Source: http://diveintohtml5.info/everything.html
+     */
+    static supportedFormats():IAudioFormat[] {
+      if (!this._types) {
+        this._types = [];
+        var a = document.createElement('audio');
+        if (!document.createElement('audio').canPlayType) {
+          return;
+        }
+        _.each(this.FORMATS, (type:string, extension:string) => {
+          if (!!a.canPlayType(type).replace(/no/, '')) {
+            this._types.push({
+              extension: extension,
+              type: type
+            });
+          }
+        });
+      }
+      return this._types.slice();
+    }
+
+    private static _types:IAudioFormat[] = null;
+
     load() {
-      var sources:number = _.keys(AudioResource.types).length;
+      var formats:IAudioFormat[] = AudioResource.supportedFormats();
+      var sources:number = formats.length;
       var invalid:Array<string> = [];
       var incrementFailure:Function = (path:string) => {
         sources--;
@@ -50,14 +95,10 @@ module pow2 {
       });
 
       // Try all supported types, and accept the first valid one.
-      _.each(<any>AudioResource.types, (mime:string, extension:string) => {
-        if (!reference.canPlayType(mime + ";")) {
-          sources--;
-          return;
-        }
+      _.each(formats, (format:IAudioFormat) => {
         var source = <HTMLSourceElement>document.createElement('source');
-        source.type = mime;
-        source.src = this.url + '.' + extension;
+        source.type = format.type;
+        source.src = this.url + '.' + format.extension;
         source.addEventListener('error', function (e:Event) {
           incrementFailure(source.src);
           e.preventDefault();
