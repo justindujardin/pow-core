@@ -95,8 +95,12 @@ module pow2 {
 
     toString():string {
       var ctor:any = this.constructor;
-      if (ctor && ctor.name != "Function") {
-        return ctor.name || (this.toString().match(/function (.+?)\(/) || [, ''])[1];
+      var ctorString:string = ctor ? ctor.toString().match(/function (.+?)\(/) : null;
+      if (ctor && ctor.name) {
+        return ctor.name;
+      }
+      else if (ctorString && ctorString[1]) {
+        return ctorString[1];
       } else {
         return this.name;
       }
