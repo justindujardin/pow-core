@@ -61,7 +61,7 @@ module.exports = function (config) {
     browserNoActivityTimeout: 1500000,
 
     sauceLabs: {
-      testName: 'observable.ts',
+      testName: 'pow-core',
       startConnect: false,
       recordVideo: false,
       recordScreenshots: false,
