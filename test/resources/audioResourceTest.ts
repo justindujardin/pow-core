@@ -2,15 +2,17 @@
 ///<reference path="../../lib/pow-core.d.ts"/>
 
 describe("pow2.AudioResource", ()=> {
-  if(pow2.AudioResource.supportedFormats().length === 0){
-    console.log("Skipping audio resource loading test on platform with no supported media types.");
-    return;
-  }
   it("should be defined", ()=> {
     expect(pow2.AudioResource).toBeDefined();
   });
 
   it("should succeed with good url", (done)=> {
+
+    if(pow2.AudioResource.supportedFormats().length === 0){
+      console.log("Skipping audio test because platform supports no audio file types.");
+      return done();
+    }
+
     var loader:pow2.ResourceLoader = new pow2.ResourceLoader();
     var resource = loader.load<pow2.AudioResource>('base/test/fixtures/tele', ()=> {
       expect(resource.isReady()).toBe(true);

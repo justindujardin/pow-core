@@ -56,30 +56,30 @@ module pow2 {
      * Source: http://diveintohtml5.info/everything.html
      */
     static supportedFormats():IAudioFormat[] {
-      if (!this._types) {
+      if (AudioResource._types === null) {
         this._types = [];
         var a = document.createElement('audio');
-        if (!document.createElement('audio').canPlayType) {
-          return;
-        }
-        // Server editions of Windows will throw "Not Implemented" if they
-        // have no access to media extension packs.  Catch this error and
-        // leave the detected types at 0 length.
-        try {
-          a.canPlayType('audio/mpeg;');
-        }
-        catch(e){
-          return;
-        }
+        if (document.createElement('audio').canPlayType) {
+          try {
+            // Server editions of Windows will throw "Not Implemented" if they
+            // have no access to media extension packs.  Catch this error and
+            // leave the detected types at 0 length.
+            a.canPlayType('audio/mpeg;');
 
-        _.each(this.FORMATS, (type:string, extension:string) => {
-          if (!!a.canPlayType(type).replace(/no/, '')) {
-            this._types.push({
-              extension: extension,
-              type: type
+            _.each(this.FORMATS, (type:string, extension:string) => {
+              if (!!a.canPlayType(type).replace(/no/, '')) {
+                this._types.push({
+                  extension: extension,
+                  type: type
+                });
+              }
             });
           }
-        });
+          catch (e) {
+            // Fall through
+          }
+        }
+
       }
       return this._types.slice();
     }
@@ -97,6 +97,10 @@ module pow2 {
           this.failed("No valid sources at the following URLs\n   " + invalid.join('\n   '));
         }
       };
+
+      if (sources === 0) {
+        return _.defer(() => this.failed('no supported media types'));
+      }
 
       var reference:HTMLAudioElement = document.createElement('audio');
       reference.addEventListener('canplaythrough', () => {
