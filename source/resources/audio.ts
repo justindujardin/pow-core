@@ -45,8 +45,8 @@ module pow2 {
     data:HTMLAudioElement;
     private static FORMATS:Object = {
       'mp3': 'audio/mpeg;',
-      'ogg': 'audio/ogg; codecs="vorbis"',
       'wav': 'audio/wav; codecs="1"',
+      'ogg': 'audio/ogg; codecs="vorbis"',
       'aac': 'audio/mp4; codecs="mp4a.40.2"'
     };
 
@@ -107,11 +107,14 @@ module pow2 {
         this.data = reference;
         this.ready();
       });
+      reference.addEventListener('error', (e:any) => {
+        this.failed(e);
+      });
 
       // Try all supported types, and accept the first valid one.
       _.each(formats, (format:IAudioFormat) => {
         var source = <HTMLSourceElement>document.createElement('source');
-        source.type = format.type;
+        source.type = format.type.substr(0, format.type.indexOf(';'));
         source.src = this.url + '.' + format.extension;
         source.addEventListener('error', function (e:Event) {
           incrementFailure(source.src);
