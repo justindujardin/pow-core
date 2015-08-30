@@ -8,8 +8,9 @@ describe("pow2.AudioResource", ()=> {
 
   it("should succeed with good url", (done)=> {
     var loader:pow2.ResourceLoader = new pow2.ResourceLoader();
-    var resource = loader.load<pow2.AudioResource>('base/test/fixtures/tele');
-    resource.on(pow2.Resource.READY, ()=> {
+    console.log("Supported audio formats: ", JSON.stringify(pow2.AudioResource.supportedFormats()),null,2);
+    var resource = loader.load<pow2.AudioResource>('base/test/fixtures/tele', ()=> {
+      expect(resource.isReady()).toBe(true);
       expect(resource.data.currentTime).toBe(0);
       expect(resource.data.ended).toBe(false);
       expect(resource.data.paused).toBe(true);
