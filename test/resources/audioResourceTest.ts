@@ -2,6 +2,11 @@
 ///<reference path="../../lib/pow-core.d.ts"/>
 
 describe("pow2.AudioResource", ()=> {
+  var j:any = jasmine;
+  var old:number = j.DEFAULT_TIMEOUT_INTERVAL;
+  beforeEach(() => j.DEFAULT_TIMEOUT_INTERVAL = 30000);
+  beforeEach(() => j.DEFAULT_TIMEOUT_INTERVAL = old);
+
   it("should be defined", ()=> {
     expect(pow2.AudioResource).toBeDefined();
   });
