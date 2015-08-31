@@ -3,33 +3,33 @@
 module.exports = function (config) {
 
   var customLaunchers = {
-    //'SL_Chrome': {
-    //  base: 'SauceLabs',
-    //  browserName: 'chrome',
-    //  version: '42'
-    //},
-    //'SL_ChromeBeta': {
-    //  base: 'SauceLabs',
-    //  browserName: 'chrome',
-    //  version: 'beta'
-    //},
-    //'SL_Firefox': {
-    //  base: 'SauceLabs',
-    //  browserName: 'firefox',
-    //  version: '37'
-    //},
-    //'SL_Safari7': {
-    //  base: 'SauceLabs',
-    //  browserName: 'safari',
-    //  platform: 'OS X 10.9',
-    //  version: '7'
-    //},
-    //'SL_Safari8': {
-    //  base: 'SauceLabs',
-    //  browserName: 'safari',
-    //  platform: 'OS X 10.10',
-    //  version: '8'
-    //},
+    'SL_Chrome': {
+      base: 'SauceLabs',
+      browserName: 'chrome',
+      version: '42'
+    },
+    'SL_ChromeBeta': {
+      base: 'SauceLabs',
+      browserName: 'chrome',
+      version: 'beta'
+    },
+    'SL_Firefox': {
+      base: 'SauceLabs',
+      browserName: 'firefox',
+      version: '37'
+    },
+    'SL_Safari7': {
+      base: 'SauceLabs',
+      browserName: 'safari',
+      platform: 'OS X 10.9',
+      version: '7'
+    },
+    'SL_Safari8': {
+      base: 'SauceLabs',
+      browserName: 'safari',
+      platform: 'OS X 10.10',
+      version: '8'
+    },
     'SL_IE_9': {
       base: 'SauceLabs',
       browserName: 'internet explorer',
