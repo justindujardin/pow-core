@@ -12,8 +12,9 @@ describe("pow2.AudioResource", ()=> {
   });
 
   it("should succeed with good url", (done)=> {
-
-    if(pow2.AudioResource.supportedFormats().length === 0){
+    var ie10 = /MSIE 10/i.test(navigator.userAgent);
+    var ie11 = /rv:11.0/i.test(navigator.userAgent);
+    if (pow2.AudioResource.supportedFormats().length === 0 || ie10 || ie11) {
       console.log("Skipping audio test because platform supports no audio file types.");
       return done();
     }
