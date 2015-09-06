@@ -34,7 +34,7 @@ module pow2 {
     /**
      * The media resource type to check against an audio element.
      */
-    type:string;
+      type:string;
 
   }
 
@@ -43,13 +43,13 @@ module pow2 {
    */
   export class AudioResource extends Resource {
     data:HTMLAudioElement;
-    private static FORMATS:Object = {
-      'mp3': 'audio/mpeg;',
-      'aac': 'audio/aac;',
-      'm4a': 'audio/x-m4a;',
-      'ogg': 'audio/ogg; codecs="vorbis"',
-      'wav': 'audio/wav; codecs="1"'
-    };
+    private static FORMATS:[string,string][] = [
+      ['mp3', 'audio/mpeg;'],
+      ['m4a', 'audio/x-m4a;'],
+      ['aac', 'audio/mp4a;'],
+      ['ogg', 'audio/ogg; codecs="vorbis"'],
+      ['wav', 'audio/wav; codecs="1"']
+    ];
 
     /**
      * Detect support for audio files of varying types.
@@ -57,6 +57,11 @@ module pow2 {
      * Source: http://diveintohtml5.info/everything.html
      */
     static supportedFormats():IAudioFormat[] {
+      var w:any = window;
+      var ac:any = w.AudioContext || w.webkitAudioContext;
+      if (AudioResource._context === null && ac) {
+        AudioResource._context = new ac();
+      }
       if (AudioResource._types === null) {
         this._types = [];
         var a = document.createElement('audio');
@@ -67,7 +72,9 @@ module pow2 {
             // leave the detected types at 0 length.
             a.canPlayType('audio/wav;');
 
-            _.each(this.FORMATS, (type:string, extension:string) => {
+            _.each(this.FORMATS, (desc) => {
+              var type = desc[1];
+              var extension = desc[0];
               if (!!a.canPlayType(type)) {
                 this._types.push({
                   extension: extension,
@@ -85,7 +92,16 @@ module pow2 {
       return this._types.slice();
     }
 
+    private static _context:any = null;
+
     private static _types:IAudioFormat[] = null;
+
+    /**
+     *
+     * @type {null}
+     * @private
+     */
+    private _source:MediaElementAudioSourceNode = null;
 
     load() {
       var formats:IAudioFormat[] = AudioResource.supportedFormats();
@@ -104,24 +120,40 @@ module pow2 {
       }
 
       var reference:HTMLAudioElement = document.createElement('audio');
+
+      if (AudioResource._context) {
+        this._source = AudioResource._context.createMediaElementSource(reference);
+      }
+
       reference.addEventListener('canplaythrough', () => {
         this.data = reference;
         this.ready();
       });
-      reference.addEventListener('error', (e:any) => {
-        this.failed(e);
+      reference.addEventListener('stalled', () => {
+        reference.load();
+        reference.play();
       });
-
+      ['error'].forEach((e:string) => {
+        reference.addEventListener(e, () => {
+          this.failed(e);
+        })
+      });
+      var events = 'abort,canplay,canplaythrough,durationchange,emptied,ended,error,loadeddata,loadedmetadata,loadstart,pause,play,playing,progress,ratechange,seeked,seeking,stalled,suspend,timeupdate,volumechange,waiting'.split(',');
+      events.forEach((e:string) => {
+        reference.addEventListener(e, (args) => {
+          console.log("Event -> " + e);
+        })
+      });
+      console.log(JSON.stringify(formats, null, 2));
       // Try all supported types, and accept the first valid one.
       _.each(formats, (format:IAudioFormat) => {
-        var source = <HTMLSourceElement>document.createElement('source');
+        let source = <HTMLSourceElement>document.createElement('source');
         source.type = format.type.substr(0, format.type.indexOf(';'));
         source.src = this.url + '.' + format.extension;
-        source.addEventListener('error', function (e:Event) {
+        console.log("trying source: " + source.src);
+        source.addEventListener('error', () => {
+          console.log("source failed: " + source.src);
           incrementFailure(source.src);
-          e.preventDefault();
-          e.stopImmediatePropagation();
-          return false;
         });
         reference.appendChild(source);
       });
