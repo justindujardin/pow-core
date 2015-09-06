@@ -35,13 +35,21 @@ module pow2 {
      * The media resource type to check against an audio element.
      */
       type:string;
+  }
 
+  /**
+   * Define an interface for interacting with audio files.
+   */
+  export interface IAudioSource {
+    play():IAudioSource;
+    pause():IAudioSource;
+    volume:number;
   }
 
   /**
    * Use jQuery to load an Audio resource.
    */
-  export class AudioResource extends Resource {
+  export class AudioResource extends Resource implements IAudioSource {
     data:HTMLAudioElement;
     private static FORMATS:[string,string][] = [
       ['mp3', 'audio/mpeg;'],
@@ -96,12 +104,8 @@ module pow2 {
 
     private static _types:IAudioFormat[] = null;
 
-    /**
-     *
-     * @type {null}
-     * @private
-     */
-    private _source:MediaElementAudioSourceNode = null;
+    private _source:AudioBufferSourceNode = null;
+    private _audio:HTMLAudioElement = null;
 
     load() {
       var formats:IAudioFormat[] = AudioResource.supportedFormats();
@@ -120,31 +124,94 @@ module pow2 {
       }
 
       var reference:HTMLAudioElement = document.createElement('audio');
+      if (AudioResource._context) {
+        this._source = AudioResource._context.createMediaElementSource(reference);
+        if (this._source) {
+          return this._loadAudioBuffer(formats);
+        }
+      }
 
+      return this._loadAudioElement(formats);
+    }
+
+    play(when:number = 0):IAudioSource {
+      if (this._source) {
+        this._source.start(when);
+      }
+      return this;
+    }
+
+    pause():IAudioSource {
+      if (this._source) {
+        this._source.stop(0);
+      }
+      else if (this._audio) {
+
+      }
+      return this;
+    }
+
+    private _volume:number = 0.8;
+    set volume(value:number) {
+      this._volume = value;
+    }
+
+    get volume():number {
+      return this._volume;
+    }
+
+    private _loadAudioBuffer(formats:IAudioFormat[]) {
+      var todo = formats.slice();
+      var decodeFile = () => {
+        if (todo.length === 0) {
+          return this.failed("no sources");
+        }
+        var fileWithExtension = this.url + '.' + todo.shift().extension;
+        var request = new XMLHttpRequest();
+        request.open('GET', fileWithExtension, true);
+        request.responseType = 'arraybuffer';
+        request.onload = () => {
+          AudioResource._context.decodeAudioData(request.response, (buffer) => {
+            var source = AudioResource._context.createBufferSource();
+            source.buffer = buffer;
+            source.connect(AudioResource._context.destination);
+            this._source = source;
+            this.ready();
+          }, decodeFile);
+        };
+        request.send();
+      };
+      decodeFile();
+    }
+
+    private _loadAudioElement(formats:IAudioFormat[]) {
+      var sources:number = formats.length;
+      var invalid:Array<string> = [];
+      var incrementFailure:Function = (path:string) => {
+        sources--;
+        invalid.push(path);
+        if (sources <= 0) {
+          this.failed("No valid sources at the following URLs\n   " + invalid.join('\n   '));
+        }
+      };
+
+      if (sources === 0) {
+        return _.defer(() => this.failed('no supported media types'));
+      }
+
+      var reference:HTMLAudioElement = document.createElement('audio');
       if (AudioResource._context) {
         this._source = AudioResource._context.createMediaElementSource(reference);
       }
 
       reference.addEventListener('canplaythrough', () => {
         this.data = reference;
+        this._audio = reference;
         this.ready();
       });
-      reference.addEventListener('stalled', () => {
-        reference.load();
-        reference.play();
+      reference.addEventListener('error', (e) => {
+        this.failed(e);
       });
-      ['error'].forEach((e:string) => {
-        reference.addEventListener(e, () => {
-          this.failed(e);
-        })
-      });
-      var events = 'abort,canplay,canplaythrough,durationchange,emptied,ended,error,loadeddata,loadedmetadata,loadstart,pause,play,playing,progress,ratechange,seeked,seeking,stalled,suspend,timeupdate,volumechange,waiting'.split(',');
-      events.forEach((e:string) => {
-        reference.addEventListener(e, (args) => {
-          console.log("Event -> " + e);
-        })
-      });
-      console.log(JSON.stringify(formats, null, 2));
       // Try all supported types, and accept the first valid one.
       _.each(formats, (format:IAudioFormat) => {
         let source = <HTMLSourceElement>document.createElement('source');

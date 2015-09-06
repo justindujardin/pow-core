@@ -13,9 +13,7 @@ describe("pow2.AudioResource", ()=> {
       console.error("Loaded:" + resource.url);
       expect(resource.error).toBeNull();
       expect(resource.isReady()).toBe(true);
-      expect(resource.data.currentTime).toBe(0);
-      expect(resource.data.ended).toBe(false);
-      expect(resource.data.paused).toBe(true);
+      resource.play().pause();
       done();
     });
   });
