@@ -209,9 +209,6 @@ module pow2 {
         this._audio = reference;
         this.ready();
       });
-      reference.addEventListener('error', (e) => {
-        this.failed(e);
-      });
       // Try all supported types, and accept the first valid one.
       _.each(formats, (format:IAudioFormat) => {
         let source = <HTMLSourceElement>document.createElement('source');

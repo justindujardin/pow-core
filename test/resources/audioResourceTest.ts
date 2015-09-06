@@ -3,6 +3,11 @@
 
 describe("pow2.AudioResource", ()=> {
 
+  if (pow2.AudioResource.supportedFormats().length === 0) {
+    console.log("Skipping audio test on platform with no supported media types");
+    return;
+  }
+
   it("should be defined", ()=> {
     expect(pow2.AudioResource).toBeDefined();
   });
