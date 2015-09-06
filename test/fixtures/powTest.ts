@@ -2,6 +2,8 @@
 ///<reference path="../../lib/pow-core.d.ts"/>
 module pow2.tests {
 
+  jasmine.DEFAULT_TIMEOUT_INTERVAL = 12 * 1000;
+
   export function NamespaceClassToType(fullTypeName:string):any {
     if (!fullTypeName) {
       return null;
