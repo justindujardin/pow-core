@@ -2,12 +2,6 @@
 ///<reference path="../../lib/pow-core.d.ts"/>
 
 describe("pow2.AudioResource", ()=> {
-  var ie10 = /MSIE 10/i.test(navigator.userAgent);
-  var ie11 = /rv:11.0/i.test(navigator.userAgent);
-  if (pow2.AudioResource.supportedFormats().length === 0 || ie10 || ie11) {
-    console.log("Skipping audio test on PITA platform.  TODO: Fix IE10/11");
-    return;
-  }
 
   it("should be defined", ()=> {
     expect(pow2.AudioResource).toBeDefined();

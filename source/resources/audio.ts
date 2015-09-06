@@ -34,7 +34,7 @@ module pow2 {
     /**
      * The media resource type to check against an audio element.
      */
-      type:string;
+    type:string;
 
   }
 
@@ -45,10 +45,10 @@ module pow2 {
     data:HTMLAudioElement;
     private static FORMATS:Object = {
       'mp3': 'audio/mpeg;',
-      'aac': 'audio/mp4; codecs="mp4a.40.2"',
-      'm4a': 'audio/mp4; codecs="mp4a.40.2"',
+      'aac': 'audio/aac;',
+      'm4a': 'audio/x-m4a;',
       'ogg': 'audio/ogg; codecs="vorbis"',
-      'wav': 'audio/wav; codecs="1"',
+      'wav': 'audio/wav; codecs="1"'
     };
 
     /**
@@ -65,10 +65,10 @@ module pow2 {
             // Server editions of Windows will throw "Not Implemented" if they
             // have no access to media extension packs.  Catch this error and
             // leave the detected types at 0 length.
-            a.canPlayType('audio/mpeg;');
+            a.canPlayType('audio/wav;');
 
             _.each(this.FORMATS, (type:string, extension:string) => {
-              if (!!a.canPlayType(type).replace(/no/, '')) {
+              if (!!a.canPlayType(type)) {
                 this._types.push({
                   extension: extension,
                   type: type
