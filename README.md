@@ -15,6 +15,12 @@ Core Typescript classes for use in the various Pow related projects.  Currently 
 
 `bower install --save pow-core`
 
+## Browser Support
+
+The pow-core test suite is run against a number of browsers to ensure it's compatible.
+
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/powcore.svg)](https://saucelabs.com/u/powcore)
+
 ## Building
 
 [Download](http://nodejs.org/) and install Node.JS if you don't have it:
