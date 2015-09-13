@@ -27,5 +27,5 @@ before_install:
 
 after_script:
  - ./node_modules/.bin/lcov-result-merger '.coverage/**/lcov.info' .coverage/lcov.info
- - ./node_modules/.bin/grunt coveralls
+ - node ./node_modules/.bin/coveralls.js < .coverage/lcov.info
 
