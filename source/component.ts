@@ -94,7 +94,16 @@ module pow2 {
     }
 
     toString():string {
-      return (<any>this).constructor.name;
+      var ctor:any = this.constructor;
+      var ctorString:string = ctor ? ctor.toString().match(/function (.+?)\(/) : null;
+      if (ctor && ctor.name) {
+        return ctor.name;
+      }
+      else if (ctorString && ctorString[1]) {
+        return ctorString[1];
+      } else {
+        return this.name;
+      }
     }
   }
 

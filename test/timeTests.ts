@@ -51,6 +51,7 @@ describe("pow2.Time", ()=> {
       expect(counter.ticks).toBe(0);
       expect(counter.frames).toBe(0);
       time.start();
+      time.start();
       _.delay(()=> {
         expect(counter.ticks).toBeGreaterThan(0);
         expect(counter.frames).toBeGreaterThan(0);

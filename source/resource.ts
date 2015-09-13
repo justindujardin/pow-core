@@ -46,6 +46,8 @@ module pow2 {
     data:any;
     extension:string;
     loader:ResourceLoader = null;
+
+    public error:any = null;
     private _ready:boolean = false;
 
     constructor(url:string, data:any = null) {
@@ -73,6 +75,7 @@ module pow2 {
 
     failed(error:any) {
       this._ready = false;
+      this.error = error;
       //console.log("ERROR loading resource: " + this.url + "\n   -> " + error);
       this.trigger(Resource.FAILED, this);
     }
