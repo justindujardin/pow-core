@@ -26,6 +26,6 @@ before_install:
   - sh -e /etc/init.d/xvfb start
 
 after_script:
- - find . -name .coverage\*.* -print
- - ./node_modules/.bin/grunt coveralls
+ - find .coverage/ -print
+ - ./node_modules/.bin/grunt coveralls --verbose
 
