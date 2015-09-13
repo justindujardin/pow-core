@@ -24,12 +24,6 @@ module.exports = function (config) {
       platform: 'OS X 10.9',
       version: '7'
     },
-    'SL_Safari8': {
-      base: 'SauceLabs',
-      browserName: 'safari',
-      platform: 'OS X 10.10',
-      version: '8'
-    },
     'SL_IE_9': {
       base: 'SauceLabs',
       browserName: 'internet explorer',
@@ -51,8 +45,8 @@ module.exports = function (config) {
   };
 
   config.set({
-    captureTimeout: 120000,
-    browserNoActivityTimeout: 1500000,
+    captureTimeout: 30000,
+    browserNoActivityTimeout: 15000,
 
     sauceLabs: {
       testName: 'pow-core',
