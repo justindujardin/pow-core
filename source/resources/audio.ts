@@ -51,12 +51,12 @@ module pow2 {
    */
   export class AudioResource extends Resource implements IAudioSource {
     data:HTMLAudioElement;
-    private static FORMATS:[string,string][] = [
-      ['mp3', 'audio/mpeg;'],
-      ['m4a', 'audio/x-m4a;'],
-      ['aac', 'audio/mp4a;'],
-      ['ogg', 'audio/ogg; codecs="vorbis"'],
-      ['wav', 'audio/wav; codecs="1"']
+    private static FORMATS:[string,string[]][] = [
+      ['mp3', ['audio/mpeg;']],
+      ['m4a', ['audio/x-m4a;']],
+      ['aac', ['audio/mp4a;', 'audio/mp4;']],
+      ['ogg', ['audio/ogg; codecs="vorbis"']],
+      ['wav', ['audio/wav; codecs="1"']]
     ];
 
     /**
@@ -73,7 +73,8 @@ module pow2 {
       if (AudioResource._types === null) {
         this._types = [];
         var a = document.createElement('audio');
-        if (document.createElement('audio').canPlayType) {
+        // The existence of canPlayType indicates support for audio elements.
+        if (a.canPlayType) {
           try {
             // Server editions of Windows will throw "Not Implemented" if they
             // have no access to media extension packs.  Catch this error and
@@ -81,14 +82,16 @@ module pow2 {
             a.canPlayType('audio/wav;');
 
             _.each(this.FORMATS, (desc) => {
-              var type = desc[1];
+              var types = desc[1];
               var extension = desc[0];
-              if (!!a.canPlayType(type)) {
-                this._types.push({
-                  extension: extension,
-                  type: type
-                });
-              }
+              _.each(types, (type:string) => {
+                if (!!a.canPlayType(type)) {
+                  this._types.push({
+                    extension: extension,
+                    type: type
+                  });
+                }
+              });
             });
           }
           catch (e) {
@@ -110,19 +113,9 @@ module pow2 {
     load() {
       var formats:IAudioFormat[] = AudioResource.supportedFormats();
       var sources:number = formats.length;
-      var invalid:Array<string> = [];
-      var incrementFailure:Function = (path:string) => {
-        sources--;
-        invalid.push(path);
-        if (sources <= 0) {
-          this.failed("No valid sources at the following URLs\n   " + invalid.join('\n   '));
-        }
-      };
-
       if (sources === 0) {
         return _.defer(() => this.failed('no supported media types'));
       }
-
       var reference:HTMLAudioElement = document.createElement('audio');
       if (AudioResource._context) {
         this._source = AudioResource._context.createMediaElementSource(reference);
@@ -130,7 +123,6 @@ module pow2 {
           return this._loadAudioBuffer(formats);
         }
       }
-
       return this._loadAudioElement(formats);
     }
 
@@ -212,13 +204,12 @@ module pow2 {
       // Try all supported types, and accept the first valid one.
       _.each(formats, (format:IAudioFormat) => {
         let source = <HTMLSourceElement>document.createElement('source');
-        source.type = format.type.substr(0, format.type.indexOf(';'));
-        source.src = this.url + '.' + format.extension;
-        console.log("trying source: " + source.src);
         source.addEventListener('error', () => {
           console.log("source failed: " + source.src);
           incrementFailure(source.src);
         });
+        source.type = format.type.substr(0, format.type.indexOf(';'));
+        source.src = this.url + '.' + format.extension;
         reference.appendChild(source);
       });
 
