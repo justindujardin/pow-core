@@ -1,4 +1,3 @@
-///<reference path="../types/jasmine.d.ts"/>
 
 import {Events} from "pow-core/events";
 import {IProcessObject} from "pow-core/time";

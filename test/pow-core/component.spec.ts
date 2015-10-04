@@ -1,5 +1,3 @@
-///<reference path="../types/jasmine.d.ts"/>
-///<reference path="../lib/pow-core.d.ts"/>
 
 import {Component} from "pow-core/component";
 

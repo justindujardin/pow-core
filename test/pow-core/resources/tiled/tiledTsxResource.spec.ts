@@ -1,4 +1,3 @@
-///<reference path="../../../types/jasmine.d.ts"/>
 
 import {TiledTSXResource} from "pow-core/resources/tiled/tiledTsx";
 import {ResourceLoader} from "pow-core/resourceLoader";

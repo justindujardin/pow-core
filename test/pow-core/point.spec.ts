@@ -1,5 +1,3 @@
-///<reference path="../types/jasmine.d.ts"/>
-///<reference path="../lib/pow-core.d.ts"/>
 
 import {Point} from "pow-core/point";
 import * as errors from "pow-core/errors";

@@ -1,4 +1,3 @@
-///<reference path="../../../types/jasmine.d.ts"/>
 
 import {TiledTMXResource} from "pow-core/resources/tiled/tiledTmx";
 import * as tiled from "pow-core/resources/tiled/tiled";

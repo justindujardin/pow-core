@@ -3,7 +3,15 @@ module.exports = function(grunt) {
       pkg: grunt.file.readJSON('package.json'),
       clean: {
          build: {
-            src: ["lib/"]
+            src: [
+              "lib/",
+              "source/pow-core/**/*.js.map",
+              "source/pow-core/**/*.js",
+              "source/pow-core/**/*.d.ts",
+              "test/pow-core/**/*.js.map",
+              "test/pow-core/**/*.js",
+              "test/pow-core/**/*.d.ts"
+            ]
          }
       },
       ts: {
@@ -16,15 +24,14 @@ module.exports = function(grunt) {
          },
          source: {
             src: [
-               "source/**/*.ts"
+               "source/pow-core/*.ts",
+               "source/pow-core/**/*.ts"
             ]
          },
          tests: {
             src: [
-               "test/fixtures/*.ts",
-               "test/fixtures/**/*.ts",
-               "test/*.ts",
-               "test/**/*.ts"
+               "test/pow-core/*.ts",
+               "test/pow-core/**/*.ts"
             ]
          }
 
@@ -126,8 +133,9 @@ module.exports = function(grunt) {
    grunt.registerTask('release', 'Build, bump and tag a new release.', function(type) {
       type = type || 'patch';
       grunt.task.run([
-         'npm-contributors',
+         'clean',
          'ts:source',
+         'npm-contributors',
          'uglify',
          'bump:' + type + ':bump-only',
          'changelog',

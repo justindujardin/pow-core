@@ -1,31 +1,25 @@
-///<reference path="../../types/jasmine.d.ts"/>
 
-import {ScriptResource} from "pow-core/resources/script";
+import {JSONResource} from "pow-core/resources/json";
 import {ResourceLoader} from "pow-core/resourceLoader";
 import {Resource} from "pow-core/resource";
-
 export function main() {
-  describe("ScriptResource", ()=> {
+  describe("JSONResource", ()=> {
     it("should be defined", ()=> {
-      expect(ScriptResource).toBeDefined();
+      expect(JSONResource).toBeDefined();
     });
 
     it("should succeed with good url", (done)=> {
       var loader:ResourceLoader = new ResourceLoader();
-      var resource = loader.load<ScriptResource>('base/test/fixtures/example.js');
+      var resource = loader.load<JSONResource>('base/test/fixtures/example.json');
       resource.on(Resource.READY, ()=> {
-        var w:any = window;
-        expect(w.POW_CORE_TEST.result).toBe('OK');
-        delete w.POW_CORE_TEST;
+        expect(resource.data.result).toBe('OK');
         done();
       });
     });
     it("should fail with bad url", (done)=> {
       var loader:ResourceLoader = new ResourceLoader();
-      var resource = loader.load<ScriptResource>('bad/does/not/exist.js');
+      var resource = loader.load<JSONResource>('bad/does/not/exist.json');
       resource.on(Resource.FAILED, ()=> {
-        var w:any = window;
-        expect(w.POW_CORE_TEST).toBeUndefined();
         done();
       });
     });

@@ -1,4 +1,3 @@
-///<reference path="../../types/jasmine.d.ts"/>
 
 import {XMLResource} from "pow-core/resources/xml";
 import {ResourceLoader} from "pow-core/resourceLoader";

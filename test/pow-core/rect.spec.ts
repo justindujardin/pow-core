@@ -1,4 +1,3 @@
-///<reference path="../types/jasmine.d.ts"/>
 
 import * as errors from "pow-core/errors";
 import {Rect} from "pow-core/rect";

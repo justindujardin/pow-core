@@ -1,4 +1,3 @@
-///<reference path="../types/jasmine.d.ts"/>
 
 import {IWorld} from "pow-core/world";
 import {World} from "pow-core/world";
