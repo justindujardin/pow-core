@@ -40,6 +40,7 @@ export interface ITiledBase {
   width:number;
   height:number;
   visible:boolean;
+  _xml:any;
 }
 
 // <layer>, <objectgroup>
