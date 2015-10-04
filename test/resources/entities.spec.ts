@@ -1,24 +1,30 @@
-///<reference path="../fixtures/powTest.ts"/>
-module pow2.tests {
+import {Component} from "pow-core/component";
+import {Entity} from "pow-core/entity";
+import * as ee from "pow-core/resources/entities";
+import {ResourceLoader} from "pow-core/resourceLoader";
+import {EntityContainerResource} from "pow-core/resources/entities";
+import * as powtest from '../powTest';
 
-  export class BooleanConstructComponent extends pow2.Component {
-    constructor(public arg:boolean) {
-      super();
-    }
+declare var _:any;
+
+class BooleanConstructComponent extends Component {
+  constructor(public arg:boolean) {
+    super();
   }
-  export class BooleanConstructObject extends pow2.Entity {
-    constructor(public arg:boolean) {
-      super();
-    }
+}
+class BooleanConstructObject extends Entity {
+  constructor(public arg:boolean) {
+    super();
   }
+}
 
-  describe("pow2.EntityContainerResource", ()=> {
-    BasicClassSanityChecks("pow2.EntityContainerResource");
+export function main() {
+  describe("EntityContainerResource", ()=> {
 
-    var loader:pow2.ResourceLoader = new pow2.ResourceLoader();
-    var factory:pow2.EntityContainerResource = null;
+    var loader:ResourceLoader = new ResourceLoader();
+    var factory:EntityContainerResource = null;
     beforeEach((done)=> {
-      loader.load('base/test/fixtures/basic.entities', (resource:pow2.EntityContainerResource) => {
+      loader.load('base/test/fixtures/basic.entities', (resource:EntityContainerResource) => {
         factory = resource;
         done();
       });
@@ -31,12 +37,12 @@ module pow2.tests {
       describe("should validate input names and types", ()=> {
         it("works with exact input type match", ()=> {
           expect(factory.createObject('EntityWithComponentInput', {
-            component: new pow2.Component()
+            component: new Component()
           })).not.toBeNull();
         });
         it("works with more specific instance type given common ancestor", ()=> {
           expect(factory.createObject('EntityWithComponentInput', {
-            component: new pow2.tests.BooleanConstructComponent(true)
+            component: new BooleanConstructComponent(true)
           })).not.toBeNull();
         });
         it("fails with invalid instance of model input", ()=> {
@@ -64,14 +70,14 @@ module pow2.tests {
         entity.destroy();
       });
       it('should instantiate components with correct names', ()=> {
-        var entity:pow2.Entity = factory.createObject('EntityWithComponents');
+        var entity:Entity = factory.createObject('EntityWithComponents');
         expect(entity._components.length).toBe(2);
         expect(entity.findComponentByName('one')).not.toBeNull();
         expect(entity.findComponentByName('two')).not.toBeNull();
         entity.destroy();
       });
       it('should instantiate components with constructor arguments', ()=> {
-        var entity:pow2.Entity = factory.createObject('ComponentWithParams', {
+        var entity:Entity = factory.createObject('ComponentWithParams', {
           arg: true
         });
         var boolComponent = <BooleanConstructComponent>entity.findComponent(BooleanConstructComponent);
@@ -88,14 +94,14 @@ module pow2.tests {
         entity.destroy();
       });
       it("should instantiate components", ()=> {
-        var object:pow2.Entity = factory.createObject('EntityWithComponents');
+        var object:Entity = factory.createObject('EntityWithComponents');
 
         var tpl:any = factory.getTemplate('EntityWithComponents');
         expect(tpl).not.toBeNull();
 
         // Check that we can find instantiated components of the type specified in the template.
         _.each(tpl.components, (comp:any)=> {
-          expect(object.findComponent(NamespaceClassToType(comp.type))).not.toBeNull();
+          expect(object.findComponent(powtest.NamespaceClassToType(comp.type))).not.toBeNull();
         });
       });
 
@@ -106,29 +112,29 @@ module pow2.tests {
         it("works with exact input type match", ()=> {
           var tpl:any = factory.getTemplate('EntityWithComponentInput');
           expect(factory.validateTemplate(tpl, {
-            component: new pow2.Component()
-          })).toBe(pow2.EntityError.NONE);
+            component: new Component()
+          })).toBe(ee.EntityError.NONE);
         });
         it("works with more specific instance type given common ancestor", ()=> {
           var tpl:any = factory.getTemplate('EntityWithComponentInput');
           expect(factory.validateTemplate(tpl, {
-            component: new pow2.tests.BooleanConstructComponent(true)
-          })).toBe(EntityError.NONE);
+            component: new BooleanConstructComponent(true)
+          })).toBe(ee.EntityError.NONE);
 
         });
         it("fail with invalid instance of model input", ()=> {
           var tpl:any = factory.getTemplate('EntityWithComponentInput');
           expect(factory.validateTemplate(tpl, {
             component: null
-          })).toBe(EntityError.INPUT_TYPE);
+          })).toBe(ee.EntityError.INPUT_TYPE);
 
         });
         it("fail without proper input", ()=> {
           var tpl:any = factory.getTemplate('EntityWithComponentInput');
-          expect(factory.validateTemplate(tpl)).toBe(EntityError.INPUT_NAME);
+          expect(factory.validateTemplate(tpl)).toBe(ee.EntityError.INPUT_NAME);
           expect(factory.validateTemplate(tpl, {
             other: null
-          })).toBe(EntityError.INPUT_NAME);
+          })).toBe(ee.EntityError.INPUT_NAME);
         });
       });
 

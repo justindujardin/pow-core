@@ -14,25 +14,22 @@
  limitations under the License.
  */
 
+import {Resource} from "../resource";
+/**
+ * Use html image element to load an image resource.
+ */
+export class ImageResource extends Resource {
+  data:HTMLImageElement;
 
-/// <reference path="../resource.ts"/>
-
-module pow2 {
-
-  declare var $:any;
-  /**
-   * Use jQuery to load a Javascript file from a URL.
-   */
-  export class ScriptResource extends Resource {
-    load() {
-      var request:any = $.getScript(this.url);
-      request.done((script:HTMLScriptElement) => {
-        this.data = script;
-        this.ready();
-      });
-      request.fail((jqxhr, settings, exception) => {
-        this.failed(exception);
-      });
-    }
+  load() {
+    var reference:HTMLImageElement = document.createElement('img');
+    reference.onload = () => {
+      this.data = reference;
+      this.ready();
+    };
+    reference.onerror = (err:any) => {
+      this.failed(err);
+    };
+    reference.src = this.url;
   }
 }

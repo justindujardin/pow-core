@@ -15,24 +15,20 @@
  */
 
 
-/// <reference path="../resource.ts"/>
-
-module pow2 {
-
-  declare var $:any;
-  /**
-   * Use jQuery to load a JSON file from a URL.
-   */
-  export class JSONResource extends Resource {
-    load() {
-      var request:any = $.getJSON(this.url);
-      request.done((object:JSON) => {
-        this.data = object;
-        this.ready();
-      });
-      request.fail((jqxhr, settings, exception) => {
-        this.failed(exception);
-      });
-    }
+import {Resource} from "../resource";
+declare var $:any;
+/**
+ * Use jQuery to load a Javascript file from a URL.
+ */
+export class ScriptResource extends Resource {
+  load() {
+    var request:any = $.getScript(this.url);
+    request.done((script:HTMLScriptElement) => {
+      this.data = script;
+      this.ready();
+    });
+    request.fail((jqxhr, settings, exception) => {
+      this.failed(exception);
+    });
   }
 }

@@ -6,9 +6,9 @@ module.exports = function(grunt) {
             src: ["lib/"]
          }
       },
-      typescript: {
+      ts: {
          options: {
-            module: 'amd',
+            module: 'system',
             target: 'es5',
             rootPath: 'source',
             sourceMap: true,
@@ -46,15 +46,15 @@ module.exports = function(grunt) {
          },
          tests: {
             files: [
-               '<%= typescript.tests.src %>'
+               '<%= ts.tests.src %>'
             ],
-            tasks: ['typescript:tests']
+            tasks: ['ts:tests']
          },
          source: {
             files: [
-               '<%= typescript.source.src %>'
+               '<%= ts.source.src %>'
             ],
-            tasks: ['typescript:source']
+            tasks: ['ts:source']
          }
       },
 
@@ -106,17 +106,17 @@ module.exports = function(grunt) {
          out: 'lib/<%=pkg.name%>.d.ts'
        },
        default: {
-         src: ['<%=typescript.source.src%>']
+         src: ['<%=ts.source.src%>']
        }
      }
    });
    grunt.loadNpmTasks('grunt-contrib-uglify');
-   grunt.loadNpmTasks('grunt-typescript');
+   grunt.loadNpmTasks('grunt-ts');
    grunt.loadNpmTasks('grunt-contrib-clean');
    grunt.loadNpmTasks('grunt-contrib-watch');
    grunt.loadNpmTasks('grunt-systemjs-builder');
    grunt.loadNpmTasks('dts-generator');
-   grunt.registerTask('default', ['typescript']);
+   grunt.registerTask('default', ['ts', 'dtsGenerator', 'dist-bundle']);
    grunt.registerTask('develop', ['default', 'watch']);
 
    // Release a version
@@ -127,7 +127,7 @@ module.exports = function(grunt) {
       type = type || 'patch';
       grunt.task.run([
          'npm-contributors',
-         'typescript:source',
+         'ts:source',
          'uglify',
          'bump:' + type + ':bump-only',
          'changelog',
@@ -145,7 +145,7 @@ module.exports = function(grunt) {
     var Builder = require('systemjs-builder');
     var builder = new Builder('source/', buildConfig);
     var done = this.async();
-    builder.bundle('pow-core/**/*', 'lib/pow-core.min.js', {minify: false, sourceMaps: true}).then(function() {
+    builder.bundle('pow-core/**/*', 'lib/pow-core.js', {minify: false, sourceMaps: true}).then(function() {
       done();
     });
   });

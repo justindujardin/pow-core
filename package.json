@@ -11,7 +11,9 @@
   "license": "Apache2",
   "readmeFilename": "README.md",
   "dependencies": {
-    "underscore": "1.5.2"
+    "underscore": "1.5.2",
+    "es6-module-loader": "^0.15.0",
+    "systemjs": "^0.18.17"
   },
   "scripts": {
     "test": "./node_modules/karma/bin/karma start karma.conf.js --single-run"
@@ -19,7 +21,6 @@
   "devDependencies": {
     "grunt": "~0.4.0",
     "grunt-contrib-uglify": "0.3.0",
-    "grunt-typescript": "~0.7.0",
     "grunt-contrib-copy": "0.5.0",
     "grunt-cli": "0.1.10",
     "karma": "0.12.16",
@@ -41,7 +42,9 @@
     "coveralls": "~2.11.4",
     "grunt-systemjs-builder": "~0.2.2",
     "dts-generator": "~1.5.0",
-    "systemjs-builder": "~0.14.7"
+    "systemjs-builder": "~0.14.7",
+    "typescript": "~1.7.0-dev.20151004",
+    "grunt-ts": "~5.0.0-beta.5"
   },
   "contributors": []
 }
