@@ -14,26 +14,20 @@
  limitations under the License.
  */
 
-
-/// <reference path="../resource.ts"/>
-
-module pow2 {
-  /**
-   * Use html image element to load an image resource.
-   */
-  export class ImageResource extends Resource {
-    data:HTMLImageElement;
-
-    load() {
-      var reference:HTMLImageElement = document.createElement('img');
-      reference.onload = () => {
-        this.data = reference;
-        this.ready();
-      };
-      reference.onerror = (err:any) => {
-        this.failed(err);
-      };
-      reference.src = this.url;
-    }
+import {Resource} from "../resource";
+declare var $:any;
+/**
+ * Use jQuery to load a JSON file from a URL.
+ */
+export class JSONResource extends Resource {
+  load() {
+    var request:any = $.getJSON(this.url);
+    request.done((object:JSON) => {
+      this.data = object;
+      this.ready();
+    });
+    request.fail((jqxhr, settings, exception) => {
+      this.failed(exception);
+    });
   }
 }

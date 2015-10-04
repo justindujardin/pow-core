@@ -12,18 +12,12 @@ module.exports = function(grunt) {
             target: 'es5',
             rootPath: 'source',
             sourceMap: true,
-            declaration: true
+            declaration: false
          },
          source: {
             src: [
-               "source/api.ts",
-               "source/resource.ts",
-               "source/events.ts",
-               "source/*.ts",
-               "source/resources/*.ts",
-               "source/resources/tiled/*.ts"
-            ],
-            dest: 'lib/<%= pkg.name %>.js'
+               "source/**/*.ts"
+            ]
          },
          tests: {
             src: [
@@ -31,8 +25,7 @@ module.exports = function(grunt) {
                "test/fixtures/**/*.ts",
                "test/*.ts",
                "test/**/*.ts"
-            ],
-            dest: 'lib/test/<%= pkg.name %>.tests.js'
+            ]
          }
 
       },
@@ -104,12 +97,25 @@ module.exports = function(grunt) {
          options: {
             commitMessage: 'chore(attribution): update contributors'
          }
-      }
+      },
+
+     dtsGenerator: {
+       options: {
+         name: 'pow-core',
+         baseDir: './source/pow-core/',
+         out: 'lib/<%=pkg.name%>.d.ts'
+       },
+       default: {
+         src: ['<%=typescript.source.src%>']
+       }
+     }
    });
    grunt.loadNpmTasks('grunt-contrib-uglify');
    grunt.loadNpmTasks('grunt-typescript');
    grunt.loadNpmTasks('grunt-contrib-clean');
    grunt.loadNpmTasks('grunt-contrib-watch');
+   grunt.loadNpmTasks('grunt-systemjs-builder');
+   grunt.loadNpmTasks('dts-generator');
    grunt.registerTask('default', ['typescript']);
    grunt.registerTask('develop', ['default', 'watch']);
 
@@ -130,6 +136,19 @@ module.exports = function(grunt) {
          'artifacts:remove'
       ]);
    });
+
+  grunt.registerTask('dist-bundle', 'Build a single-file javascript output.', function () {
+    var buildConfig = {
+      baseUrl: 'source/',
+      defaultJSExtensions: true
+    };
+    var Builder = require('systemjs-builder');
+    var builder = new Builder('source/', buildConfig);
+    var done = this.async();
+    builder.bundle('pow-core/**/*', 'lib/pow-core.min.js', {minify: false, sourceMaps: true}).then(function() {
+      done();
+    });
+  });
 
 
    var exec = require('child_process').exec;
