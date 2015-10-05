@@ -1,4 +1,3 @@
-
 import * as errors from "pow-core/errors";
 import {Rect} from "pow-core/rect";
 import {Point} from "pow-core/point";

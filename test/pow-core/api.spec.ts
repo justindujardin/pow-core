@@ -1,4 +1,3 @@
-
 import {IWorld} from "pow-core/world";
 import {World} from "pow-core/world";
 import * as pow2 from "pow-core/api";

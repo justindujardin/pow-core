@@ -1,4 +1,3 @@
-
 import {TiledTSXResource} from "pow-core/resources/tiled/tiledTsx";
 import {ResourceLoader} from "pow-core/resourceLoader";
 import {Resource} from "pow-core/resource";

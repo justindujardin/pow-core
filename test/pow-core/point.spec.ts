@@ -1,4 +1,3 @@
-
 import {Point} from "pow-core/point";
 import * as errors from "pow-core/errors";
 

@@ -1,4 +1,3 @@
-
 import {Events} from "pow-core/events";
 
 export function main() {

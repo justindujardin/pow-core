@@ -1,4 +1,3 @@
-
 import {ScriptResource} from "pow-core/resources/script";
 import {ResourceLoader} from "pow-core/resourceLoader";
 import {Resource} from "pow-core/resource";

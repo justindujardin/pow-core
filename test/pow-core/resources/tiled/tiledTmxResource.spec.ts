@@ -1,4 +1,3 @@
-
 import {TiledTMXResource} from "pow-core/resources/tiled/tiledTmx";
 import * as tiled from "pow-core/resources/tiled/tiled";
 import {ResourceLoader} from "pow-core/resourceLoader";

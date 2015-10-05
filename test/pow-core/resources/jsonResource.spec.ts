@@ -1,4 +1,3 @@
-
 import {JSONResource} from "pow-core/resources/json";
 import {ResourceLoader} from "pow-core/resourceLoader";
 import {Resource} from "pow-core/resource";

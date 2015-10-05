@@ -1,4 +1,3 @@
-
 import {ImageResource} from "pow-core/resources/image";
 import {ResourceLoader} from "pow-core/resourceLoader";
 import {Resource} from "pow-core/resource";

@@ -1,4 +1,3 @@
-
 import {Component} from "pow-core/component";
 
 class NamedComponent extends Component {

@@ -1,4 +1,3 @@
-
 import {AudioResource} from "pow-core/resources/audio";
 import {ResourceLoader} from "pow-core/resourceLoader";
 

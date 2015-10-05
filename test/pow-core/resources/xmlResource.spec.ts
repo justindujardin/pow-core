@@ -1,4 +1,3 @@
-
 import {XMLResource} from "pow-core/resources/xml";
 import {ResourceLoader} from "pow-core/resourceLoader";
 import {Resource} from "pow-core/resource";

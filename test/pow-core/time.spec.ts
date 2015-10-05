@@ -1,4 +1,3 @@
-
 import {Events} from "pow-core/events";
 import {IProcessObject} from "pow-core/time";
 import {Time} from "pow-core/time";

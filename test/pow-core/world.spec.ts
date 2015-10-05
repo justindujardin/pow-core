@@ -1,4 +1,3 @@
-
 import {IWorldObject} from "pow-core/world";
 import {IWorld} from "pow-core/world";
 import {World} from "pow-core/world";

@@ -1,4 +1,3 @@
-
 import * as errors from "pow-core/errors";
 import {Resource} from "pow-core/resource";
 import {ResourceLoader} from "pow-core/resourceLoader";
