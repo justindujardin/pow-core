@@ -14,7 +14,7 @@ env:
 before_script:
  - npm install
  - ./node_modules/.bin/bower install
- - ./node_modules/.bin/grunt typescript
+ - ./node_modules/.bin/grunt
 
 script:
  - karma start karma.sauce.conf.js
