@@ -123,7 +123,7 @@ module.exports = function(grunt) {
    grunt.loadNpmTasks('grunt-contrib-watch');
    grunt.loadNpmTasks('grunt-systemjs-builder');
    grunt.loadNpmTasks('dts-generator');
-   grunt.registerTask('default', ['ts', 'dtsGenerator', 'dist-bundle']);
+   grunt.registerTask('default', ['ts:source', 'dtsGenerator', 'dist-bundle', 'ts:tests']);
    grunt.registerTask('develop', ['default', 'watch']);
 
    // Release a version
