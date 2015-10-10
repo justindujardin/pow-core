@@ -1,5 +1,5 @@
 import {Point} from "pow-core/point";
-import * as errors from "pow-core/errors";
+import {errors} from "pow-core/errors";
 
 
 export function main() {

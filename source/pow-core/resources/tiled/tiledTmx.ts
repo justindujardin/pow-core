@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-import * as errors from "../../errors";
+import {errors} from "../../errors";
 import * as tiled from "./tiled";
 import {XMLResource} from "../xml";
 import {Resource} from "../../resource";

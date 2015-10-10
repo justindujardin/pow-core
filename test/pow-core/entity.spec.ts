@@ -1,6 +1,6 @@
 import {Component} from "pow-core/component";
 import {Entity} from "pow-core/entity";
-import * as errors from "pow-core/errors";
+import {errors} from "pow-core/errors";
 
 class TestComponentNamed extends Component {
   constructor(public name:string) {

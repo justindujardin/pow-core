@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-import * as errors from "./errors";
+import {errors} from "./errors";
 import {ResourceLoader} from "./resourceLoader";
 import {Events} from "./events";
 export interface IResource {

@@ -17,10 +17,11 @@
 declare var _:any;
 
 
-import * as errors from "./errors";
+import {errors} from "./errors";
 import {IComponent} from "./component";
 import {Events} from "./events";
 import {IComponentHost} from "./component";
+
 /**
  * An Entity object is a container for groups of components.
  *

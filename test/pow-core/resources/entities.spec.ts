@@ -7,12 +7,12 @@ import * as powtest from '../powTest';
 
 declare var _:any;
 
-class BooleanConstructComponent extends Component {
+export class BooleanConstructComponent extends Component {
   constructor(public arg:boolean) {
     super();
   }
 }
-class BooleanConstructObject extends Entity {
+export class BooleanConstructObject extends Entity {
   constructor(public arg:boolean) {
     super();
   }
@@ -34,107 +34,135 @@ export function main() {
     });
 
     describe("createObject", ()=> {
-      describe("should validate input names and types", ()=> {
-        it("works with exact input type match", ()=> {
-          expect(factory.createObject('EntityWithComponentInput', {
-            component: new Component()
-          })).not.toBeNull();
+      describe("validates input names and types", ()=> {
+        it("works with exact input type match", (done)=> {
+          factory
+            .createObject('EntityWithComponentInput', {component: new Component()})
+            .then(() => done())
+            .catch(console.error.bind(console));
         });
-        it("works with more specific instance type given common ancestor", ()=> {
-          expect(factory.createObject('EntityWithComponentInput', {
-            component: new BooleanConstructComponent(true)
-          })).not.toBeNull();
+        it("works with more specific instance type given common ancestor", (done)=> {
+          factory
+            .createObject('EntityWithComponentInput', {component: new BooleanConstructComponent(true)})
+            .then(() => done())
+            .catch(console.error.bind(console));
         });
-        it("fails with invalid instance of model input", ()=> {
-          expect(factory.createObject('EntityWithComponentInput', {
-            component: null
-          })).toBeNull();
+        it("fails with invalid instance of model input", (done)=> {
+          factory
+            .createObject('EntityWithComponentInput', {component: null})
+            .catch(() => done())
+            .catch(console.error.bind(console));
         });
-        it("fails without proper input", ()=> {
-          expect(factory.createObject('EntityWithComponentInput')).toBeNull();
-          expect(factory.createObject('EntityWithComponentInput', {
-            other: null
-          })).toBeNull();
+        it("fails with missing input", (done)=> {
+          factory
+            .createObject('EntityWithComponentInput')
+            .catch(() => done())
+            .catch(console.error.bind(console));
+        });
+        it("fails with improper key input", (done)=> {
+          factory
+            .createObject('EntityWithComponentInput', {other: null})
+            .catch(() => done())
+            .catch(console.error.bind(console));
         });
       });
-      it('should instantiate entity object with constructor arguments', ()=> {
-        var entity:BooleanConstructObject = <any>factory.createObject('EntityWithParams', {
-          arg: true
-        });
-        expect(entity.arg).toBe(true);
-        entity.destroy();
-        entity = <any>factory.createObject('EntityWithParams', {
-          arg: false
-        });
-        expect(entity.arg).toBe(false);
-        entity.destroy();
-      });
-      it('should instantiate components with correct names', ()=> {
-        var entity:Entity = factory.createObject('EntityWithComponents');
-        expect(entity._components.length).toBe(2);
-        expect(entity.findComponentByName('one')).not.toBeNull();
-        expect(entity.findComponentByName('two')).not.toBeNull();
-        entity.destroy();
-      });
-      it('should instantiate components with constructor arguments', ()=> {
-        var entity:Entity = factory.createObject('ComponentWithParams', {
-          arg: true
-        });
-        var boolComponent = <BooleanConstructComponent>entity.findComponent(BooleanConstructComponent);
-        expect(boolComponent).not.toBeNull();
-        expect(boolComponent.arg).toBe(true);
+      it('should instantiate entity object with constructor arguments', (done)=> {
+        factory
+          .createObject('EntityWithParams', {arg: true})
+          .then((entity:BooleanConstructObject) => {
+            expect(entity.arg).toBe(true);
+            entity.destroy();
 
-        entity.destroy();
-        entity = factory.createObject('ComponentWithParams', {
-          arg: false
-        });
-        boolComponent = <BooleanConstructComponent>entity.findComponent(BooleanConstructComponent);
-        expect(boolComponent).not.toBeNull();
-        expect(boolComponent.arg).toBe(false);
-        entity.destroy();
+            done();
+          }).catch(console.error.bind(console));
       });
-      it("should instantiate components", ()=> {
-        var object:Entity = factory.createObject('EntityWithComponents');
+      it('should instantiate components with correct names', (done)=> {
+        factory
+          .createObject('EntityWithComponents')
+          .then((entity:Entity)=> {
+            expect(entity._components.length).toBe(2);
+            expect(entity.findComponentByName('one')).not.toBeNull();
+            expect(entity.findComponentByName('two')).not.toBeNull();
+            entity.destroy();
+            done();
+          });
+      });
+      it('should instantiate components with constructor arguments', (done)=> {
+        factory
+          .createObject('ComponentWithParams', {arg: true})
+          .then((entity:Entity) => {
+            var boolComponent = <BooleanConstructComponent>entity.findComponent(BooleanConstructComponent);
+            expect(boolComponent).not.toBeNull();
+            expect(boolComponent.arg).toBe(true);
+            entity.destroy();
+            done();
+          });
+      });
+      it('should instantiate components with constructor arguments', (done)=> {
+        factory
+          .createObject('ComponentWithParams', {arg: false})
+          .then((entity:Entity) => {
+            var boolComponent = <BooleanConstructComponent>entity.findComponent(BooleanConstructComponent);
+            expect(boolComponent).not.toBeNull();
+            expect(boolComponent.arg).toBe(false);
+            entity.destroy();
+            done();
+          });
+      });
+      it("should instantiate components", (done)=> {
+        factory
+          .createObject('EntityWithComponents')
+          .then((object:Entity) => {
+            var tpl = factory.getTemplate('EntityWithComponents');
+            expect(tpl).not.toBeNull();
+            expect(object._components.length).toBe(tpl.components.length);
+            done();
+          });
 
-        var tpl:any = factory.getTemplate('EntityWithComponents');
-        expect(tpl).not.toBeNull();
-
-        // Check that we can find instantiated components of the type specified in the template.
-        _.each(tpl.components, (comp:any)=> {
-          expect(object.findComponent(powtest.NamespaceClassToType(comp.type))).not.toBeNull();
-        });
       });
 
     });
 
     describe('validateTemplate', ()=> {
-      describe("should validate input names and types", ()=> {
-        it("works with exact input type match", ()=> {
-          var tpl:any = factory.getTemplate('EntityWithComponentInput');
-          expect(factory.validateTemplate(tpl, {
+      describe("checks input names/types", ()=> {
+        it("and works with exact input type match", (done)=> {
+          var tpl = factory.getTemplate('EntityWithComponentInput');
+          factory.validateTemplate(tpl, {
             component: new Component()
-          })).toBe(ee.EntityError.NONE);
+          }).then(() => done());
         });
-        it("works with more specific instance type given common ancestor", ()=> {
-          var tpl:any = factory.getTemplate('EntityWithComponentInput');
-          expect(factory.validateTemplate(tpl, {
-            component: new BooleanConstructComponent(true)
-          })).toBe(ee.EntityError.NONE);
+        it("and works with more specific instance type given common ancestor", (done)=> {
+          var tpl = factory.getTemplate('EntityWithComponentInput');
+          factory
+            .validateTemplate(tpl, {component: new BooleanConstructComponent(true)})
+            .then(() => done());
 
         });
-        it("fail with invalid instance of model input", ()=> {
-          var tpl:any = factory.getTemplate('EntityWithComponentInput');
-          expect(factory.validateTemplate(tpl, {
-            component: null
-          })).toBe(ee.EntityError.INPUT_TYPE);
+        it("and fails with invalid instance of model input", (done)=> {
+          var tpl = factory.getTemplate('EntityWithComponentInput');
+          factory
+            .validateTemplate(tpl, {component: null})
+            .catch((e) => {
+              expect(e).toBe(ee.EntityError.INPUT_TYPE);
+              done();
+            });
 
         });
-        it("fail without proper input", ()=> {
-          var tpl:any = factory.getTemplate('EntityWithComponentInput');
-          expect(factory.validateTemplate(tpl)).toBe(ee.EntityError.INPUT_NAME);
-          expect(factory.validateTemplate(tpl, {
+        it("and fails without proper input", (done)=> {
+          var tpl = factory.getTemplate('EntityWithComponentInput');
+          factory.validateTemplate(tpl).catch((e) => {
+            expect(e).toBe(ee.EntityError.INPUT_NAME);
+            done();
+          });
+        });
+        it("and fails without proper input", (done)=> {
+          var tpl = factory.getTemplate('EntityWithComponentInput');
+          factory.validateTemplate(tpl, {
             other: null
-          })).toBe(ee.EntityError.INPUT_NAME);
+          }).catch((e) => {
+            expect(e).toBe(ee.EntityError.INPUT_NAME);
+            done();
+          });
         });
       });
 

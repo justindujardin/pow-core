@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-import * as errors from "./errors";
+import {errors} from "./errors";
 import {Point} from "./point";
 export interface IRect {
   point: Point;

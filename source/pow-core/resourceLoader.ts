@@ -15,7 +15,7 @@
  */
 declare var _:any;
 
-import * as errors from "./errors";
+import {errors} from "./errors";
 import {Resource} from "./resource";
 import {IResource} from "./resource";
 import {IWorldObject} from "./world";

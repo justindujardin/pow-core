@@ -14,6 +14,8 @@
  limitations under the License.
  */
 
+///<reference path="../../types/es6-promise.d.ts"/>
+
 export * from './api';
 export * from './component';
 export * from './entity';

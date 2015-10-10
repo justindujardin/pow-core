@@ -61,7 +61,7 @@ module.exports = function(grunt) {
             files: [
                '<%= ts.source.src %>'
             ],
-            tasks: ['ts:source']
+            tasks: ['ts:source', 'dist-bundle']
          }
       },
 
