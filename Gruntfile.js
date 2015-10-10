@@ -154,7 +154,9 @@ module.exports = function(grunt) {
     var builder = new Builder('source/', buildConfig);
     var done = this.async();
     builder.bundle('pow-core/**/*', 'lib/pow-core.js', {minify: false, sourceMaps: true}).then(function() {
-      done();
+      builder.bundle('pow-core/**/*', 'lib/pow-core.min.js', {minify: true, sourceMaps: true}).then(function () {
+        done();
+      });
     });
   });
 
