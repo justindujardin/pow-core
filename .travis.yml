@@ -19,10 +19,11 @@ before_script:
 
 script:
  # Karma sauce is limited to running about 3-4 browsers at a time so we just run vendor by vendor here
- - karma start karma.sauce.conf.js --browsers FIREFOX_V4,FIREFOX_V11,FIREFOX_V21,FIREFOX_V30,FIREFOX_V35
- - karma start karma.sauce.conf.js --browsers CHROME_V26,CHROME_V31,CHROME_V39,CHROME_V40,ANDROID_V4.0,ANDROID_V4.3
- - karma start karma.sauce.conf.js --browsers IE_V7,IE_V8,IE_V9,IE_V10,IE_V11,MICROSOFTEDGE_V20.10240
- - karma start karma.sauce.conf.js --browsers SAFARI_V5,SAFARI_V6,SAFARI_V7,SAFARI_V8.0,OPERA_V11,OPERA_V12
+ - karma start karma.sauce.conf.js --browsers FIREFOX_V40,FIREFOX_V30,FIREFOX_V35
+ - karma start karma.sauce.conf.js --browsers CHROME_V26,CHROME_V31,CHROME_V39,CHROME_V40
+ - karma start karma.sauce.conf.js --browsers ANDROID_V5.0,ANDROID_V4.4
+ - karma start karma.sauce.conf.js --browsers IE_V9,IE_V10,IE_V11,MICROSOFTEDGE_V20.10240
+ - karma start karma.sauce.conf.js --browsers SAFARI_V6,SAFARI_V7,SAFARI_V8.0
 
 before_install:
   - npm install -g karma-cli
