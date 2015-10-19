@@ -27,7 +27,8 @@ export interface IResource {
 }
 
 /**
- * Promise based resource class.  Instantiate and call load() which returns a promise.
+ * Promise based resource class. Instantiate and call `fetch` or `load`, or retrieve
+ * cache friendly resources by loading from the `ResourceManage` class.
  */
 export class Resource implements IResource {
   extension:string;
