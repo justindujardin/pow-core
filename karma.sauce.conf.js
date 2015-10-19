@@ -13,25 +13,10 @@ module.exports = function (config) {
       browserName: 'chrome',
       version: 'beta'
     },
-    'SL_CHROMEDEV': {
-      base: 'SauceLabs',
-      browserName: 'chrome',
-      version: 'dev'
-    },
     'SL_FIREFOX': {
       base: 'SauceLabs',
       browserName: 'firefox',
       version: '40'
-    },
-    'SL_FIREFOXBETA': {
-      base: 'SauceLabs',
-      browserName: 'firefox',
-      version: 'beta'
-    },
-    'SL_FIREFOXDEV': {
-      base: 'SauceLabs',
-      browserName: 'firefox',
-      version: 'dev'
     },
     'SL_SAFARI7': {
       base: 'SauceLabs',
@@ -107,7 +92,7 @@ module.exports = function (config) {
 
     sauceLabs: {
       testName: 'pow-core',
-      startConnect: false,
+      startConnect: true,
       recordVideo: false,
       recordScreenshots: false,
       options: {
