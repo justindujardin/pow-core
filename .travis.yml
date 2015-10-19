@@ -3,6 +3,10 @@ sudo: false
 node_js:
  - "0.10"
 
+addons:
+  sauce_connect:
+    no_ssl_bump_domains: all
+
 env:
  global:
    - secure: Xwxk85Yw/Rnwl39ignJixsT+Q8t3Qw3iVdOg0GqEoHoU6yv1VEQTVXZMmWDXuGRH7PEUQQv5m3P3piU36NVMu+LkMZN8HZXA4oFgUlLqKDg8NwVht113KJhfU8IlaF5lFElSx/pHV+TM+/Sx/9RmsZ0Gv0kBta7//+Nllar4qQ0=

@@ -92,7 +92,7 @@ module.exports = function (config) {
 
     sauceLabs: {
       testName: 'pow-core',
-      startConnect: true,
+      startConnect: false,
       recordVideo: false,
       recordScreenshots: false,
       options: {
