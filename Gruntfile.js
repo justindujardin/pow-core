@@ -16,7 +16,7 @@ module.exports = function (grunt) {
     },
     ts: {
       options: {
-        module: 'system',
+        module: 'commonjs',
         target: 'es5',
         rootPath: 'source',
         sourceMap: true,
@@ -122,7 +122,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-ts');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-systemjs-builder');
   grunt.loadNpmTasks('dts-generator');
   grunt.registerTask('default', ['ts:source', 'dtsGenerator', 'dist-bundle', 'ts:tests']);
   grunt.registerTask('develop', ['default', 'watch']);
@@ -147,21 +146,23 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('dist-bundle', 'Build a single-file javascript output.', function () {
-    var buildConfig = {
-      baseUrl: 'source/',
-      defaultJSExtensions: true
-    };
-    var Builder = require('systemjs-builder');
-    var builder = new Builder('source/', buildConfig);
     var done = this.async();
-    builder.bundle('pow-core/**/*', 'lib/pow-core/pow-core.js', {minify: false, sourceMaps: true}).then(function () {
-      builder.bundle('pow-core/**/*', 'lib/pow-core/pow-core.min.js', {
-        minify: true,
+    var Builder = require('systemjs-builder');
+    var builder = new Builder('./source/', './config.js');
+    builder
+      .bundle('pow-core/**/*', 'lib/pow-core/pow-core.js', {
+        minify: false,
         sourceMaps: true
-      }).then(function () {
+      })
+      .then(function () {
+        return builder.bundle('pow-core/**/*', 'lib/pow-core/pow-core.min.js', {
+          minify: true,
+          sourceMaps: true
+        });
+      })
+      .then(function () {
         done();
       });
-    });
   });
 
 

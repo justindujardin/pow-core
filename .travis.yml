@@ -18,7 +18,6 @@ before_script:
  - ./node_modules/.bin/grunt
 
 script:
- # Karma sauce is limited to running about 3-4 browsers at a time so we just run vendor by vendor here
  - npm run sauce-firefox
  - npm run sauce-chrome
  - npm run sauce-android

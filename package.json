@@ -39,7 +39,6 @@
     "grunt-express-server": "0.4.5",
     "grunt-notify": "0.2.15",
     "grunt-npm": "0.0.2",
-    "grunt-systemjs-builder": "~0.2.2",
     "grunt-ts": "~5.0.0-beta.5",
     "istanbul": "bryanforbes/istanbul#source-map-resolve",
     "karma": "0.12.16",
@@ -49,7 +48,7 @@
     "karma-jasmine": "0.2.2",
     "karma-sauce-launcher": "0.2.14",
     "lcov-result-merger": "~1.0.2",
-    "systemjs-builder": "~0.14.7",
+    "systemjs-builder": "^0.14.9",
     "typescript": "~1.7.0-dev.20151004",
     "underscore": "^1.5.2"
   },
