@@ -7,13 +7,14 @@ module.exports = function (config) {
 
 // Browsers to run on Sauce Labs platforms
   var sauceBrowsers = _.reduce([
-    ['firefox', '40'],
+    ['firefox', '41', 'Windows 10'],
+    ['firefox', '40', 'OSX 10.10'],
     ['firefox', '35'],
     ['firefox', '30'],
 
-    ['chrome', '40'],
+    ['chrome', 'beta', 'Windows 10'],
+    ['chrome', 'dev', 'OSX 10.10'],
     ['chrome', '39'],
-    ['chrome', '31'],
     ['chrome', '26'],
 
     ['iphone', '8.4', 'OSX 10.10'],
@@ -53,7 +54,7 @@ module.exports = function (config) {
 
     sauceLabs: {
       testName: 'pow-core',
-      startConnect: false,
+      startConnect: true,
       recordVideo: false,
       recordScreenshots: false,
       options: {
