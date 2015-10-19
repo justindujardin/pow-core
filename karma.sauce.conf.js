@@ -2,89 +2,57 @@
 module.exports = function (config) {
   require('./karma.conf')(config);
 
-  var customLaunchers = {
-    'SL_CHROME': {
-      base: 'SauceLabs',
-      browserName: 'chrome',
-      version: '45'
-    },
-    'SL_CHROMEBETA': {
-      base: 'SauceLabs',
-      browserName: 'chrome',
-      version: 'beta'
-    },
-    'SL_FIREFOX': {
-      base: 'SauceLabs',
-      browserName: 'firefox',
-      version: '40'
-    },
-    'SL_SAFARI7': {
-      base: 'SauceLabs',
-      browserName: 'safari',
-      platform: 'OS X 10.9',
-      version: '7'
-    },
-    'SL_SAFARI8': {
-      base: 'SauceLabs',
-      browserName: 'safari',
-      platform: 'OS X 10.10',
-      version: '8'
-    },
-    'SL_SAFARI8.1': {
-      base: 'SauceLabs',
-      browserName: 'safari',
-      platform: 'OS X 10.11',
-      version: '8.1'
-    },
-    'SL_IOS8': {
-      base: 'SauceLabs',
-      browserName: 'iphone',
-      platform: 'OS X 10.10',
-      version: '8.4'
-    },
-    'SL_IOS9': {
-      base: 'SauceLabs',
-      browserName: 'iphone',
-      platform: 'OS X 10.10',
-      version: '9.0'
-    },
-    'SL_IE9': {
-      base: 'SauceLabs',
-      browserName: 'internet explorer',
-      platform: 'Windows 2008',
-      version: '9'
-    },
-    'SL_IE10': {
-      base: 'SauceLabs',
-      browserName: 'internet explorer',
-      platform: 'Windows 2012',
-      version: '10'
-    },
-    'SL_IE11': {
-      base: 'SauceLabs',
-      browserName: 'internet explorer',
-      platform: 'Windows 8.1',
-      version: '11'
-    },
-    'SL_EDGE': {
-      base: 'SauceLabs',
-      browserName: 'microsoftedge',
-      platform: 'Windows 10',
-      version: '20.10240'
-    },
-    'SL_ANDROID4.4': {
-      base: 'SauceLabs',
-      browserName: 'android',
-      platform: 'Linux',
-      version: '4.4'
-    },
-    'SL_ANDROID5.1': {
-      base: 'SauceLabs',
-      browserName: 'android',
-      platform: 'Linux',
-      version: '5.1'
+  var _ = require('underscore');
+
+// Browsers to run on Sauce Labs platforms
+  var sauceBrowsers = _.reduce([
+    ['firefox', '35'],
+    ['firefox', '30'],
+    ['firefox', '21'],
+    ['firefox', '11'],
+    ['firefox', '4'],
+
+    ['chrome', '40'],
+    ['chrome', '39'],
+    ['chrome', '31'],
+    ['chrome', '26'],
+
+    ['microsoftedge', '20.10240', 'Windows 10'],
+    ['internet explorer', '11', 'Windows 10'],
+    ['internet explorer', '10', 'Windows 8'],
+    ['internet explorer', '9', 'Windows 7'],
+    ['internet explorer', '8'],
+    ['internet explorer', '7', 'Windows XP'],
+    // ['internet explorer', '6', 'Windows XP'],
+
+    ['opera', '12'],
+    ['opera', '11'],
+
+    ['android', '5'],
+    ['android', '4.4'],
+    ['android', '4.3'],
+    ['android', '4.0'],
+
+    ['safari', '8.0', 'OS X 10.10'],
+    ['safari', '7'],
+    ['safari', '6'],
+    ['safari', '5']
+  ], function (memo, platform) {
+    // internet explorer -> ie
+    var label = platform[0].split(' ');
+    if (label.length > 1) {
+      label = _.invoke(label, 'charAt', 0)
     }
-  };
+    label = (label.join("") + '_v' + platform[1]).replace(' ', '_').toUpperCase();
+    memo[label] = _.pick({
+      'base': 'SauceLabs',
+      'browserName': platform[0],
+      'version': platform[1],
+      'platform': platform[2]
+    }, Boolean);
+    return memo;
+  }, {});
+
 
   config.set({
     captureTimeout: 120000,
@@ -103,9 +71,9 @@ module.exports = function (config) {
       }
     },
 
-    customLaunchers: customLaunchers,
+    customLaunchers: sauceBrowsers,
 
-    browsers: Object.keys(customLaunchers),
+    browsers: Object.keys(sauceBrowsers),
 
     reporters: ['dots', 'saucelabs', 'coverage'],
 
