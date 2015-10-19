@@ -16,6 +16,9 @@ module.exports = function (config) {
     ['chrome', '31'],
     ['chrome', '26'],
 
+    ['iphone', '8.4', 'OSX 10.10'],
+    ['iphone', '9.0', 'OSX 10.10'],
+
     ['microsoftedge', '20.10240', 'Windows 10'],
     ['internet explorer', '11', 'Windows 10'],
     ['internet explorer', '10', 'Windows 8'],
@@ -24,6 +27,7 @@ module.exports = function (config) {
     ['android', '5'],
     ['android', '4.4'],
 
+    ['safari', '8.1', 'OS X 10.11'],
     ['safari', '8.0', 'OS X 10.10'],
     ['safari', '7'],
     ['safari', '6']
