@@ -24,7 +24,7 @@ module.exports = function (config) {
     ['internet explorer', '10', 'Windows 8'],
     ['internet explorer', '9', 'Windows 7'],
 
-    ['android', '5'],
+    ['android', '5.1'],
     ['android', '4.4'],
 
     ['safari', '8.1', 'OS X 10.11'],
