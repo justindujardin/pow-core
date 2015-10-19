@@ -2,6 +2,7 @@
 module.exports = function (config) {
   require('./karma.conf')(config);
 
+  // Configuration based on: https://github.com/jashkenas/backbone/blob/master/karma.conf-sauce.js
   var _ = require('underscore');
 
 // Browsers to run on Sauce Labs platforms
@@ -23,7 +24,6 @@ module.exports = function (config) {
     ['internet explorer', '9', 'Windows 7'],
     ['internet explorer', '8'],
     ['internet explorer', '7', 'Windows XP'],
-    // ['internet explorer', '6', 'Windows XP'],
 
     ['opera', '12'],
     ['opera', '11'],
@@ -44,14 +44,16 @@ module.exports = function (config) {
       label = _.invoke(label, 'charAt', 0)
     }
     label = (label.join("") + '_v' + platform[1]).replace(' ', '_').toUpperCase();
-    memo[label] = _.pick({
+    memo[label] = {
       'base': 'SauceLabs',
       'browserName': platform[0],
       'version': platform[1],
       'platform': platform[2]
-    }, Boolean);
+    };
     return memo;
   }, {});
+
+  console.log(JSON.stringify(sauceBrowsers,null,2));
 
 
   config.set({
