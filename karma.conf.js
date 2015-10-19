@@ -37,7 +37,7 @@ module.exports = function (config) {
       }
     },
 
-    preprocessors: (process.env.TRAVIS || coverageDebug) ? {"lib/*.js": "coverage"} : {},
+    preprocessors: (process.env.TRAVIS || coverageDebug) ? {"lib/pow-core/*.js": "coverage"} : {},
     coverageReporter: {
       type: "lcov",
       dir: ".coverage/"
