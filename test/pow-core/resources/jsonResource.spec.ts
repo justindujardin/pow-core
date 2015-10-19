@@ -6,21 +6,18 @@ export function main() {
     it("should be defined", ()=> {
       expect(JSONResource).toBeDefined();
     });
-
     it("should succeed with good url", (done)=> {
-      var loader:ResourceLoader = new ResourceLoader();
-      var resource = loader.load<JSONResource>('base/test/fixtures/example.json');
-      resource.on(Resource.READY, ()=> {
-        expect(resource.data.result).toBe('OK');
-        done();
-      });
+      new JSONResource()
+        .fetch('base/test/fixtures/example.json')
+        .then((res:JSONResource) => {
+          expect(res.data.result).toBe('OK');
+          done();
+        });
     });
     it("should fail with bad url", (done)=> {
-      var loader:ResourceLoader = new ResourceLoader();
-      var resource = loader.load<JSONResource>('bad/does/not/exist.json');
-      resource.on(Resource.FAILED, ()=> {
-        done();
-      });
+      new JSONResource()
+        .fetch('base/bad/does/not/exist.json')
+        .catch(() => done());
     });
   });
 }

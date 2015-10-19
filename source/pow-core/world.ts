@@ -39,7 +39,7 @@ export class World implements IWorld {
 
   constructor(services?:any) {
     services = _.defaults(services || {}, {
-      loader: ResourceLoader.get(),
+      loader: new ResourceLoader,
       time: Time.get()
     });
     _.extend(this, services);

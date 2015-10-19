@@ -21,15 +21,18 @@ import {Resource} from "../resource";
 export class ImageResource extends Resource {
   data:HTMLImageElement;
 
-  load() {
-    var reference:HTMLImageElement = document.createElement('img');
-    reference.onload = () => {
-      this.data = reference;
-      this.ready();
-    };
-    reference.onerror = (err:any) => {
-      this.failed(err);
-    };
-    reference.src = this.url;
+  fetch(url?:string):Promise<ImageResource> {
+    this.url = url || this.url;
+    return new Promise<ImageResource>((resolve, reject) => {
+      var reference:HTMLImageElement = new Image();
+      reference.onload = () => {
+        this.data = reference;
+        resolve(this);
+      };
+      reference.onerror = (err:any) => {
+        reject(err);
+      };
+      reference.src = this.url;
+    });
   }
 }

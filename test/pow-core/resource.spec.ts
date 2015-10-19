@@ -7,11 +7,8 @@ export function main() {
       expect(Resource).toBeDefined();
     });
 
-    it("should require load to be implemented in a subclass", ()=> {
-      var r:Resource = new Resource("/bad/url");
-      expect(()=> {
-        r.load();
-      }).toThrow(new Error(errors.CLASS_NOT_IMPLEMENTED));
+    it("should require load to be implemented in a subclass", (done)=> {
+      new Resource().fetch("/bad/url").catch(() => done());
     });
 
   });

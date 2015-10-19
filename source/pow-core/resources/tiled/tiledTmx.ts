@@ -97,104 +97,107 @@ export class TiledTMXResource extends XMLResource {
     return this.xmlHeader + tiled.xml2Str(root[0]);
   }
 
-  prepare(data) {
-    this.$map = this.getRootNode('map');
-    this.version = parseInt(this.getElAttribute(this.$map, 'version'));
-    this.width = parseInt(this.getElAttribute(this.$map, 'width'));
-    this.height = parseInt(this.getElAttribute(this.$map, 'height'));
-    this.orientation = this.getElAttribute(this.$map, 'orientation');
-    this.tileheight = parseInt(this.getElAttribute(this.$map, 'tileheight'));
-    this.tilewidth = parseInt(this.getElAttribute(this.$map, 'tilewidth'));
-    this.properties = tiled.readTiledProperties(this.$map);
-    var tileSetDeps:tiled.ITileSetDependency[] = [];
-    var tileSets = this.getChildren(this.$map, 'tileset');
-    var relativePath:string = this.url.substr(0, this.url.lastIndexOf('/') + 1);
-    _.each(tileSets, (ts) => {
-      var source:string = this.getElAttribute(ts, 'source');
-      var firstGid:number = parseInt(this.getElAttribute(ts, 'firstgid') || "-1");
-      if (source) {
-        tileSetDeps.push({
-          source: tiled.compactUrl(relativePath, source),
-          literal: source,
-          firstgid: firstGid
-        });
-      }
-      // Tileset element is inline, load from the existing XML and
-      // assign the source (used for relative image loading) to be
-      // the .tmx file.
-      else {
-        tileSetDeps.push({
-          data: ts,
-          source: relativePath,
-          firstgid: firstGid
-        })
-      }
-    });
-
-    // Extract tile <layer>s and <objectgroup>s
-    var layers = this.getChildren(this.$map, 'layer,objectgroup');
-    _.each(layers, (layer) => {
-      var tileLayer = <tiled.ITiledLayer>tiled.readITiledLayerBase(layer);
-      this.layers.push(tileLayer);
-
-      // Take CSV and convert it to JSON array, then parse.
-      var data:any = this.getChild(layer, 'data');
-      if (data) {
-        var encoding:string = this.getElAttribute(data, 'encoding');
-        if (!encoding || encoding.toLowerCase() !== 'csv') {
-          this.failed("Pow2 only supports CSV maps.  Edit the Map Properties (for:" + this.url + ") in Tiled to use the CSV option when saving.");
+  load(data?:any):Promise<Resource> {
+    this.data = data || this.data;
+    return new Promise<TiledTMXResource>((resolve, reject) => {
+      this.$map = this.getRootNode('map');
+      this.version = parseInt(this.getElAttribute(this.$map, 'version'));
+      this.width = parseInt(this.getElAttribute(this.$map, 'width'));
+      this.height = parseInt(this.getElAttribute(this.$map, 'height'));
+      this.orientation = this.getElAttribute(this.$map, 'orientation');
+      this.tileheight = parseInt(this.getElAttribute(this.$map, 'tileheight'));
+      this.tilewidth = parseInt(this.getElAttribute(this.$map, 'tilewidth'));
+      this.properties = tiled.readTiledProperties(this.$map);
+      var tileSetDeps:tiled.ITileSetDependency[] = [];
+      var tileSets = this.getChildren(this.$map, 'tileset');
+      var relativePath:string = this.url.substr(0, this.url.lastIndexOf('/') + 1);
+      _.each(tileSets, (ts) => {
+        var source:string = this.getElAttribute(ts, 'source');
+        var firstGid:number = parseInt(this.getElAttribute(ts, 'firstgid') || "-1");
+        if (source) {
+          tileSetDeps.push({
+            source: tiled.compactUrl(relativePath, source),
+            literal: source,
+            firstgid: firstGid
+          });
         }
-        tileLayer.data = JSON.parse('[' + $.trim(data.text()) + ']');
-      }
+        // Tileset element is inline, load from the existing XML and
+        // assign the source (used for relative image loading) to be
+        // the .tmx file.
+        else {
+          tileSetDeps.push({
+            data: ts,
+            source: relativePath,
+            firstgid: firstGid
+          })
+        }
+      });
 
-      // Any custom color for this layer?
-      var color:string = this.getElAttribute(layer, 'color');
-      if (color) {
-        tileLayer.color = color;
-      }
+      // Extract tile <layer>s and <objectgroup>s
+      var layers = this.getChildren(this.$map, 'layer,objectgroup');
+      _.each(layers, (layer) => {
+        var tileLayer = <tiled.ITiledLayer>tiled.readITiledLayerBase(layer);
+        this.layers.push(tileLayer);
 
-      // Read any child objects
-      var objects = this.getChildren(layer, 'object');
-      if (objects) {
-        tileLayer.objects = [];
-        _.each(objects, (object) => {
-          tileLayer.objects.push(<tiled.ITiledObject>tiled.readITiledObject(object));
-        });
-      }
+        // Take CSV and convert it to JSON array, then parse.
+        var data:any = this.getChild(layer, 'data');
+        if (data) {
+          var encoding:string = this.getElAttribute(data, 'encoding');
+          if (!encoding || encoding.toLowerCase() !== 'csv') {
+            reject("Pow2 only supports CSV maps.  Edit the Map Properties (for:" + this.url + ") in Tiled to use the CSV option when saving.");
+          }
+          tileLayer.data = JSON.parse('[' + $.trim(data.text()) + ']');
+        }
+
+        // Any custom color for this layer?
+        var color:string = this.getElAttribute(layer, 'color');
+        if (color) {
+          tileLayer.color = color;
+        }
+
+        // Read any child objects
+        var objects = this.getChildren(layer, 'object');
+        if (objects) {
+          tileLayer.objects = [];
+          _.each(objects, (object) => {
+            tileLayer.objects.push(<tiled.ITiledObject>tiled.readITiledObject(object));
+          });
+        }
+      });
+
+      // Load any source references.
+      var _next = ():any => {
+        if (tileSetDeps.length <= 0) {
+          return resolve(this);
+        }
+        var dep = tileSetDeps.shift();
+        if (dep.data) {
+          new TiledTSXResource()
+            .load(dep.data)
+            .then((resource:TiledTSXResource) => {
+              resource.relativeTo = relativePath;
+              resource.firstgid = dep.firstgid;
+              this.tilesets[resource.name] = resource;
+              _next();
+            })
+            .catch((e) => reject(e));
+        }
+        else if (dep.source) {
+          new TiledTSXResource()
+            .fetch(dep.data)
+            .then((resource:TiledTSXResource) => {
+              this.tilesets[resource.name] = resource;
+              resource.firstgid = dep.firstgid;
+              resource.literal = dep.literal;
+              _next();
+            })
+            .catch((e) => reject(e));
+        }
+        else {
+          reject("Unknown type of tile set data");
+        }
+      };
+      _next();
     });
-
-    // Load any source references.
-    var _next = ():any => {
-      if (tileSetDeps.length <= 0) {
-        return this.ready();
-      }
-      var dep = tileSetDeps.shift();
-      if (dep.data) {
-
-        var tsr = <TiledTSXResource>this.loader.create(TiledTSXResource, dep.data);
-        tsr.relativeTo = relativePath;
-        tsr.once(Resource.READY, ()=> {
-          this.tilesets[tsr.name] = tsr;
-          tsr.firstgid = dep.firstgid;
-          _next();
-        });
-        tsr.once(Resource.FAILED, (error)=> {
-          this.failed(error);
-        });
-        tsr.prepare(dep.data);
-      }
-      else if (dep.source) {
-        this.loader.load(dep.source, (tsr?:TiledTSXResource) => {
-          this.tilesets[tsr.name] = tsr;
-          tsr.firstgid = dep.firstgid;
-          tsr.literal = dep.literal;
-          _next();
-        });
-      }
-      else {
-        throw new Error("Unknown type of tile set data");
-      }
-    };
-    _next();
   }
 }

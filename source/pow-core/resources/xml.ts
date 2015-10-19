@@ -24,22 +24,27 @@ declare var _:any;
  */
 export class XMLResource extends Resource {
   data:any; // JQuery object
-  load() {
-    var request:any = $.get(this.url); // JQueryXHR
-    request.done((object:XMLDocument) => {
-      this.data = $(object);
-      this.prepare(this.data);
+
+  fetch(url:string):Promise<XMLResource> {
+    this.url = url || this.url;
+    return new Promise<XMLResource>((resolve, reject) => {
+      var request:any = $.get(this.url); // JQueryXHR
+      request.done((object:XMLDocument) => {
+        this.data = $(object);
+        this.load(this.data).then(resolve).catch(reject);
+      });
+      request.fail((jqxhr, settings, exception) => {
+        reject(exception);
+      });
     });
-    request.fail((jqxhr, settings, exception) => {
-      this.failed(exception);
-    });
+
   }
 
-  /*
-   Do any data modification here, or just fall-through to ready.
+  /**
+   * Load from a given piece of data.
    */
-  prepare(data) {
-    this.ready();
+  load(data:any):Promise<XMLResource> {
+    return Promise.resolve<XMLResource>(this);
   }
 
   getRootNode(tag:string) {

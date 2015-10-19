@@ -4,7 +4,7 @@ module.exports = function(grunt) {
       clean: {
          build: {
             src: [
-              "lib/",
+              "lib/pow-core/",
               "source/pow-core/**/*.js.map",
               "source/pow-core/**/*.js",
               "source/pow-core/**/*.d.ts",
@@ -24,6 +24,7 @@ module.exports = function(grunt) {
          },
          source: {
             src: [
+               "source/pow-core/all.ts",
                "source/pow-core/*.ts",
                "source/pow-core/**/*.ts"
             ]
@@ -43,7 +44,7 @@ module.exports = function(grunt) {
          },
          build: {
             files: {
-               'lib/<%= pkg.name %>.min.js'    : ['lib/<%= pkg.name %>.js']
+               'lib/pow-core/<%= pkg.name %>.min.js'    : ['lib/pow-core/<%= pkg.name %>.js']
             }
          }
       },
@@ -90,11 +91,11 @@ module.exports = function(grunt) {
       artifacts: {
          options:{
             files: [
-               'lib/pow-core.d.ts',
-               'lib/pow-core.js',
-               'lib/pow-core.js.map',
-               'lib/pow-core.min.js',
-               'lib/pow-core.min.map'
+               'lib/pow-core/pow-core.d.ts',
+               'lib/pow-core/pow-core.js',
+               'lib/pow-core/pow-core.js.map',
+               'lib/pow-core/pow-core.min.js',
+               'lib/pow-core/pow-core.min.map'
             ]
          }
       },
@@ -110,7 +111,7 @@ module.exports = function(grunt) {
        options: {
          name: 'pow-core',
          baseDir: './source/pow-core/',
-         out: 'lib/<%=pkg.name%>.d.ts'
+         out: 'lib/pow-core/<%=pkg.name%>.d.ts'
        },
        default: {
          src: ['<%=ts.source.src%>']
@@ -153,8 +154,8 @@ module.exports = function(grunt) {
     var Builder = require('systemjs-builder');
     var builder = new Builder('source/', buildConfig);
     var done = this.async();
-    builder.bundle('pow-core/**/*', 'lib/pow-core.js', {minify: false, sourceMaps: true}).then(function() {
-      builder.bundle('pow-core/**/*', 'lib/pow-core.min.js', {minify: true, sourceMaps: true}).then(function () {
+    builder.bundle('pow-core/**/*', 'lib/pow-core/pow-core.js', {minify: false, sourceMaps: true}).then(function() {
+      builder.bundle('pow-core/**/*', 'lib/pow-core/pow-core.min.js', {minify: true, sourceMaps: true}).then(function () {
         done();
       });
     });

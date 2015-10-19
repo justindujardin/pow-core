@@ -31,9 +31,11 @@ export function main() {
 
     it('allows overriding services after construction', () => {
       var world = new World();
-      expect(world.loader._uid).toBe(ResourceLoader.get()._uid);
-      world.setService('loader', new ResourceLoader());
-      expect(world.loader._uid).not.toBe(ResourceLoader.get()._uid);
+      var override:any = {
+        key: 'foo'
+      };
+      world.setService('loader', override);
+      expect((<any>world.loader).key).toBe('foo');
     });
 
     describe('mark', () => {

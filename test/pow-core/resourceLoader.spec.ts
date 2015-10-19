@@ -3,34 +3,28 @@ import {Resource} from "pow-core/resource";
 import {ResourceLoader} from "pow-core/resourceLoader";
 import {IResource} from "pow-core/resource";
 import {World} from "pow-core/world";
+
 declare var _:any;
 
 class MockResource extends Resource {
-  public shouldFail:boolean = false;
-
-  load() {
-    _.defer(()=> {
-      this.shouldFail ? this.failed(null) : this.ready();
+  load(data?:boolean):Promise<MockResource> {
+    return new Promise((resolve, reject) => {
+      data ? reject('false') : resolve();
+    });
+  }
+  fetch(shouldFailAsString?:string):Promise<MockResource> {
+    return new Promise((resolve, reject) => {
+      !!shouldFailAsString ? reject('false') : resolve();
     });
   }
 }
-class FailResource extends Resource {
-  load() {
-    _.defer(() => this.failed(null));
-  }
-}
+
 export function main() {
   describe("ResourceLoader", ()=> {
     it("should be defined and instantiable", ()=> {
       expect(ResourceLoader).toBeDefined();
       var loader = new ResourceLoader();
       expect(loader).not.toBeNull();
-    });
-
-    it("should be accessible as a shared singleton", ()=> {
-      // Twice to hit cached value branch
-      expect(ResourceLoader.get()).toBeDefined();
-      expect(ResourceLoader.get()).toBeDefined();
     });
 
     describe('create', () => {
@@ -41,56 +35,46 @@ export function main() {
         }).toThrow(new Error(errors.INVALID_ARGUMENTS));
       });
 
-      it("should trigger Resource.READY event when resource loads properly", (done)=> {
-        var loader = new ResourceLoader();
-        var resource = loader.create<MockResource>(MockResource, true);
-        resource.shouldFail = false;
-        resource.on(Resource.READY, ()=> {
-          expect(resource.shouldFail).toBe(false);
-          done();
-        });
-        resource.load();
+      it("should resolve promise when resource loads properly", (done)=> {
+        new ResourceLoader()
+          .create<MockResource>(MockResource)
+          .load(false)
+          .then(() => done());
       });
 
-      it("should trigger Resource.FAILED event when resource fails to load", (done)=> {
-        var loader = new ResourceLoader();
-        var resource = loader.create<MockResource>(MockResource, true);
-        resource.shouldFail = true;
-        resource.on(Resource.FAILED, ()=> {
-          expect(resource.shouldFail).toBe(true);
-          done();
-        });
-        resource.load();
+      it("should reject promise when resource fails to load", (done)=> {
+        new ResourceLoader()
+          .create<MockResource>(MockResource)
+          .load(true)
+          .catch(() => done());
       });
     });
 
 
     describe('loadAsType', () => {
       it("should allow specifying resource type explicitly", (done)=> {
-        var loader = new ResourceLoader();
-        var resource = loader.loadAsType<MockResource>("something", MockResource, ()=> {
-          expect(resource.shouldFail).toBeFalsy();
-          done();
-        });
+        new ResourceLoader()
+          .loadAsType<MockResource>("something", MockResource)
+          .catch(console.error.bind(console))
+          .then(() => done());
       });
     });
 
 
     describe('load', () => {
-      it("should fail with unknown resource type", ()=> {
+      it("should fail with unknown resource type", (done)=> {
         var loader = new ResourceLoader();
-        var resource = loader.load<MockResource>("something.unknown");
-        expect(resource).toBe(null);
+        loader.load<MockResource>("something.unknown").catch(() => done());
       });
       it("should cache loaded resources", (done)=> {
         var loader = new ResourceLoader();
         loader.registerType('mock', MockResource);
-        var resource:any = loader.load('made-up.mock', ()=> {
-          resource._marked = 1337;
+        loader.load('made-up.mock').then((resources:any[])=> {
+          resources[0]._marked = 1337;
           // Ensure the same resource is returned, indicating that it
           // was retrieved from the cache.
-          loader.load('made-up.mock', (res:IResource)=> {
-            expect((<any>res)._marked).toBe(1337);
+          loader.load('made-up.mock').then((cachedResources:any[])=> {
+            expect(cachedResources[0]._marked).toBe(1337);
             done();
           });
         });
@@ -99,25 +83,12 @@ export function main() {
       it("should load an array of resources", (done)=> {
         var loader = new ResourceLoader();
         loader.registerType('mock', MockResource);
-        var resources = loader.load<MockResource[]>(['made-up.mock', 'two.mock'], ()=> {
-          done();
-        });
-        expect(resources.length).toBe(2);
-      });
-
-
-      it("should work with world time updates", (done) => {
-        var loader = new ResourceLoader();
-        var world = new World();
-        world.time.start();
-        world.mark(loader);
-        loader.registerType('mock', MockResource);
-        loader.load<MockResource>('made-up.mock', () => {
-          loader.loadAsType('made-up.mock', MockResource, () => {
-            world.erase(loader);
+        loader
+          .load<MockResource[]>(['made-up.mock', 'two.mock'])
+          .then((resources:any)=> {
+            expect(resources.length).toBe(2);
             done();
           });
-        });
       });
     });
 
@@ -125,8 +96,7 @@ export function main() {
       it("should register custom types", (done)=> {
         var loader = new ResourceLoader();
         loader.registerType('mock', MockResource);
-        var resource = <MockResource>loader.load('made-up.mock');
-        resource.on(Resource.READY, done);
+        loader.load('made-up.mock').then(() => done());
       });
     });
 

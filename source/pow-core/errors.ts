@@ -14,6 +14,9 @@
  limitations under the License.
  */
 
+
+///<reference path="../../types/es6-promise.d.ts"/>
+
 /**
  * Constant strings for use in throwing Error with messages.  Used to
  * make checking thrown errors doable without an explosion of Error subclasses.
@@ -33,6 +36,11 @@ export var errors = {
    * Something called on a base class that doesn't implement the desired functionality
    */
   CLASS_NOT_IMPLEMENTED: 'must be implemented in a subclass',
+
+  /**
+   * The operation is not supported by the implementation.
+   */
+  UNSUPPORTED_OPERATION: 'this operation is unsupported by the implementation',
 
   REQUIRED_ARGUMENT: 'argument must be valid',
 

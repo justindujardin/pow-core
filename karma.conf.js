@@ -10,9 +10,10 @@ module.exports = function (config) {
     files: [
       "vendor/jquery/dist/jquery.min.js",
       "vendor/underscore/underscore-min.js",
-      'node_modules/es6-module-loader/dist/es6-module-loader-sans-promises.src.js',
+      'node_modules/es6-module-loader/dist/es6-module-loader.src.js',
       'node_modules/systemjs/dist/system.src.js',
-      "lib/pow-core.js",
+      'node_modules/systemjs/dist/system-polyfills.js',
+      "lib/pow-core/pow-core.js",
       {pattern: 'test/fixtures/*.*', watched: true, included: false, served: true},
       {pattern: 'test/**/*.js', watched: true, included: false, served: true},
       "karma.main.js"

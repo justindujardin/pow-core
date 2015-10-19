@@ -15,6 +15,7 @@
  */
 
 import {Resource} from "../resource";
+import {errors} from "../errors";
 declare var _:any;
 
 /**
@@ -106,11 +107,12 @@ export class AudioResource extends Resource implements IAudioSource {
   private _source:AudioBufferSourceNode = null;
   private _audio:HTMLAudioElement = null;
 
-  load() {
+  fetch(url?:string):Promise<Resource> {
+    this.url = url || this.url;
     var formats:IAudioFormat[] = AudioResource.supportedFormats();
     var sources:number = formats.length;
     if (sources === 0) {
-      return _.defer(() => this.failed('no supported media types'));
+      return Promise.reject(errors.UNSUPPORTED_OPERATION);
     }
     var reference:HTMLAudioElement = document.createElement('audio');
     if (AudioResource._context) {
@@ -148,67 +150,74 @@ export class AudioResource extends Resource implements IAudioSource {
     return this._volume;
   }
 
-  private _loadAudioBuffer(formats:IAudioFormat[]) {
-    var todo = formats.slice();
-    var decodeFile = () => {
-      if (todo.length === 0) {
-        return this.failed("no sources");
-      }
-      var fileWithExtension = this.url + '.' + todo.shift().extension;
-      var request = new XMLHttpRequest();
-      request.open('GET', fileWithExtension, true);
-      request.responseType = 'arraybuffer';
-      request.onload = () => {
-        AudioResource._context.decodeAudioData(request.response, (buffer) => {
-          var source = AudioResource._context.createBufferSource();
-          source.buffer = buffer;
-          source.connect(AudioResource._context.destination);
-          this._source = source;
-          this.ready();
-        }, decodeFile);
+  private _loadAudioBuffer(formats:IAudioFormat[]):Promise<AudioResource> {
+
+    return new Promise<AudioResource>((resolve, reject) => {
+      var todo = formats.slice();
+      var decodeFile = () => {
+        if (todo.length === 0) {
+          return reject("no sources");
+        }
+        var fileWithExtension = this.url + '.' + todo.shift().extension;
+        var request = new XMLHttpRequest();
+        request.open('GET', fileWithExtension, true);
+        request.responseType = 'arraybuffer';
+        request.onload = () => {
+          AudioResource._context.decodeAudioData(request.response, (buffer) => {
+            var source = AudioResource._context.createBufferSource();
+            source.buffer = buffer;
+            source.connect(AudioResource._context.destination);
+            this._source = source;
+            resolve(this);
+          }, decodeFile);
+        };
+        request.send();
       };
-      request.send();
-    };
-    decodeFile();
+      decodeFile();
+
+    });
   }
 
-  private _loadAudioElement(formats:IAudioFormat[]) {
-    var sources:number = formats.length;
-    var invalid:Array<string> = [];
-    var incrementFailure:Function = (path:string) => {
-      sources--;
-      invalid.push(path);
-      if (sources <= 0) {
-        this.failed("No valid sources at the following URLs\n   " + invalid.join('\n   '));
+  private _loadAudioElement(formats:IAudioFormat[]):Promise<AudioResource> {
+
+    return new Promise<AudioResource>((resolve, reject) => {
+      var sources:number = formats.length;
+      var invalid:Array<string> = [];
+      var incrementFailure:Function = (path:string) => {
+        sources--;
+        invalid.push(path);
+        if (sources <= 0) {
+          reject("No valid sources at the following URLs\n   " + invalid.join('\n   '));
+        }
+      };
+
+      if (sources === 0) {
+        return reject('no supported media types');
       }
-    };
 
-    if (sources === 0) {
-      return _.defer(() => this.failed('no supported media types'));
-    }
+      var reference:HTMLAudioElement = document.createElement('audio');
+      if (AudioResource._context) {
+        this._source = AudioResource._context.createMediaElementSource(reference);
+      }
 
-    var reference:HTMLAudioElement = document.createElement('audio');
-    if (AudioResource._context) {
-      this._source = AudioResource._context.createMediaElementSource(reference);
-    }
-
-    reference.addEventListener('canplaythrough', () => {
-      this.data = reference;
-      this._audio = reference;
-      this.ready();
-    });
-    // Try all supported types, and accept the first valid one.
-    _.each(formats, (format:IAudioFormat) => {
-      let source = <HTMLSourceElement>document.createElement('source');
-      source.addEventListener('error', () => {
-        console.log("source failed: " + source.src);
-        incrementFailure(source.src);
+      reference.addEventListener('canplaythrough', () => {
+        this.data = reference;
+        this._audio = reference;
+        resolve(this);
       });
-      source.type = format.type.substr(0, format.type.indexOf(';'));
-      source.src = this.url + '.' + format.extension;
-      reference.appendChild(source);
-    });
+      // Try all supported types, and accept the first valid one.
+      _.each(formats, (format:IAudioFormat) => {
+        let source = <HTMLSourceElement>document.createElement('source');
+        source.addEventListener('error', () => {
+          console.log("source failed: " + source.src);
+          incrementFailure(source.src);
+        });
+        source.type = format.type.substr(0, format.type.indexOf(';'));
+        source.src = this.url + '.' + format.extension;
+        reference.appendChild(source);
+      });
 
-    reference.load();
+      reference.load();
+    });
   }
 }

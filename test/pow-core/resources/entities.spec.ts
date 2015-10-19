@@ -21,13 +21,14 @@ export class BooleanConstructObject extends Entity {
 export function main() {
   describe("EntityContainerResource", ()=> {
 
-    var loader:ResourceLoader = new ResourceLoader();
     var factory:EntityContainerResource = null;
     beforeEach((done)=> {
-      loader.load('base/test/fixtures/basic.entities', (resource:EntityContainerResource) => {
-        factory = resource;
-        done();
-      });
+      new EntityContainerResource()
+        .fetch('base/test/fixtures/basic.entities')
+        .then((resource:EntityContainerResource) => {
+          factory = resource;
+          done();
+        }).catch(console.error.bind(console));
     });
     afterEach(()=> {
       factory = null;

@@ -1,5 +1,5 @@
 ///<reference path="../../types/jasmine.d.ts"/>
-///<reference path="../../lib/pow-core.d.ts"/>
+///<reference path="../../lib/pow-core/pow-core.d.ts"/>
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 12 * 1000;
 

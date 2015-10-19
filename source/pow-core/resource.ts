@@ -17,64 +17,30 @@
 import {errors} from "./errors";
 import {ResourceLoader} from "./resourceLoader";
 import {Events} from "./events";
+
 export interface IResource {
   url:string;
   data:any;
   extension:string;
-  load();
-  isReady():boolean;
-  ready();
-  failed(error:any);
+  fetch(url?:string):Promise<IResource>;
+  load(data?:any):Promise<IResource>;
 }
 
 /**
- * Basic asynchronous resource class.
- *
- * Supports loading and success/error handling. A resource is immediately
- * available, and you can get at its internal data when `isReady` returns true.
- *
- * Resource objects trigger 'ready' and 'failed' events during their initial loading.
+ * Promise based resource class.  Instantiate and call load() which returns a promise.
  */
-export class Resource extends Events implements IResource {
-
-  static READY:string = 'ready';
-  static FAILED:string = 'failed';
-
-  url:string;
-  data:any;
+export class Resource implements IResource {
   extension:string;
-  loader:ResourceLoader = null;
 
-  public error:any = null;
-  private _ready:boolean = false;
-
-  constructor(url:string, data:any = null) {
-    super();
-    this.url = url;
-    this.data = data;
+  constructor(public url:string = null,
+              public data:any = null) {
   }
 
-  load() {
-    throw new Error(errors.CLASS_NOT_IMPLEMENTED);
+  load(data?:any):Promise<Resource> {
+    return Promise.reject(errors.CLASS_NOT_IMPLEMENTED);
   }
 
-  setLoader(loader:ResourceLoader) {
-    this.loader = loader;
-  }
-
-  isReady():boolean {
-    return this.data !== null && this._ready === true;
-  }
-
-  ready() {
-    this._ready = true;
-    this.trigger(Resource.READY, this);
-  }
-
-  failed(error:any) {
-    this._ready = false;
-    this.error = error;
-    //console.log("ERROR loading resource: " + this.url + "\n   -> " + error);
-    this.trigger(Resource.FAILED, this);
+  fetch(url?:string):Promise<Resource> {
+    return Promise.reject(errors.CLASS_NOT_IMPLEMENTED);
   }
 }

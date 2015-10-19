@@ -20,14 +20,19 @@ declare var $:any;
  * Use jQuery to load a JSON file from a URL.
  */
 export class JSONResource extends Resource {
-  load() {
-    var request:any = $.getJSON(this.url);
-    request.done((object:JSON) => {
-      this.data = object;
-      this.ready();
-    });
-    request.fail((jqxhr, settings, exception) => {
-      this.failed(exception);
+  data:any;
+
+  fetch(url?:string):Promise<JSONResource> {
+    this.url = url || this.url;
+    return new Promise<JSONResource>((resolve, reject) => {
+      var request:any = $.getJSON(this.url);
+      request.done((object:JSON) => {
+        this.data = object;
+        resolve(this);
+      });
+      request.fail((jqxhr, settings, exception) => {
+        reject(exception);
+      });
     });
   }
 }

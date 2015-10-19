@@ -20,21 +20,14 @@ export function main() {
     });
 
     it("should succeed with good url", (done)=> {
-      var loader:ResourceLoader = new ResourceLoader();
-      var resource = loader.load<AudioResource>('base/test/fixtures/tele', ()=> {
-        console.error("Loaded:" + resource.url);
-        expect(resource.error).toBeNull();
-        expect(resource.isReady()).toBe(true);
-        resource.play().pause();
-        done();
-      });
+      new AudioResource()
+        .fetch('base/test/fixtures/tele')
+        .then(() => done());
     });
     it("should fail with bad url", (done)=> {
-      var loader:ResourceLoader = new ResourceLoader();
-      var resource = loader.load<AudioResource>('bad/does/not/exist', ()=> {
-        expect(resource.isReady()).toBe(false);
-        done();
-      });
+      new AudioResource()
+        .fetch('base/bad/does/not/exist')
+        .catch(() => done());
     });
   });
 }

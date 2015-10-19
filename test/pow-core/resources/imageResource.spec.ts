@@ -9,20 +9,18 @@ export function main() {
     });
 
     it("should succeed with good url", (done)=> {
-      var loader:ResourceLoader = new ResourceLoader();
-      var resource = loader.load<ImageResource>('base/test/fixtures/vezu.png');
-      resource.on(Resource.READY, ()=> {
-        expect(resource.data.naturalWidth).toBe(16);
-        expect(resource.data.naturalHeight).toBe(16);
-        done();
-      });
+      new ImageResource()
+        .fetch('base/test/fixtures/vezu.png')
+        .then((res:ImageResource) => {
+          expect(res.data.naturalWidth).toBe(16);
+          expect(res.data.naturalHeight).toBe(16);
+          done();
+        });
     });
     it("should fail with bad url", (done)=> {
-      var loader:ResourceLoader = new ResourceLoader();
-      var resource = loader.load<ImageResource>('base/bad/does/not/exist.png');
-      resource.on(Resource.FAILED, ()=> {
-        done();
-      });
+      new ImageResource()
+        .fetch('base/test/fixtures/invalidfile.png')
+        .catch(() => done());
     });
   });
 }

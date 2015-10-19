@@ -226,7 +226,7 @@ export class EntityContainerResource extends JSONResource {
   }
 
   getTemplate(templateName:string):IEntityTemplate {
-    if (!this.isReady()) {
+    if (!this.data) {
       return null;
     }
     // Valid template name.

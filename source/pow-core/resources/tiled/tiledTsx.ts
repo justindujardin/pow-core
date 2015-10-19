@@ -45,59 +45,61 @@ export class TiledTSXResource extends XMLResource {
   relativeTo:string = null;
   imageUrl:string = null;
   literal:string = null; // The literal source path specified in xml
-  prepare(data) {
-    var tileSet = this.getRootNode('tileset');
-    this.name = this.getElAttribute(tileSet, 'name');
-    this.tilewidth = parseInt(this.getElAttribute(tileSet, 'tilewidth'));
-    this.tileheight = parseInt(this.getElAttribute(tileSet, 'tileheight'));
-    var relativePath:string = this.url ? this.url.substr(0, this.url.lastIndexOf('/') + 1) : "";
+  load(data?:any):Promise<TiledTSXResource> {
+    this.data = data || this.data;
+    return new Promise<TiledTSXResource>((resolve, reject) => {
+      var tileSet = this.getRootNode('tileset');
+      this.name = this.getElAttribute(tileSet, 'name');
+      this.tilewidth = parseInt(this.getElAttribute(tileSet, 'tilewidth'));
+      this.tileheight = parseInt(this.getElAttribute(tileSet, 'tileheight'));
+      var relativePath:string = this.url ? this.url.substr(0, this.url.lastIndexOf('/') + 1) : "";
 
-    // Load tiles and custom properties.
-    var tiles = this.getChildren(tileSet, 'tile');
-    _.each(tiles, (ts:any) => {
-      var id:number = parseInt(this.getElAttribute(ts, 'id'));
-      var tile:TilesetTile = new TilesetTile(id);
-      tile.properties = tiled.readTiledProperties(ts);
-      this.tiles.push(tile);
-    });
+      // Load tiles and custom properties.
+      var tiles = this.getChildren(tileSet, 'tile');
+      _.each(tiles, (ts:any) => {
+        var id:number = parseInt(this.getElAttribute(ts, 'id'));
+        var tile:TilesetTile = new TilesetTile(id);
+        tile.properties = tiled.readTiledProperties(ts);
+        this.tiles.push(tile);
+      });
 
-    var image:any = this.getChild(tileSet, 'img');
-    if (image && image.length > 0) {
+      var image:any = this.getChild(tileSet, 'img');
+      if (!image || image.length === 0) {
+        return resolve(this);
+      }
       var source = this.getElAttribute(image, 'source');
       this.imageWidth = parseInt(this.getElAttribute(image, 'width') || "0");
       this.imageHeight = parseInt(this.getElAttribute(image, 'height') || "0");
       this.imageUrl = tiled.compactUrl(this.relativeTo ? this.relativeTo : relativePath, source);
       console.log("Tileset source: " + this.imageUrl);
-      this.loader.load(this.imageUrl, (res?:ImageResource) => {
-        this.image = res;
-        if (!res.isReady()) {
-          this.failed("Failed to load required TileMap image: " + source);
-          return;
-        }
 
-        this.imageWidth = this.image.data.width;
-        this.imageHeight = this.image.data.height;
+      new ImageResource(this.imageUrl)
+        .fetch()
+        .then((res?:ImageResource) => {
+          this.image = res;
+          this.imageWidth = this.image.data.width;
+          this.imageHeight = this.image.data.height;
 
-        // Finally, build an expanded tileset from the known image w/h and the
-        // tiles with properties that are specified in the form of <tile> objects.
-        var xUnits = this.imageWidth / this.tilewidth;
-        var yUnits = this.imageHeight / this.tileheight;
-        var tileCount = xUnits * yUnits;
-        var tileLookup = new Array(tileCount);
-        for (var i = 0; i < tileCount; i++) {
-          tileLookup[i] = false;
-        }
-        _.each(this.tiles, (tile) => {
-          tileLookup[tile.id] = tile.properties;
+          // Finally, build an expanded tileset from the known image w/h and the
+          // tiles with properties that are specified in the form of <tile> objects.
+          var xUnits = this.imageWidth / this.tilewidth;
+          var yUnits = this.imageHeight / this.tileheight;
+          var tileCount = xUnits * yUnits;
+          var tileLookup = new Array(tileCount);
+          for (var i = 0; i < tileCount; i++) {
+            tileLookup[i] = false;
+          }
+          _.each(this.tiles, (tile) => {
+            tileLookup[tile.id] = tile.properties;
+          });
+          this.tiles = tileLookup;
+
+          resolve(this);
+        })
+        .catch((e) => {
+          reject("Failed to load required TileMap image: " + source + " - " + e);
         });
-        this.tiles = tileLookup;
-
-        this.ready();
-      });
-    }
-    else {
-      this.ready();
-    }
+    });
   }
 
   hasGid(gid:number):boolean {
