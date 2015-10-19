@@ -43,9 +43,6 @@ module.exports = function (config) {
     return memo;
   }, {});
 
-  console.log(JSON.stringify(sauceBrowsers,null,2));
-
-
   config.set({
     captureTimeout: 120000,
     browserNoActivityTimeout: 120000,
