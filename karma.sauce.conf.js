@@ -49,8 +49,8 @@ module.exports = function (config) {
   }, {});
 
   config.set({
-    captureTimeout: 240000,
-    browserNoActivityTimeout: 240000,
+    captureTimeout: 120000,
+    browserNoActivityTimeout: 120000,
 
     sauceLabs: {
       testName: 'pow-core',
