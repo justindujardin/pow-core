@@ -49,7 +49,7 @@ module.exports = function (config) {
   }, {});
 
   config.set({
-    captureTimeout: 120000,
+    captureTimeout: 240000,
     browserNoActivityTimeout: 120000,
 
     sauceLabs: {
