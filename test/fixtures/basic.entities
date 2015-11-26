@@ -1,21 +1,21 @@
 [
   {
     "name": "EntityWithComponents",
-    "type": "pow2.Entity",
+    "type": "pow-core/entity|Entity",
     "components": [
       {
         "name": "one",
-        "type": "pow2.Component"
+        "type": "pow-core/component|Component"
       },
       {
         "name": "two",
-        "type": "pow2.Component"
+        "type": "pow-core/component|Component"
       }
     ]
   },
   {
     "name": "EntityWithParams",
-    "type": "pow2.tests.BooleanConstructObject",
+    "type": "test/pow-core/resources/entities.spec|BooleanConstructObject",
     "params": [
       "arg"
     ],
@@ -25,21 +25,21 @@
   },
   {
     "name": "EntityWithComponentInput",
-    "type": "pow2.Entity",
+    "type": "pow-core/entity|Entity",
     "inputs": {
-      "component": "pow2.Component"
+      "component": "pow-core/component|Component"
     }
   },
   {
     "name": "ComponentWithParams",
-    "type": "pow2.Entity",
+    "type": "pow-core/entity|Entity",
     "inputs": {
       "arg": "boolean"
     },
     "components": [
       {
         "name": "test",
-        "type": "pow2.tests.BooleanConstructComponent",
+        "type": "test/pow-core/resources/entities.spec|BooleanConstructComponent",
         "params": [
           "arg"
         ]

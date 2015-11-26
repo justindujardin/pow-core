@@ -1,2 +1,12 @@
 lib
-test/vendor
+
+source/**/*.js
+source/**/*.js.map
+source/**/*.d.ts
+test/*.js
+test/*.js.map
+test/*.d.ts
+test/resources/**/*.js
+test/resources/**/*.js.map
+test/resources/**/*.d.ts
+vendor

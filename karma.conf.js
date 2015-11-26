@@ -8,11 +8,15 @@ module.exports = function (config) {
     basePath: '',
     frameworks: ['jasmine'],
     files: [
-      "test/vendor/jquery/dist/jquery.min.js",
-      "test/vendor/underscore/underscore-min.js",
-      "lib/pow-core.js",
-      "lib/test/*.js",
-      {pattern: 'test/fixtures/*.*', watched: true, included: false, served: true}
+      "vendor/jquery/dist/jquery.min.js",
+      "vendor/underscore/underscore-min.js",
+      'node_modules/es6-module-loader/dist/es6-module-loader.src.js',
+      'node_modules/systemjs/dist/system.src.js',
+      'node_modules/systemjs/dist/system-polyfills.js',
+      "lib/pow-core/pow-core.js",
+      {pattern: 'test/fixtures/*.*', watched: true, included: false, served: true},
+      {pattern: 'test/**/*.js', watched: true, included: false, served: true},
+      "karma.main.js"
     ],
     reporters: ['dots', 'coverage'],
     port: 9876,
@@ -33,7 +37,7 @@ module.exports = function (config) {
       }
     },
 
-    preprocessors: (process.env.TRAVIS || coverageDebug) ? {"lib/*.js": "coverage"} : {},
+    preprocessors: (process.env.TRAVIS || coverageDebug) ? {"lib/pow-core/*.js": "coverage"} : {},
     coverageReporter: {
       type: "lcov",
       dir: ".coverage/"
