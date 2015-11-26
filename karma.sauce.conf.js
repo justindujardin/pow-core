@@ -17,21 +17,11 @@ module.exports = function (config) {
     ['chrome', '39'],
     ['chrome', '26'],
 
-    ['iphone', '8.4', 'OSX 10.10'],
-    ['iphone', '9.0', 'OSX 10.10'],
-
     ['microsoftedge', '20.10240', 'Windows 10'],
     ['internet explorer', '11', 'Windows 10'],
     ['internet explorer', '10', 'Windows 8'],
-    ['internet explorer', '9', 'Windows 7'],
+    ['internet explorer', '9', 'Windows 7']
 
-    ['android', '5.1'],
-    ['android', '4.4'],
-
-    ['safari', '9.0', 'OS X 10.11'],
-    ['safari', '8.0', 'OS X 10.10'],
-    ['safari', '7'],
-    ['safari', '6']
   ], function (memo, platform) {
     // internet explorer -> ie
     var label = platform[0].split(' ');
