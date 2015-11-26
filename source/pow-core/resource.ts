@@ -16,7 +16,6 @@
 
 import {errors} from "./errors";
 import {ResourceLoader} from "./resourceLoader";
-import {Events} from "./events";
 
 export interface IResource {
   url:string;

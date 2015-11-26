@@ -15,7 +15,7 @@
  */
 
 import {Entity} from "./entity";
-import {Events, IEvents} from "./events";
+import {IObservable} from './observable';
 
 declare var _:any;
 /**
@@ -30,7 +30,7 @@ export interface IObject {
  * Basic component interface.  Supports component host lifetime implementations, and
  * hot-swapping components.
  */
-export interface IComponent extends IObject, IEvents {
+export interface IComponent extends IObject {
 
   /**
    * The host object that this component belongs to.
@@ -76,7 +76,7 @@ export interface IComponentHost extends IObject {
  * time constructs, we have to have an actual implementation to instanceof.  For that
  * reason, all SceneComponents should derive this class.
  */
-export class Component extends Events implements IComponent {
+export class Component  implements IComponent {
   id:string = _.uniqueId('sc');
   host:Entity;
   name:string;

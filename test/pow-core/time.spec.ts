@@ -1,13 +1,15 @@
-import {Events} from "pow-core/events";
 import {IProcessObject} from "pow-core/time";
 import {Time} from "pow-core/time";
+import {Observable, ISubscription} from "pow-core/observable";
 declare var _:any;
 
-class MockTimeObject extends Events implements IProcessObject {
+class MockTimeObject implements IProcessObject {
   _uid:string = _.uniqueId('p');
 
+  onTick = new Observable();
+
   tick(elapsed:number) {
-    this.trigger('tick');
+    this.onTick.next();
   }
 }
 
@@ -101,14 +103,17 @@ export function main() {
         var t:Time = new Time();
         var m:MockTimeObject = new MockTimeObject();
         t.addObject(m);
-        m.once('tick', ()=> {
-          t.stop();
-          t.removeObject(m);
-          expect(window.requestAnimationFrame).toBeDefined();
-          _.each(olds, (value, key:any) => {
-            window[key] = value;
-          });
-          done();
+        let subscription:ISubscription = m.onTick.subscribe({
+          next: ()=> {
+            t.stop();
+            t.removeObject(m);
+            subscription.unsubscribe();
+            expect(window.requestAnimationFrame).toBeDefined();
+            _.each(olds, (value, key:any) => {
+              window[key] = value;
+            });
+            done();
+          }
         });
         t.start();
       });

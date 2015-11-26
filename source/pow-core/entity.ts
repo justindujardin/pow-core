@@ -19,7 +19,6 @@ declare var _:any;
 
 import {errors} from "./errors";
 import {IComponent} from "./component";
-import {Events} from "./events";
 import {IComponentHost} from "./component";
 
 /**
@@ -29,7 +28,7 @@ import {IComponentHost} from "./component";
  * addition and removal of component objects.  Components may be looked up by type, and
  * may depend on siblings components for parts of their own behavior.
  */
-export class Entity extends Events implements IComponentHost {
+export class Entity implements IComponentHost {
   id:string;
   name:string;
 
