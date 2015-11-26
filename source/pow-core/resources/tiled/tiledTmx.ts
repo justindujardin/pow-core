@@ -135,7 +135,11 @@ export class TiledTMXResource extends XMLResource {
 
       // Extract tile <layer>s and <objectgroup>s
       var layers = this.getChildren(this.$map, 'layer,objectgroup');
+      let failed:boolean = false;
       _.each(layers, (layer) => {
+        if (failed) {
+          return;
+        }
         var tileLayer = <tiled.ITiledLayer>tiled.readITiledLayerBase(layer);
         this.layers.push(tileLayer);
 
@@ -144,7 +148,8 @@ export class TiledTMXResource extends XMLResource {
         if (data) {
           var encoding:string = this.getElAttribute(data, 'encoding');
           if (!encoding || encoding.toLowerCase() !== 'csv') {
-            reject("Pow2 only supports CSV maps.  Edit the Map Properties (for:" + this.url + ") in Tiled to use the CSV option when saving.");
+            failed = true;
+            return reject(`pow-core only supports CSV maps.  Edit the Map Properties (for:${this.url}) to use the CSV`);
           }
           tileLayer.data = JSON.parse('[' + $.trim(data.text()) + ']');
         }
@@ -164,6 +169,10 @@ export class TiledTMXResource extends XMLResource {
           });
         }
       });
+
+      if (failed) {
+        return;
+      }
 
       // Load any source references.
       var _next = ():any => {
