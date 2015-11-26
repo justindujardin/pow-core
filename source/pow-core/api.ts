@@ -54,3 +54,7 @@ export function unregisterWorld(name:string) {
   delete _worldLookup[name];
   return instance;
 }
+
+export function clearWorlds() {
+  _worldLookup = {};
+}

@@ -58,6 +58,16 @@ export function main() {
           .catch(console.error.bind(console))
           .then(() => done());
       });
+      it("should reject with error if not given a source", (done)=> {
+        new ResourceLoader()
+          .loadAsType<MockResource>(null, MockResource)
+          .catch(() => done());
+      });
+      it("should reject with error if not given a type to load as", (done)=> {
+        new ResourceLoader()
+          .loadAsType<MockResource>("something", null)
+          .catch(() => done());
+      });
     });
 
 
