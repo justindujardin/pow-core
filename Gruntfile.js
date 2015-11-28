@@ -116,13 +116,26 @@ module.exports = function (grunt) {
       default: {
         src: ['<%=ts.source.src%>']
       }
+    },
+
+    remapIstanbul: {
+      build: {
+        src: '.coverage/**/coverage-final.json',
+        options: {
+          reports: {
+            'json': 'coverage-final.json'
+          }
+        }
+      }
     }
+
   });
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-ts');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('dts-generator');
+  grunt.loadNpmTasks('remap-istanbul');
   grunt.registerTask('default', ['ts:source', 'dtsGenerator', 'dist-bundle', 'ts:tests']);
   grunt.registerTask('develop', ['default', 'watch']);
 
