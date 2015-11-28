@@ -1,3 +1,31 @@
+<a name="0.3.0"></a>
+## 0.3.0 (2015-11-28)
+
+
+#### Bug Fixes
+
+* **AudioResource:** detect system audio types and add aac support ([1cc95c7f](http://github.com/justindujardin/pow-core/commit/1cc95c7f0d906b8ec46ca56f71e4a1552637a720))
+
+
+#### Features
+
+* replace events class with observable implementation ([9a41d17e](http://github.com/justindujardin/pow-core/commit/9a41d17e6204ea0b727275bf765b1a63e81ecbe3))
+* **AudioResource:**
+  * support identifying formats with multiple mime-types ([146a963b](http://github.com/justindujardin/pow-core/commit/146a963b6845e9a29452375443d73c4ddee5a3a1))
+  * use AudioContext API when available ([1aaa829e](http://github.com/justindujardin/pow-core/commit/1aaa829e918fb5e56f91969d723c61d35efe480a))
+* **README:** add sauce labs build matrix ([7963313c](http://github.com/justindujardin/pow-core/commit/7963313c59135beb90f7b292d354b19e9fb94527))
+* **Resource:** Promise based resource loading api ([fd7883cd](http://github.com/justindujardin/pow-core/commit/fd7883cd058d04d063eed097cd161414b877e14d))
+* **Sauce:** expand browser coverage considerably ([3d389530](http://github.com/justindujardin/pow-core/commit/3d38953056d645b3bf68a2ed51a6db631f8c27c9))
+* **entities:** load entity constructors from es6 module imports ([53169d1e](http://github.com/justindujardin/pow-core/commit/53169d1e4eb61d08aa7d7917ae9d63f6ef16bd2a))
+* **resourceLoader:** use templates to simplify load api ([daf201f4](http://github.com/justindujardin/pow-core/commit/daf201f44864231978b87f03c1359670847af947))
+
+
+#### Breaking Changes
+
+* entity file extension changed from 'powEntities' to lowercase 'entities' to avoid case-sensitivity problems.
+ ([daf201f4](http://github.com/justindujardin/pow-core/commit/daf201f44864231978b87f03c1359670847af947))
+
+
 <a name="0.2.1"></a>
 ### 0.2.1 (2015-08-08)
 
