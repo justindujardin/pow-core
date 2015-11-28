@@ -46,5 +46,7 @@
     "typescript": "~1.7.0-dev.20151004",
     "underscore": "^1.5.2"
   },
-  "contributors": []
+  "contributors": [
+    "Justin DuJardin <justindujardin@users.noreply.github.com>"
+  ]
 }
