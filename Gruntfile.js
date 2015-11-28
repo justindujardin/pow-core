@@ -134,7 +134,7 @@ module.exports = function (grunt) {
     type = type || 'patch';
     grunt.task.run([
       'clean',
-      'ts:source',
+      'default',
       'npm-contributors',
       'uglify',
       'bump:' + type + ':bump-only',
