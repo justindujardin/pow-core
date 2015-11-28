@@ -20,9 +20,27 @@ export function main() {
       expect(c.syncComponent()).toBe(true);
     });
 
-    it('returns a human readable class from toString()', () => {
-      var c = new NamedComponent();
-      expect(c.toString()).toBe('NamedComponent');
+    describe('toString', () => {
+      it('returns a human readable class', () => {
+        var c = new NamedComponent();
+        expect(c.toString()).toBe('NamedComponent');
+      });
+
+      it('returns a readable class when constructor.name is missing', () => {
+        var c = new NamedComponent();
+        delete c.constructor.name;
+        expect(c.toString()).toBe('NamedComponent');
+      });
+
+      it('returns instance name when all else fails', () => {
+        var c = new NamedComponent();
+        c.name = 'NamedComponent';
+        delete c.constructor.name;
+        c.constructor.toString = () => {
+          return '';
+        };
+        expect(c.toString()).toBe('NamedComponent');
+      });
     });
 
   });
