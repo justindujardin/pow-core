@@ -19,8 +19,8 @@ declare var _:any;
 
 export interface IProcessObject {
   _uid?:string;
-  tick?(elapsed:number);
-  processFrame?(elapsed:number);
+  tick?(elapsed?:number);
+  processFrame?(elapsed?:number);
 }
 
 var _shared:Time = null;
@@ -45,7 +45,7 @@ export class Time {
   }
 
 
-  start() {
+  start(): Time {
     if (this.running) {
       return;
     }
@@ -66,40 +66,45 @@ export class Time {
       window.requestAnimationFrame(_frameCallback);
     };
     _frameCallback(0);
+    return this;
   }
 
-  stop() {
+  stop(): Time {
     this.running = false;
+    return this;
   }
 
-  removeObject(object:IProcessObject) {
+  removeObject(object:IProcessObject): Time {
     this.objects = <IProcessObject[]>_.reject(this.objects, function (o:IProcessObject) {
       return o._uid === object._uid;
     });
+    return this;
   }
 
-  addObject(object:IProcessObject) {
+  addObject(object:IProcessObject): Time {
     if (!object._uid) {
       object._uid = _.uniqueId("u");
     }
-    if (_.where(this.objects, {_uid: object._uid}).length > 0) {
-      return;
+    if (_.where(this.objects, {_uid: object._uid}).length === 0) {
+      this.objects.push(object);
     }
-    this.objects.push(object);
+    return this;
   }
 
-  tickObjects(elapsedMS:number) {
+  tickObjects(elapsedMS:number): Time {
     var values:any[] = this.objects;
     for (var i:number = values.length - 1; i >= 0; --i) {
       values[i].tick && values[i].tick(elapsedMS);
     }
+    return this;
   }
 
-  processFrame(elapsedMS:number) {
+  processFrame(elapsedMS:number): Time {
     var values:any[] = this.objects;
     for (var i:number = values.length - 1; i >= 0; --i) {
       values[i].processFrame && values[i].processFrame(elapsedMS);
     }
+    return this;
   }
 
   polyFillAnimationFrames() {

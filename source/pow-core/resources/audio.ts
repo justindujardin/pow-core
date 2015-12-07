@@ -16,7 +16,8 @@
 
 import {Resource} from "../resource";
 import {errors} from "../errors";
-declare var _:any;
+import {Time} from '../time';
+declare var _: any;
 
 /**
  * A supported audio format description that maps extensions to resource types.
@@ -47,8 +48,8 @@ export interface IAudioSource {
  * Use jQuery to load an Audio resource.
  */
 export class AudioResource extends Resource implements IAudioSource {
-  data:HTMLAudioElement;
-  private static FORMATS:[string,string[]][] = [
+  data: HTMLAudioElement;
+  private static FORMATS: [string,string[]][] = [
     ['mp3', ['audio/mpeg;']],
     ['m4a', ['audio/x-m4a;']],
     ['aac', ['audio/mp4a;', 'audio/mp4;']],
@@ -61,9 +62,9 @@ export class AudioResource extends Resource implements IAudioSource {
    *
    * Source: http://diveintohtml5.info/everything.html
    */
-  static supportedFormats():IAudioFormat[] {
-    var w:any = window;
-    var ac:any = w.AudioContext || w.webkitAudioContext;
+  static supportedFormats(): IAudioFormat[] {
+    var w: any = window;
+    var ac: any = w.AudioContext || w.webkitAudioContext;
     if (AudioResource._context === null && ac) {
       AudioResource._context = new ac();
     }
@@ -81,7 +82,7 @@ export class AudioResource extends Resource implements IAudioSource {
           _.each(this.FORMATS, (desc) => {
             var types = desc[1];
             var extension = desc[0];
-            _.each(types, (type:string) => {
+            _.each(types, (type: string) => {
               if (!!a.canPlayType(type)) {
                 this._types.push({
                   extension: extension,
@@ -100,21 +101,21 @@ export class AudioResource extends Resource implements IAudioSource {
     return this._types.slice();
   }
 
-  private static _context:any = null;
+  private static _context: any = null;
 
-  private static _types:IAudioFormat[] = null;
+  private static _types: IAudioFormat[] = null;
 
-  private _source:AudioBufferSourceNode = null;
-  private _audio:HTMLAudioElement = null;
+  private _source: AudioBufferSourceNode = null;
+  private _audio: HTMLAudioElement = null;
 
-  fetch(url?:string):Promise<Resource> {
+  fetch(url?: string): Promise<Resource> {
     this.url = url || this.url;
-    var formats:IAudioFormat[] = AudioResource.supportedFormats();
-    var sources:number = formats.length;
+    var formats: IAudioFormat[] = AudioResource.supportedFormats();
+    var sources: number = formats.length;
     if (sources === 0) {
       return Promise.reject(errors.UNSUPPORTED_OPERATION);
     }
-    var reference:HTMLAudioElement = document.createElement('audio');
+    var reference: HTMLAudioElement = document.createElement('audio');
     if (AudioResource._context) {
       this._source = AudioResource._context.createMediaElementSource(reference);
       if (this._source) {
@@ -124,14 +125,14 @@ export class AudioResource extends Resource implements IAudioSource {
     return this._loadAudioElement(formats);
   }
 
-  play(when:number = 0):IAudioSource {
+  play(when: number = 0): IAudioSource {
     if (this._source) {
       this._source.start(when);
     }
     return this;
   }
 
-  pause():IAudioSource {
+  pause(): IAudioSource {
     if (this._source) {
       this._source.stop(0);
     }
@@ -141,16 +142,16 @@ export class AudioResource extends Resource implements IAudioSource {
     return this;
   }
 
-  private _volume:number = 0.8;
-  set volume(value:number) {
+  private _volume: number = 0.8;
+  set volume(value: number) {
     this._volume = value;
   }
 
-  get volume():number {
+  get volume(): number {
     return this._volume;
   }
 
-  private _loadAudioBuffer(formats:IAudioFormat[]):Promise<AudioResource> {
+  private _loadAudioBuffer(formats: IAudioFormat[]): Promise<AudioResource> {
 
     return new Promise<AudioResource>((resolve, reject) => {
       var todo = formats.slice();
@@ -178,12 +179,12 @@ export class AudioResource extends Resource implements IAudioSource {
     });
   }
 
-  private _loadAudioElement(formats:IAudioFormat[]):Promise<AudioResource> {
+  private _loadAudioElement(formats: IAudioFormat[]): Promise<AudioResource> {
 
     return new Promise<AudioResource>((resolve, reject) => {
-      var sources:number = formats.length;
-      var invalid:Array<string> = [];
-      var incrementFailure:Function = (path:string) => {
+      var sources: number = formats.length;
+      var invalid: Array<string> = [];
+      var incrementFailure: Function = (path: string) => {
         sources--;
         invalid.push(path);
         if (sources <= 0) {
@@ -195,23 +196,31 @@ export class AudioResource extends Resource implements IAudioSource {
         return reject('no supported media types');
       }
 
-      var reference:HTMLAudioElement = document.createElement('audio');
+      var reference: HTMLAudioElement = document.createElement('audio');
       if (AudioResource._context) {
         this._source = AudioResource._context.createMediaElementSource(reference);
       }
 
-      reference.addEventListener('canplaythrough', () => {
+      let timer = new Time()
+        .start()
+        .addObject({
+          tick: () => reference.readyState > 3 ? completed() : null
+        });
+      let completed = () => {
         this.data = reference;
         this._audio = reference;
+        timer.stop();
         resolve(this);
-      });
+      };
+      reference.addEventListener('canplaythrough', completed);
       // Try all supported types, and accept the first valid one.
-      _.each(formats, (format:IAudioFormat) => {
+      _.each(formats, (format: IAudioFormat) => {
         let source = <HTMLSourceElement>document.createElement('source');
         source.addEventListener('error', () => {
           console.log("source failed: " + source.src);
           incrementFailure(source.src);
         });
+
         source.type = format.type.substr(0, format.type.indexOf(';'));
         source.src = this.url + '.' + format.extension;
         reference.appendChild(source);

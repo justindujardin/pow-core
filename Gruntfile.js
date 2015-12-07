@@ -116,15 +116,30 @@ module.exports = function (grunt) {
       default: {
         src: ['<%=ts.source.src%>']
       }
+    },
+
+    remapIstanbul: {
+      build: {
+        src: '.coverage/**/coverage-final.json',
+        options: {
+          reports: {
+            'html': 'coverage',
+            'lcovonly': '.coverage/lcov.info'
+          }
+        }
+      }
     }
+
   });
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-ts');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('dts-generator');
+  grunt.loadNpmTasks('remap-istanbul');
   grunt.registerTask('default', ['ts:source', 'dtsGenerator', 'dist-bundle', 'ts:tests']);
   grunt.registerTask('develop', ['default', 'watch']);
+  grunt.registerTask('coverage-report', ['remapIstanbul']);
 
   // Release a version
   grunt.loadNpmTasks('grunt-bump');
@@ -150,12 +165,12 @@ module.exports = function (grunt) {
     var Builder = require('systemjs-builder');
     var builder = new Builder('./source/', './config.js');
     builder
-      .bundle('pow-core/**/*', 'lib/pow-core/pow-core.js', {
+      .bundle('pow-core', 'lib/pow-core/pow-core.js', {
         minify: false,
         sourceMaps: true
       })
       .then(function () {
-        return builder.bundle('pow-core/**/*', 'lib/pow-core/pow-core.min.js', {
+        return builder.bundle('pow-core', 'lib/pow-core/pow-core.min.js', {
           minify: true,
           sourceMaps: true
         });

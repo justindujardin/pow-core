@@ -27,13 +27,13 @@ export function main() {
       });
 
       it('returns a readable class when constructor.name is missing', () => {
-        var c = new NamedComponent();
+        var c:any = new NamedComponent();
         delete c.constructor.name;
         expect(c.toString()).toBe('NamedComponent');
       });
 
       it('returns instance name when all else fails', () => {
-        var c = new NamedComponent();
+        var c:any = new NamedComponent();
         c.name = 'NamedComponent';
         delete c.constructor.name;
         c.constructor.toString = () => {

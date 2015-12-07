@@ -7,17 +7,11 @@ Error.stackTraceLimit=Infinity;
 // we will call `__karma__.start()` later, once all the specs are loaded.
 __karma__.loaded = function() {};
 
-System.config({
-  baseURL: '/base/',
-  defaultJSExtensions: true
-});
-
-System.import('lib/pow-core/pow-core').then(function() {
+System.import('pow-core/all').then(function() {
   console.log("Importing Test modules: ");
   return Promise.all(
     Object.keys(window.__karma__.files) // All files served by Karma.
     .filter(onlySpecFiles)
-    .map(file2moduleName)
     .map(function(path) {
       console.log(" - " + path);
       return System.import(path).then(function(module) {
@@ -39,12 +33,4 @@ System.import('lib/pow-core/pow-core').then(function() {
 
 function onlySpecFiles(path) {
   return /\.spec\.js$/.test(path);
-}
-
-// Normalize paths to module names.
-function file2moduleName(filePath) {
-  var name = filePath.replace(/\\/g, '/')
-    .replace(/^\/base\//, '')
-    .replace(/\.js/, '');
-  return name;
 }
