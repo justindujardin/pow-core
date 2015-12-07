@@ -15,7 +15,7 @@
   },
   {
     "name": "EntityWithParams",
-    "type": "test/pow-core/resources/entities.spec|BooleanConstructObject",
+    "type": "/base/test/pow-core/resources/entities.spec|BooleanConstructObject",
     "params": [
       "arg"
     ],
@@ -39,7 +39,7 @@
     "components": [
       {
         "name": "test",
-        "type": "test/pow-core/resources/entities.spec|BooleanConstructComponent",
+        "type": "/base/test/pow-core/resources/entities.spec|BooleanConstructComponent",
         "params": [
           "arg"
         ]

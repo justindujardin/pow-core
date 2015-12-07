@@ -2,7 +2,7 @@
 module.exports = function (config) {
   "use strict";
 
-  var coverageDebug = false;
+  var coverageDebug = true;
 
   config.set({
     basePath: '',
@@ -13,6 +13,7 @@ module.exports = function (config) {
       'node_modules/es6-module-loader/dist/es6-module-loader.src.js',
       'node_modules/systemjs/dist/system.src.js',
       'node_modules/systemjs/dist/system-polyfills.js',
+      "config.js",
       "lib/pow-core/pow-core.js",
       {pattern: 'test/fixtures/*.*', watched: true, included: false, served: true},
       {pattern: 'test/**/*.js', watched: true, included: false, served: true},
@@ -39,8 +40,13 @@ module.exports = function (config) {
 
     preprocessors: (process.env.TRAVIS || coverageDebug) ? {"lib/pow-core/*.js": "coverage"} : {},
     coverageReporter: {
-      type: "lcov",
-      dir: ".coverage/"
+      dir: '.coverage',
+
+      reporters: [
+        // reporters not supporting the `file` property
+        {type: 'json'},
+        {type: 'lcov'}
+      ]
     }
   });
 };

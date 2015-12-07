@@ -123,7 +123,8 @@ module.exports = function (grunt) {
         src: '.coverage/**/coverage-final.json',
         options: {
           reports: {
-            'json': 'coverage-final.json'
+            'html': 'coverage',
+            'lcovonly': '.coverage/lcov.info'
           }
         }
       }
@@ -138,6 +139,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('remap-istanbul');
   grunt.registerTask('default', ['ts:source', 'dtsGenerator', 'dist-bundle', 'ts:tests']);
   grunt.registerTask('develop', ['default', 'watch']);
+  grunt.registerTask('coverage-report', ['remapIstanbul']);
 
   // Release a version
   grunt.loadNpmTasks('grunt-bump');
@@ -163,12 +165,12 @@ module.exports = function (grunt) {
     var Builder = require('systemjs-builder');
     var builder = new Builder('./source/', './config.js');
     builder
-      .bundle('pow-core/**/*', 'lib/pow-core/pow-core.js', {
+      .bundle('pow-core', 'lib/pow-core/pow-core.js', {
         minify: false,
         sourceMaps: true
       })
       .then(function () {
-        return builder.bundle('pow-core/**/*', 'lib/pow-core/pow-core.min.js', {
+        return builder.bundle('pow-core', 'lib/pow-core/pow-core.min.js', {
           minify: true,
           sourceMaps: true
         });

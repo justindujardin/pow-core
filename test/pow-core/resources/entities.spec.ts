@@ -24,7 +24,7 @@ export function main() {
     var factory:EntityContainerResource = null;
     beforeEach((done)=> {
       new EntityContainerResource()
-        .fetch('base/test/fixtures/basic.entities')
+        .fetch('/base/test/fixtures/basic.entities')
         .then((resource:EntityContainerResource) => {
           factory = resource;
           done();
@@ -75,7 +75,10 @@ export function main() {
             entity.destroy();
 
             done();
-          }).catch(console.error.bind(console));
+          })
+          .catch((e) => {
+            console.error(e);
+          });
       });
       it('should instantiate components with correct names', (done)=> {
         factory
@@ -97,7 +100,7 @@ export function main() {
             expect(boolComponent.arg).toBe(true);
             entity.destroy();
             done();
-          });
+          }).catch(console.error.bind(console));
       });
       it('should instantiate components with constructor arguments', (done)=> {
         factory
@@ -108,7 +111,7 @@ export function main() {
             expect(boolComponent.arg).toBe(false);
             entity.destroy();
             done();
-          });
+          }).catch(console.error.bind(console));
       });
       it("should instantiate components", (done)=> {
         factory

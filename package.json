@@ -13,7 +13,7 @@
   "dependencies": {
     "underscore": "1.5.2",
     "es6-module-loader": "^0.15.0",
-    "systemjs": "^0.18.17"
+    "systemjs": "justindujardin/systemjs.git#typescript-source-maps"
   },
   "scripts": {
     "test": "./node_modules/karma/bin/karma start karma.conf.js --single-run"
@@ -42,7 +42,7 @@
     "karma-jasmine": "0.2.2",
     "karma-sauce-launcher": "0.3.0",
     "remap-istanbul": "^0.4.0",
-    "systemjs-builder": "^0.14.9",
+    "systemjs-builder": "justindujardin/builder.git#typescript-source-maps",
     "typescript": "~1.7.0-dev.20151004",
     "underscore": "^1.5.2"
   },
